@@ -1,0 +1,92 @@
+default:
+  tags:
+    - linux/amd64
+
+stages:
+  - build
+  - release
+
+variables:
+  DOCKER_HOST: tcp://dockerhost:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: '1'
+  CI_REGISTRY: registry.qiuzhi.tech
+  CI_REGISTRY_IMAGE: registry.qiuzhi.tech/airbot-play/ros-interface
+
+
+build:
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - cache/
+  stage: build
+  image: ${CI_REGISTRY}/airbot-play/arm-control:main
+  script:
+    - sed -i 's|http://archive.ubuntu.com/|http://mirrors.tuna.tsinghua.edu.cn/|' /etc/apt/sources.list
+    - echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ focal main" > /etc/apt/sources.list.d/ros1-latest.list
+    - apt-key add ros.asc
+    - |
+      apt update && 
+      DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y \
+      ros-noetic-ros-base ros-noetic-kdl-parser ros-noetic-tf ros-noetic-joy iproute2 \
+      python3 python3-bloom python3-pip fakeroot dpkg-dev debhelper libkdl-parser-dev
+    - pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple rosdepc
+    - rosdepc init
+    - rosdepc update
+    # - echo "185.199.111.133 raw.githubusercontent.com" >> /etc/hosts
+    # - bloom-generate rosdebian --ros-distro noetic
+    # - sed -i '/\<dh_shlibdeps\>/s/$/ --dpkg-shlibdeps-params=--ignore-missing-info/' debian/rules  
+    # - fakeroot debian/rules binary
+    # - mv ../*.deb .
+  artifacts:
+    paths:
+      - "*.deb"
+    expire_in: 1 week
+
+build-push:
+  rules:
+    - if: $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true"
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    paths:
+      - cache/
+  needs: 
+    - job: build
+      artifacts: true
+  stage: build
+  image: docker:24.0.5
+  services:
+    - name: docker:24.0.5-dind-rootless
+      alias: dockerhost
+      entrypoint: ["dockerd-entrypoint.sh", "--tls=false"]
+  before_script:
+    - docker info
+  script:
+    - docker context create builder
+    - docker buildx create builder --use --driver docker-container --driver-opt image=moby/buildkit:master --driver-opt network=host
+    - echo $HARBOR_USERNAME
+    - echo "$HARBOR_PASSWORD" | docker login --username "$HARBOR_USERNAME" --password-stdin -- "$CI_REGISTRY"
+    - docker buildx build --platform linux/amd64 -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --cache-from type=local,src=cache/ --cache-to type=local,dest=cache/ --build-arg NPROC=48 . --push
+
+release_job:
+  stage: release
+  image: registry.qiuzhi.tech/library/release-cli:latest
+  needs: 
+    - job: build
+      artifacts: true
+  rules:
+    - if: $CI_COMMIT_TAG
+  image:
+    name: registry.qiuzhi.tech/library/mc:latest
+    entrypoint: [""]
+  before_script:
+    - mc alias set minio $MINIO_HOST $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+  script:
+    - export SAVE_FILE=$(ls | grep deb)
+    - sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.tuna.tsinghua.edu.cn/ubuntu/|' /etc/apt/sources.list
+    - apt update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y zip && apt-get clean && rm -rf /var/lib/apt/lists/*
+    - mc cp $SAVE_FILE minio/ci-artifacts/$CI_PROJECT_PATH/$CI_COMMIT_TAG/$SAVE_FILE
+    - export DOWNLOAD_URL=$(mc share download --expire 168h minio/ci-artifacts/$CI_PROJECT_PATH/$CI_COMMIT_TAG/$SAVE_FILE | grep "Share" | awk '{print $2}')
+    - echo $DOWNLOAD_URL
+    - 'release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG --assets-link
+      "{\"name\":\"$SAVE_FILE\", \"url\":\"$DOWNLOAD_URL\", \"link_type\":\"package\"}"'

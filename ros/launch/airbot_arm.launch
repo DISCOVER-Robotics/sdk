@@ -1,0 +1,12 @@
+<launch>
+    <arg name="urdf" default="/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf" />
+    <arg name="interface" default="can0" />
+    <arg name="end_mode" default="teacher" />
+    <node name="airbot_arm_ros" pkg="ros_interface" type="airbot_arm_ros" output="screen"> 
+        <param name="urdf" value="$(arg urdf)" />
+        <param name="interface" value="$(arg interface)" />
+        <param name="end_mode" value="$(arg end_mode)" />
+    </node>
+    <node name="joy_proxy" pkg="ros_interface" type="joy_proxy" output="screen" />
+    <node name="joy" pkg="joy" type="joy_node" output="screen" />
+</launch>

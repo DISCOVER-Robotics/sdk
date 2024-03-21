@@ -1,0 +1,13 @@
+
+[submodule "thirdparty/httplib"]
+	path = thirdparty/httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+[submodule "thirdparty/websocketpp"]
+	path = thirdparty/websocketpp
+	url = https://github.com/zaphoyd/websocketpp.git
+[submodule "thirdparty/eigen"]
+	path = thirdparty/eigen
+	url = https://gitlab.com/libeigen/eigen
+[submodule "models"]
+	path = models
+	url = https://git.qiuzhi.tech/airbot-play/arm-models.git

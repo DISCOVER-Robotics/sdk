@@ -1,0 +1,5 @@
+build/
+.vscode/
+logs/
+debian/
+.obj*/

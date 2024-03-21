@@ -1,0 +1,9 @@
+[submodule "examples/cpp/airbot_tools/thirdparty/argparse"]
+	path = examples/cpp/airbot_tools/thirdparty/argparse
+	url = https://github.com/p-ranav/argparse
+[submodule "examples/cpp/airbot_tests/thirdparty/argparse"]
+	path = examples/cpp/airbot_tests/thirdparty/argparse
+	url = https://github.com/p-ranav/argparse.git
+[submodule "examples/cpp/airbot_tests/thirdparty/cpp-httplib"]
+	path = examples/cpp/airbot_tests/thirdparty/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib
