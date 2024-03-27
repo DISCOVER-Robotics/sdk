@@ -7,10 +7,7 @@
 #include <std_msgs/Bool.h>
 #include <std_msgs/String.h>
 
-#include <airbot/command/command_base.hpp>
-#include <airbot/modules/controller/fk_analytic.hpp>
-#include <airbot/modules/controller/id_chain_rne.hpp>
-#include <airbot/modules/controller/ik_analytic.hpp>
+#include <airbot/airbot.hpp>
 #include <kdl/frames.hpp>
 
 using Pose = geometry_msgs::Pose;

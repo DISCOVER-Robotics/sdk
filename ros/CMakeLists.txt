@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ros_interface VERSION 2.3.0 LANGUAGES CXX)
+project(ros_interface VERSION 2.4.0 LANGUAGES CXX)
 
 find_package(
   catkin REQUIRED
@@ -15,6 +15,7 @@ find_package(
 )
 find_package(airbot_play REQUIRED)
 
+set(CATKIN_BUILD_BINARY_PACKAGE true)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_CXX_STANDARD 17)
