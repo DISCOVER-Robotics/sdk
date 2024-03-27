@@ -46,4 +46,4 @@ ros-docker:
     - docker buildx create builder --use --driver docker-container --driver-opt image=moby/buildkit:master --driver-opt network=host
     - echo $HARBOR_USERNAME
     - echo "$HARBOR_PASSWORD" | docker login --username "$HARBOR_USERNAME" --password-stdin -- "$CI_REGISTRY"
-    - docker buildx build -f ros/Dockerfile --platform linux/amd64 -t $ROS_CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --build-arg NPROC=$NPROC . --push
+    - docker buildx build -f ros/Dockerfile --platform linux/amd64 -t $ROS_CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --build-arg NPROC=$NPROC . --push 
