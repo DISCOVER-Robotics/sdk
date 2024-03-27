@@ -1,0 +1,19 @@
+default:
+  tags:
+    - linux/amd64
+
+stages:
+  - test
+  - build
+  - release
+
+variables:
+  DOCKER_HOST: tcp://dockerhost:2375
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_BUILDKIT: '1'
+  CI_REGISTRY: registry.qiuzhi.tech
+  GIT_SUBMODULE_STRATEGY: recursive
+
+include: 
+  - 'ros/.gitlab-ci.yml'
+  - 'python/.gitlab-ci.yml'

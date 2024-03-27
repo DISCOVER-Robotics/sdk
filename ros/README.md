@@ -13,7 +13,7 @@ Install the deb packages from [releases of `arm-control`](https://git.qiuzhi.tec
 Run with root privileges:
 
 ```shell
-apt install ros-noetic-joy
+apt install ros-noetic-joy ros-noetic-tf ros-noetic-kdl-parser
 ```
 
 ### 1.3 Create ROS workspace and install ROS interface

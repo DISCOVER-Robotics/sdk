@@ -6,3 +6,9 @@ _generate/
 *.py[cod]
 *.egg-info
 *env*
+
+logs/
+.vscode/
+README.pdf
+
+tests/
