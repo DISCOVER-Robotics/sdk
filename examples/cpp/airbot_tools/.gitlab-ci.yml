@@ -13,17 +13,3 @@ airbot-tools:
     paths:
       - packages/
     expire_in: 1 week
-
-airbot-tools-upload:
-  stage: release
-  needs:
-    - job: airbot-tools
-      artifacts: true
-  image: curlimages/curl:latest
-  # rules:
-  #   - if: $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true"
-  script:
-    - export DEB_FILE=$(ls packages/ | grep deb)
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${DEB_FILE} \
-      ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/airbot-tools/${CI_COMMIT_REF_NAME}/${DEB_FILE}
