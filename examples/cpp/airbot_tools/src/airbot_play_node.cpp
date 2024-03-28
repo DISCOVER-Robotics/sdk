@@ -65,6 +65,10 @@ int main(int argc, char **argv) {
       .help(
           "Use maximum speed (master speed) for each motor when moving. False "
           "by default");
+  program.add_argument("--forearm-type")
+      .default_value("DM")
+      .choices("DM", "OD")
+      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
 
   try {
     program.parse_args(argc, argv);
@@ -82,6 +86,7 @@ int main(int argc, char **argv) {
   double master_speed = program.get<double>("--master-speed");
   bool constrained = program.get<bool>("--constrained");
   bool real_time = program.get<bool>("--real-time");
+  std::string forearm_type = program.get<std::string>("--forearm-type");
   if (urdf_path == "") {
     if (master_end_mode == "none")
       urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
@@ -93,10 +98,10 @@ int main(int argc, char **argv) {
   std::unique_ptr<arm::Robot> robot;
   try {
     robot = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                         std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                         std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(),
-                                         master_speed, master_end_mode, constrained, real_time);
-  } catch (const std::runtime_error &e) {
+                           std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                           std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(), master_speed,
+                           master_end_mode, constrained, real_time, false, forearm_type);
+  } catch (const std::runtime_error& e) {
     std::cerr << e.what() << '\n';
     endwin();
     return 1;
