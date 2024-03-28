@@ -8,8 +8,22 @@ airbot-tools:
     - sed -i 's|http://archive.ubuntu.com/|http://mirrors.tuna.tsinghua.edu.cn/|' /etc/apt/sources.list
     - apt update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y libopencv-*
     - cd examples/cpp/airbot_tools && mkdir build && cd build && cmake .. && make -j $NPROC && cpack -G DEB
-    - mkdir $CI_PROJECT_DIR/airbot-tools && mv ../*.deb $CI_PROJECT_DIR
+    - mkdir $CI_PROJECT_DIR/packages && mv ../*.deb $CI_PROJECT_DIR/packages
   artifacts:
     paths:
-      - "$CI_PROJECT_DIR/airbot_tools*.deb"
+      - packages/
     expire_in: 1 week
+
+airbot-tools-upload:
+  stage: release
+  needs:
+    - job: airbot-tools
+      artifacts: true
+  image: curlimages/curl:latest
+  # rules:
+  #   - if: $CI_COMMIT_TAG || $CI_COMMIT_REF_PROTECTED == "true"
+  script:
+    - export DEB_FILE=$(ls packages/ | grep deb)
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${DEB_FILE} \
+      ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ros1/${CI_COMMIT_REF_NAME}/${DEB_FILE}
