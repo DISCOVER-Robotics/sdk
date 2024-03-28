@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(ros_interface VERSION 2.4.0 LANGUAGES CXX)
+project(ros_interface VERSION 2.5.0 LANGUAGES CXX)
 
 find_package(
   catkin REQUIRED
