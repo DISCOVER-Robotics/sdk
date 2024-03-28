@@ -34,7 +34,7 @@ release:
   script:
     - apk add curl
     - |
-      export AIRBOT_DEB_TOOLS=$(ls packages/ | grep "airbot-tools") &&
+      export AIRBOT_DEB_TOOLS=$(ls packages/ | grep "airbot_tools") &&
       export AIRBOT_DEB_TOOLS_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/airbot-tools/${CI_COMMIT_REF_NAME}/${AIRBOT_DEB_TOOLS}"
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file  packages/${AIRBOT_DEB_TOOLS} ${AIRBOT_DEB_TOOLS_LINK}  
