@@ -127,10 +127,10 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="airbot",
-    version="2.4.0",
-    author="Dean Moldovan",
-    author_email="dean0x7d@gmail.com",
-    description="A test project using pybind11 and CMake",
+    version="2.5.0",
+    author="Beiwen Tian",
+    author_email="george@discover-robotics.com",
+    description="",
     long_description="",
     ext_modules=[CMakeExtension("airbot")],
     cmdclass={"build_ext": CMakeBuild},

@@ -17,3 +17,4 @@ variables:
 include: 
   - 'ros/.gitlab-ci.yml'
   - 'python/.gitlab-ci.yml'
+  - 'examples/cpp/airbot_tools/.gitlab-ci.yml'

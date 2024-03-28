@@ -1,8 +1,8 @@
-FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/airbot-play/arm-control:main as dep
+FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/airbot-play/arm-control:develop as dep
 
 FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/library/ros:noetic AS build-dep
 COPY --from=dep /usr/local /usr/local
-ADD . /opt/rosif_ws/src/ros_interface
+ADD ros /opt/rosif_ws/src/ros_interface
 WORKDIR /opt/rosif_ws/src/ros_interface
 RUN apt-key add ros.asc
 

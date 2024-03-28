@@ -9,13 +9,13 @@
 #include <sstream>
 #include <string>
 
-std::string post(const std::string& host, int port, const std::string& path, const std::string& body);
+std::string post(const std::string &host, int port, const std::string &path, const std::string &body);
 
 class HTTPException : public std::exception {
  public:
-  explicit HTTPException(const std::string& message) : message_(message) {}
+  explicit HTTPException(const std::string &message) : message_(message) {}
 
-  const char* what() const noexcept override { return message_.c_str(); }
+  const char *what() const noexcept override { return message_.c_str(); }
 
  private:
   std::string message_;
