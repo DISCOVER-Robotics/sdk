@@ -19,7 +19,7 @@
 
 namespace fs = std::filesystem;
 
-std::string post(const std::string& host, int port, const std::string& path, const std::string& body) {
+std::string post(const std::string &host, int port, const std::string &path, const std::string &body) {
   // 创建socket
   int sockfd = socket(AF_INET, SOCK_STREAM, 0);
   if (sockfd == -1) throw HTTPException("Failed to create socket");
@@ -92,7 +92,7 @@ int get_key() {
   return ch;
 }
 
-auto split_host_port(const std::string& host_port) {
+auto split_host_port(const std::string &host_port) {
   auto pos = host_port.find(':');
   if (pos == std::string::npos) {
     return std::make_pair(host_port, 80);
@@ -100,7 +100,7 @@ auto split_host_port(const std::string& host_port) {
   return std::make_pair(host_port.substr(0, pos), std::stoi(host_port.substr(pos + 1)));
 }
 
-std::string ConvertDoubleToJson(const vector<double>& vec, double end) {
+std::string ConvertDoubleToJson(const vector<double> &vec, double end) {
   std::ostringstream oss;
   oss << "{\"data\": [";
   for (size_t i = 0; i < vec.size(); ++i) {
@@ -113,7 +113,7 @@ std::string ConvertDoubleToJson(const vector<double>& vec, double end) {
   return oss.str();
 }
 
-std::string ConvertQVToJson(const vector<vector<double>>& vecs, double end) {
+std::string ConvertQVToJson(const vector<vector<double>> &vecs, double end) {
   std::ostringstream oss;
   oss << "{\"data\": [";
   for (size_t i = 0; i < vecs[0].size(); ++i) {
@@ -137,13 +137,13 @@ std::string ConvertQVToJson(const vector<vector<double>>& vecs, double end) {
   return oss.str();
 }
 
-std::string post_init(const std::string& host, int port, int retry = 3) {
+std::string post_init(const std::string &host, int port, int retry = 3) {
   std::string path = "/init";
   std::string ret;
   for (int i = 0; i < retry; i++) {
     try {
       ret = post(host, port, path, "");
-    } catch (const HTTPException& e) {
+    } catch (const HTTPException &e) {
       std::cerr << e.what() << '\n';
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -151,13 +151,13 @@ std::string post_init(const std::string& host, int port, int retry = 3) {
   return ret;
 }
 
-std::string post_finish(const std::string& host, int port, int retry = 3) {
+std::string post_finish(const std::string &host, int port, int retry = 3) {
   std::string path = "/erase";
   std::string ret;
   for (int i = 0; i < retry; i++) {
     try {
       ret = post(host, port, path, "");
-    } catch (const HTTPException& e) {
+    } catch (const HTTPException &e) {
       std::cerr << e.what() << '\n';
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -165,14 +165,14 @@ std::string post_finish(const std::string& host, int port, int retry = 3) {
   return ret;
 }
 
-std::string post_end(arm::Robot* robot, const std::string& host, int port, int retry = 3) {
+std::string post_end(arm::Robot *robot, const std::string &host, int port, int retry = 3) {
   std::string path = "/set_target_end";
   std::string ret;
   auto json_data = ConvertQVToJson(robot->get_current_joint_q_v(), robot->get_current_end());
   for (int i = 0; i < retry; i++) {
     try {
       ret = post(host, port, path, json_data);
-    } catch (const HTTPException& e) {
+    } catch (const HTTPException &e) {
       std::cerr << e.what() << '\n';
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(5));
@@ -180,7 +180,7 @@ std::string post_end(arm::Robot* robot, const std::string& host, int port, int r
   return ret;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
   // argparse
   argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
   program.add_description("A simple program to control AIRBOT Play via keyboard.");
@@ -213,7 +213,8 @@ int main(int argc, char** argv) {
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
           "\"gripper\": The gripper equipped with Damiao motor \n"
           "\"yinshi\": The Yinshi two-finger gripper \n"
-          "\"newteacher\": The demonstrator equipped with self-developed motor \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
           "\"none\": The arm is not equipped with end effector.");
   program.add_argument("-f", "--follower-end-mode")
       .default_value("gripper")
@@ -223,7 +224,8 @@ int main(int argc, char** argv) {
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
           "\"gripper\": The gripper equipped with Damiao motor \n"
           "\"yinshi\": The Yinshi two-finger gripper \n"
-          "\"newteacher\": The demonstrator equipped with self-developed motor \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
           "\"none\": The arm is not equipped with end effector.");
   program.add_argument("-t", "--trajectory").default_value("").help("The trajectory file to replay");
   program.add_argument("-d", "--direction")
@@ -263,7 +265,7 @@ int main(int argc, char** argv) {
 
   try {
     program.parse_args(argc, argv);
-  } catch (const std::exception& err) {
+  } catch (const std::exception &err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -303,13 +305,13 @@ int main(int argc, char** argv) {
   std::vector<int64_t> manual_times_;
 
   // Synchronization
-  arm::Robot* robot;
+  arm::Robot *robot;
   try {
     robot = new arm::Robot(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
                            std::make_unique<arm::AnalyticIKSolver>(urdf_path),
                            std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(), master_speed,
                            master_end_mode, constrained, real_time);
-  } catch (const std::runtime_error& e) {
+  } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     endwin();
     return 1;
@@ -317,8 +319,8 @@ int main(int argc, char** argv) {
 
   robot->record_load(trajectory_path);
 
-  std::vector<arm::Robot*> followers;
-  for (auto&& i : node_cans) {
+  std::vector<arm::Robot *> followers;
+  for (auto &&i : node_cans) {
     try {
       auto follower = new arm::Robot(
           std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
@@ -356,20 +358,20 @@ int main(int argc, char** argv) {
           std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
       }));
-    } catch (const std::runtime_error& e) {
+    } catch (const std::runtime_error &e) {
       std::cerr << e.what() << '\n';
       endwin();
       {
         std::lock_guard<std::shared_mutex> lock(mutex_);
         running = false;
       }
-      for (auto&& i : threads) i.join();
-      for (auto&& i : followers) delete i;
+      for (auto &&i : threads) i.join();
+      for (auto &&i : followers) delete i;
       delete robot;
       return 1;
     }
   }
-  for (auto&& i : remote_hosts) {
+  for (auto &&i : remote_hosts) {
     auto [host_, port_] = split_host_port(i);
     post_init(host_, port_);
     threads.push_back(std::thread(
@@ -545,13 +547,13 @@ int main(int argc, char** argv) {
     running = false;
   }
 
-  for (auto&& i : remote_hosts) {
+  for (auto &&i : remote_hosts) {
     auto [host, port] = split_host_port(i);
     post_finish(host, port);
   }
 
-  for (auto&& i : threads) i.join();
-  for (auto&& i : followers) delete i;
+  for (auto &&i : threads) i.join();
+  for (auto &&i : followers) delete i;
   delete robot;
 
   return 0;

@@ -19,8 +19,7 @@
 
 namespace fs = std::filesystem;
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   // argparse
   argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
   program.add_description("A simple program to control AIRBOT Play via keyboard.");
@@ -59,9 +58,7 @@ int main(int argc, char **argv)
   program.add_argument("--constrained")
       .default_value(false)
       .implicit_value(true)
-      .help(
-          "Stop arm when going out of bounds in gravity compensation mode. "
-          "False by default");
+      .help("Stop arm when going out of bounds in gravity compensation mode. False by default");
   program.add_argument("--real-time")
       .default_value(false)
       .implicit_value(true)
@@ -69,12 +66,9 @@ int main(int argc, char **argv)
           "Use maximum speed (master speed) for each motor when moving. False "
           "by default");
 
-  try
-  {
+  try {
     program.parse_args(argc, argv);
-  }
-  catch (const std::exception &err)
-  {
+  } catch (const std::exception &err) {
     std::cerr << err.what() << std::endl;
     std::cerr << program;
     return 1;
@@ -88,8 +82,7 @@ int main(int argc, char **argv)
   double master_speed = program.get<double>("--master-speed");
   bool constrained = program.get<bool>("--constrained");
   bool real_time = program.get<bool>("--real-time");
-  if (urdf_path == "")
-  {
+  if (urdf_path == "") {
     if (master_end_mode == "none")
       urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
     else
@@ -98,15 +91,12 @@ int main(int argc, char **argv)
 
   // Synchronization
   std::unique_ptr<arm::Robot> robot;
-  try
-  {
+  try {
     robot = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                    std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                    std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(), master_speed,
-                                    master_end_mode, constrained, real_time);
-  }
-  catch (const std::runtime_error &e)
-  {
+                                         std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                         std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(),
+                                         master_speed, master_end_mode, constrained, real_time);
+  } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     endwin();
     return 1;
@@ -116,10 +106,10 @@ int main(int argc, char **argv)
 
   // init terminal
   filter();
-  initscr();            // Initialize ncurses
-  raw();                // Disable line buffering
-  keypad(stdscr, TRUE); // Enable special keys
-  noecho();             // Disable echoing of characters
+  initscr();             // Initialize ncurses
+  raw();                 // Disable line buffering
+  keypad(stdscr, TRUE);  // Enable special keys
+  noecho();              // Disable echoing of characters
   timeout(2);
 
   // Manipulation of Master arm
@@ -128,164 +118,140 @@ int main(int argc, char **argv)
   auto angle_step = 0.1;
   auto gripper_state = false;
   double x, y, z, w;
-  while (1)
-  {
+  while (1) {
     int ch = getch();
     uint32_t end_snap_signal = robot->get_end_snap_signal();
     uint32_t base_snap_signal = robot->get_base_snap_signal();
-    if (end_snap_signal || base_snap_signal)
-    {
+    if (end_snap_signal || base_snap_signal) {
       robot->end_snap_signal_handle(end_snap_signal);
       robot->base_snap_signal_handle(base_snap_signal);
-    }
-    else
-    {
-      switch (ch)
-      {
-      case '1':
-        robot->add_target_joint_q({angle_step, 0, 0, 0, 0, 0});
-        break;
-      case '2':
-        robot->add_target_joint_q({-angle_step, 0, 0, 0, 0, 0});
-        break;
-      case '3':
-        robot->add_target_joint_q({0, angle_step, 0, 0, 0, 0});
-        break;
-      case '4':
-        robot->add_target_joint_q({0, -angle_step, 0, 0, 0, 0});
-        break;
-      case '5':
-        robot->add_target_joint_q({0, 0, angle_step, 0, 0, 0});
-        break;
-      case '6':
-        robot->add_target_joint_q({0, 0, -angle_step, 0, 0, 0});
-        break;
-      case '7':
-        robot->add_target_joint_q({0, 0, 0, angle_step, 0, 0});
-        break;
-      case '8':
-        robot->add_target_joint_q({0, 0, 0, -angle_step, 0, 0});
-        break;
-      case '9':
-        robot->add_target_joint_q({0, 0, 0, 0, angle_step, 0});
-        break;
-      case '0':
-        robot->add_target_joint_q({0, 0, 0, 0, -angle_step, 0});
-        break;
-      case '-':
-        robot->add_target_joint_q({0, 0, 0, 0, 0, angle_step});
-        break;
-      case '=':
-        robot->add_target_joint_q({0, 0, 0, 0, 0, -angle_step});
-        break;
-      case 'w':
-        if (from_base)
-        {
-          robot->add_target_translation({step, 0, 0});
-        }
-        else
-        {
-          robot->add_target_relative_translation({step, 0, 0});
-        }
-        break;
-      case 's':
-        if (from_base)
-        {
-          robot->add_target_translation({-step, 0, 0});
-        }
-        else
-        {
-          robot->add_target_relative_translation({-step, 0, 0});
-        }
-        break;
-      case 'a':
-        if (from_base)
-        {
-          robot->add_target_translation({0, step, 0});
-        }
-        else
-        {
-          robot->add_target_relative_translation({0, step, 0});
-        }
-        break;
-      case 'd':
-        if (from_base)
-        {
-          robot->add_target_translation({0, -step, 0});
-        }
-        else
-        {
-          robot->add_target_relative_translation({0, -step, 0});
-        }
-        break;
-      case 'q':
-        if (from_base)
-        {
-          robot->add_target_translation({0, 0, step});
-        }
-        else
-        {
-          robot->add_target_relative_translation({0, 0, step});
-        }
-        break;
-      case 'e':
-        if (from_base)
-        {
-          robot->add_target_translation({0, 0, -step});
-        }
-        else
-        {
-          robot->add_target_relative_translation({0, 0, -step});
-        }
-        break;
-      case 'r':
-        from_base = !from_base;
-        break;
-      case 'j':
-        KDL::Rotation::RPY(0, 0, angle_step).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case 'l':
-        KDL::Rotation::RPY(0, 0, -angle_step).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case 'i':
-        KDL::Rotation::RPY(0, angle_step, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case 'k':
-        KDL::Rotation::RPY(0, -angle_step, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case 'u':
-        KDL::Rotation::RPY(angle_step, 0, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case 'o':
-        KDL::Rotation::RPY(-angle_step, 0, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
-        break;
-      case '`':
-        robot->set_target_joint_q({0., 0., 0., 0., 0., 0.});
-        break;
+    } else {
+      switch (ch) {
+        case '1':
+          robot->add_target_joint_q({angle_step, 0, 0, 0, 0, 0});
+          break;
+        case '2':
+          robot->add_target_joint_q({-angle_step, 0, 0, 0, 0, 0});
+          break;
+        case '3':
+          robot->add_target_joint_q({0, angle_step, 0, 0, 0, 0});
+          break;
+        case '4':
+          robot->add_target_joint_q({0, -angle_step, 0, 0, 0, 0});
+          break;
+        case '5':
+          robot->add_target_joint_q({0, 0, angle_step, 0, 0, 0});
+          break;
+        case '6':
+          robot->add_target_joint_q({0, 0, -angle_step, 0, 0, 0});
+          break;
+        case '7':
+          robot->add_target_joint_q({0, 0, 0, angle_step, 0, 0});
+          break;
+        case '8':
+          robot->add_target_joint_q({0, 0, 0, -angle_step, 0, 0});
+          break;
+        case '9':
+          robot->add_target_joint_q({0, 0, 0, 0, angle_step, 0});
+          break;
+        case '0':
+          robot->add_target_joint_q({0, 0, 0, 0, -angle_step, 0});
+          break;
+        case '-':
+          robot->add_target_joint_q({0, 0, 0, 0, 0, angle_step});
+          break;
+        case '=':
+          robot->add_target_joint_q({0, 0, 0, 0, 0, -angle_step});
+          break;
+        case 'w':
+          if (from_base) {
+            robot->add_target_translation({step, 0, 0});
+          } else {
+            robot->add_target_relative_translation({step, 0, 0});
+          }
+          break;
+        case 's':
+          if (from_base) {
+            robot->add_target_translation({-step, 0, 0});
+          } else {
+            robot->add_target_relative_translation({-step, 0, 0});
+          }
+          break;
+        case 'a':
+          if (from_base) {
+            robot->add_target_translation({0, step, 0});
+          } else {
+            robot->add_target_relative_translation({0, step, 0});
+          }
+          break;
+        case 'd':
+          if (from_base) {
+            robot->add_target_translation({0, -step, 0});
+          } else {
+            robot->add_target_relative_translation({0, -step, 0});
+          }
+          break;
+        case 'q':
+          if (from_base) {
+            robot->add_target_translation({0, 0, step});
+          } else {
+            robot->add_target_relative_translation({0, 0, step});
+          }
+          break;
+        case 'e':
+          if (from_base) {
+            robot->add_target_translation({0, 0, -step});
+          } else {
+            robot->add_target_relative_translation({0, 0, -step});
+          }
+          break;
+        case 'r':
+          from_base = !from_base;
+          break;
+        case 'j':
+          KDL::Rotation::RPY(0, 0, angle_step).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case 'l':
+          KDL::Rotation::RPY(0, 0, -angle_step).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case 'i':
+          KDL::Rotation::RPY(0, angle_step, 0).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case 'k':
+          KDL::Rotation::RPY(0, -angle_step, 0).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case 'u':
+          KDL::Rotation::RPY(angle_step, 0, 0).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case 'o':
+          KDL::Rotation::RPY(-angle_step, 0, 0).GetQuaternion(x, y, z, w);
+          robot->add_target_relative_rotation({x, y, z, w});
+          break;
+        case '`':
+          robot->set_target_joint_q({0., 0., 0., 0., 0., 0.});
+          break;
 
-      case 'm':
-        robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
-        break;
-      case '[':
-        robot->set_target_end(0);
-        break;
-      case ']':
-        robot->set_target_end(1);
-        break;
-      case '\\':
-        robot->alter_logging();
-        break;
-      default:
-        break;
+        case 'm':
+          robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
+          break;
+        case '[':
+          robot->set_target_end(0);
+          break;
+        case ']':
+          robot->set_target_end(1);
+          break;
+        case '\\':
+          robot->alter_logging();
+          break;
+        default:
+          break;
       }
-      if (ch == 'z' || ch == 3)
-        break;
+      if (ch == 'z' || ch == 3) break;
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(2));
   }
