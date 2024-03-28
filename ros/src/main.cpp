@@ -54,9 +54,9 @@ int main(int argc, char** argv) {
   node.param("/airbot_arm_ros/interface", can_if, std::string("can0"));
   node.param("/airbot_arm_ros/end_mode", end_mode, std::string("teacher"));
   ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(), can_if.c_str(), end_mode.c_str());
-  arm::Robot robot(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                   std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                   std::make_unique<arm::ChainIDSolver>(urdf_path, "down"), can_if.c_str(), M_PI / 2, end_mode, false, false);
+  arm::Robot robot(
+      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+      std::make_unique<arm::ChainIDSolver>(urdf_path, "down"), can_if.c_str(), M_PI / 2, end_mode, false, false);
 
   /**
    * Initialize ROS publisher and subscriber
@@ -118,7 +118,7 @@ int main(int argc, char** argv) {
           else
             robot.set_target_end(0.01);
         }
-        if (joy->buttons[1] == 1) {                              // A
+        if (joy->buttons[1] == 1) {  // A
           if (!recording) {
             robot.record_start("q");
             ROS_INFO("record started");

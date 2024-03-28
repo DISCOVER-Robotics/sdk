@@ -21,12 +21,12 @@ class WebCam {
   WebCam(uint16_t camera_id, uint16_t height = 480, uint16_t width = 640);
   ~WebCam();
 
-  const cv::Mat& get_frame();
+  const cv::Mat &get_frame();
 
-  std::pair<const cv::Mat&, time_t> get_frame_time();
+  std::pair<const cv::Mat &, time_t> get_frame_time();
 
-  void save_frame(const std::string& filename);
+  void save_frame(const std::string &filename);
 
-  void display_frame(const bool& running);
+  void display_frame(const bool &running);
 };
 #endif
