@@ -30,14 +30,17 @@ void print(std::string s, int w = 0, int h = 0) {
 }
 
 cv::Mat mergeRGBHorizontally(const std::vector<cv::Mat> &mats) {
-  // Ensure that input vector is not empty
-  if (mats.empty()) {
-    std::cerr << "Input vector is empty!" << std::endl;
-    return cv::Mat();
+  // Ensure that input images are all not empty
+  std::vector<cv::Mat> mats_;
+  for (auto image : mats) {
+    if (image.empty())
+      return cv::Mat();
+    else
+      mats_.emplace_back(image);
   }
 
   // Get the number of channels
-  int numChannels = mats[0].channels();
+  int numChannels = mats_[0].channels();
   if (numChannels != 3) {
     std::cerr << "Input Mats must be RGB Mats!" << std::endl;
     return cv::Mat();
@@ -45,10 +48,9 @@ cv::Mat mergeRGBHorizontally(const std::vector<cv::Mat> &mats) {
 
   // Downsample each Mat by a factor of 2
   std::vector<cv::Mat> downsampledMats;
-  for (const auto &mat : mats) {
+  for (const auto &mat : mats_) {
     cv::Mat downsampledMat;
-    cv::resize(mat, downsampledMat, cv::Size(), 0.5,
-               0.5);  // Downsample by a factor of 2
+    cv::resize(mat, downsampledMat, cv::Size(), 0.5, 0.5);  // Downsample by a factor of 2
     downsampledMats.push_back(downsampledMat);
   }
 
@@ -78,6 +80,7 @@ cv::Mat mergeRGBHorizontally(const std::vector<cv::Mat> &mats) {
 
   return mergedRGB;
 }
+
 void createDirIfNotExists(const fs::path &path) {
   if (!fs::exists(path)) {
     try {
@@ -104,12 +107,12 @@ int main(int argc, char **argv) {
   // argparse
   argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
   program.add_argument("-u", "--urdf")
-      .default_value(std::getenv("URDF_PATH") ? std::string(std::getenv("URDF_PATH"))
-                                              : std::string("/usr/local/share/airbot_play/airbot_play_v2_1/"
-                                                            "urdf/airbot_play_v2_1_with_gripper.urdf"))
+      .default_value(
+          std::getenv("URDF_PATH")
+              ? std::string(std::getenv("URDF_PATH"))
+              : std::string("/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf"))
       .help(
-          "URDF file for describing the arm. If not provided, check and read "
-          "from the "
+          "URDF file for describing the arm. If not provided, check and read from the "
           "environment variable URDF_PATH or load from deb install path.");
   program.add_argument("-m", "--master")
       .required()
@@ -127,8 +130,7 @@ int main(int argc, char **argv) {
       .default_value("newteacher")
       .choices("newteacher", "teacher", "gripper", "yinshi")
       .help(
-          "The mode of the master arm end effector. Available choices: "
-          "\"teacher\", \"gripper\", \"yinshi\", "
+          "The mode of the master arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
           "\"newteacher\"");
   program.add_argument("-f", "--frequency")
       .scan<'i', int>()
@@ -138,8 +140,7 @@ int main(int argc, char **argv) {
       .default_value("gripper")
       .choices("newteacher", "teacher", "gripper", "yinshi")
       .help(
-          "The mode of the follower arm end effector. Available choices: "
-          "\"teacher\", \"gripper\", \"yinshi\", "
+          "The mode of the follower arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
           "\"newteacher\"");
   program.add_argument("--master-speed")
       .scan<'g', double>()
@@ -152,9 +153,7 @@ int main(int argc, char **argv) {
   program.add_argument("-c", "--camera")
       .default_value<std::vector<std::string>>({})
       .append()
-      .help(
-          "Camera devices indices. Can use multiple times (multiple "
-          "cameras). E.g., -c 0 -c 1");
+      .help("Camera devices indices. Can use multiple times (multiple cameras). E.g., -c 0 -c 1");
   program.add_argument("-se", "--start-episode")
       .default_value(0)
       .scan<'d', int>()
@@ -217,8 +216,7 @@ int main(int argc, char **argv) {
 
   // for (auto&& i : cameras)
   //   if (getenv("DISPLAY") != NULL)
-  //     camera_threads.emplace_back(std::thread([&](std::shared_ptr<WebCam>
-  //     cam) { cam->display_frame(running); }, i));
+  //     camera_threads.emplace_back(std::thread([&](std::shared_ptr<WebCam> cam) { cam->display_frame(running); }, i));
 
   assert(start_joint_pos.size() == 7 && "The size of start_joint_pos should be 7.");
   std::vector<double> joint_arm(start_joint_pos.begin(), start_joint_pos.end() - 1);

@@ -17,8 +17,8 @@
 #include <thread>
 #include <vector>
 
-#include "camera/webcam.hpp"
 #include "argparse/argparse.hpp"
+#include "camera/webcam.hpp"
 
 namespace fs = std::filesystem;
 
@@ -30,56 +30,55 @@ void print(std::string s, int w = 0, int h = 0) {
 }
 
 cv::Mat mergeRGBHorizontally(const std::vector<cv::Mat>& mats) {
-    // Ensure that input images are all not empty
-    std::vector<cv::Mat> mats_;
-    for (auto image : mats)
-    {
-        if (image.empty())
-        return cv::Mat();
-        else
-        mats_.emplace_back(image);
+  // Ensure that input images are all not empty
+  std::vector<cv::Mat> mats_;
+  for (auto image : mats) {
+    if (image.empty())
+      return cv::Mat();
+    else
+      mats_.emplace_back(image);
+  }
+
+  // Get the number of channels
+  int numChannels = mats_[0].channels();
+  if (numChannels != 3) {
+    std::cerr << "Input Mats must be RGB Mats!" << std::endl;
+    return cv::Mat();
+  }
+
+  // Downsample each Mat by a factor of 2
+  std::vector<cv::Mat> downsampledMats;
+  for (const auto& mat : mats_) {
+    cv::Mat downsampledMat;
+    cv::resize(mat, downsampledMat, cv::Size(), 0.5, 0.5);  // Downsample by a factor of 2
+    downsampledMats.push_back(downsampledMat);
+  }
+
+  // Split channels
+  std::vector<cv::Mat> channels(downsampledMats.size() * numChannels);
+  for (size_t i = 0; i < downsampledMats.size(); ++i) {
+    std::vector<cv::Mat> tempChannels;
+    cv::split(downsampledMats[i], tempChannels);
+    for (int j = 0; j < numChannels; ++j) {
+      channels[i * numChannels + j] = tempChannels[j];
     }
+  }
 
-    // Get the number of channels
-    int numChannels = mats_[0].channels();
-    if (numChannels != 3) {
-        std::cerr << "Input Mats must be RGB Mats!" << std::endl;
-        return cv::Mat();
+  // Merge channels horizontally
+  std::vector<cv::Mat> mergedChannels(numChannels);
+  for (int i = 0; i < numChannels; ++i) {
+    std::vector<cv::Mat> tempChannels;
+    for (size_t j = 0; j < downsampledMats.size(); ++j) {
+      tempChannels.push_back(channels[j * numChannels + i]);
     }
+    cv::hconcat(tempChannels, mergedChannels[i]);
+  }
 
-    // Downsample each Mat by a factor of 2
-    std::vector<cv::Mat> downsampledMats;
-    for (const auto& mat : mats_) {
-        cv::Mat downsampledMat;
-        cv::resize(mat, downsampledMat, cv::Size(), 0.5, 0.5);  // Downsample by a factor of 2
-        downsampledMats.push_back(downsampledMat);
-    }
+  // Merge RGB Mats
+  cv::Mat mergedRGB;
+  cv::merge(mergedChannels, mergedRGB);
 
-    // Split channels
-    std::vector<cv::Mat> channels(downsampledMats.size() * numChannels);
-    for (size_t i = 0; i < downsampledMats.size(); ++i) {
-        std::vector<cv::Mat> tempChannels;
-        cv::split(downsampledMats[i], tempChannels);
-        for (int j = 0; j < numChannels; ++j) {
-        channels[i * numChannels + j] = tempChannels[j];
-        }
-    }
-
-    // Merge channels horizontally
-    std::vector<cv::Mat> mergedChannels(numChannels);
-    for (int i = 0; i < numChannels; ++i) {
-        std::vector<cv::Mat> tempChannels;
-        for (size_t j = 0; j < downsampledMats.size(); ++j) {
-        tempChannels.push_back(channels[j * numChannels + i]);
-        }
-        cv::hconcat(tempChannels, mergedChannels[i]);
-    }
-
-    // Merge RGB Mats
-    cv::Mat mergedRGB;
-    cv::merge(mergedChannels, mergedRGB);
-
-    return mergedRGB;
+  return mergedRGB;
 }
 
 void createDirIfNotExists(const fs::path& path) {
@@ -235,18 +234,22 @@ int main(int argc, char** argv) {
   std::vector<double> joint_arm_left(start_joint_pos_left.begin(), start_joint_pos_left.end() - 1);
   std::vector<double> joint_arm_right(start_joint_pos_right.begin(), start_joint_pos_right.end() - 1);
 
-  auto leader_left = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can_left.c_str(), master_speed, master_end_mode);
-  auto follower_left = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), node_can_left.c_str(), follower_speed, follower_end_mode); 
-  auto leader_right = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can_right.c_str(), master_speed, master_end_mode);
-  auto follower_right = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), node_can_right.c_str(), follower_speed, follower_end_mode);
+  auto leader_left = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
+                                                  std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                                  std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
+                                                  master_can_left.c_str(), master_speed, master_end_mode);
+  auto follower_left = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
+                                                    std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                                    std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
+                                                    node_can_left.c_str(), follower_speed, follower_end_mode);
+  auto leader_right = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
+                                                   std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                                   std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
+                                                   master_can_right.c_str(), master_speed, master_end_mode);
+  auto follower_right = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
+                                                     std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                                     std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
+                                                     node_can_right.c_str(), follower_speed, follower_end_mode);
 
   threads.emplace_back(std::thread([&]() {
     while (true) {
@@ -285,22 +288,22 @@ int main(int argc, char** argv) {
         }
       if (flag) continue;
       cv::Mat merged = mergeRGBHorizontally(images);
-      if (!merged.empty())
-      {
+      if (!merged.empty()) {
         cv::imshow("Concat", merged);
         cv::waitKey(1);
       }
     }
   }));
-  
 
   // record data
   std::vector<time_t> time_records_;
   std::vector<double> endt_q_records_left_, endt_v_records_left_, endf_q_records_left_, endf_v_records_left_;
-  std::vector<std::vector<double>> qt_records_left_, vt_records_left_, tt_records_left_, qf_records_left_, vf_records_left_, tf_records_left_;
+  std::vector<std::vector<double>> qt_records_left_, vt_records_left_, tt_records_left_, qf_records_left_,
+      vf_records_left_, tf_records_left_;
   std::vector<std::vector<std::vector<double>>> eef_posef_records_left_, eef_poset_records_left_;
   std::vector<double> endt_q_records_right_, endt_v_records_right_, endf_q_records_right_, endf_v_records_right_;
-  std::vector<std::vector<double>> qt_records_right_, vt_records_right_, tt_records_right_, qf_records_right_, vf_records_right_, tf_records_right_;
+  std::vector<std::vector<double>> qt_records_right_, vt_records_right_, tt_records_right_, qf_records_right_,
+      vf_records_right_, tf_records_right_;
   std::vector<std::vector<std::vector<double>>> eef_posef_records_right_, eef_poset_records_right_;
   std::vector<std::vector<cv::Mat>> images_records_(camera_num);
   bool recording = false;
@@ -432,7 +435,7 @@ int main(int argc, char** argv) {
           data["/observations/eff_f_left"] = tf_records_left_;
           data["/observations/endpos_f_left"] = endf_q_records_left_;
           data["/observations/eef_pose_f_left"] = eef_posef_records_left_;
-          
+
           data["/observations/pos_t_right"] = qt_records_right_;
           data["/observations/vel_t_right"] = vt_records_right_;
           data["/observations/eff_t_right"] = tt_records_right_;
@@ -511,14 +514,16 @@ int main(int argc, char** argv) {
                   std::to_string(leader_left->get_current_joint_q()[2]) + " " +
                   std::to_string(leader_left->get_current_joint_q()[3]) + " " +
                   std::to_string(leader_left->get_current_joint_q()[4]) + " " +
-                  std::to_string(leader_left->get_current_joint_q()[5]) + " " + std::to_string(leader_left->get_current_end()),
+                  std::to_string(leader_left->get_current_joint_q()[5]) + " " +
+                  std::to_string(leader_left->get_current_end()),
               2, 0);
         print("Current joint positions of right: " + std::to_string(leader_right->get_current_joint_q()[0]) + " " +
                   std::to_string(leader_right->get_current_joint_q()[1]) + " " +
                   std::to_string(leader_right->get_current_joint_q()[2]) + " " +
                   std::to_string(leader_right->get_current_joint_q()[3]) + " " +
                   std::to_string(leader_right->get_current_joint_q()[4]) + " " +
-                  std::to_string(leader_right->get_current_joint_q()[5]) + " " + std::to_string(leader_right->get_current_end()),
+                  std::to_string(leader_right->get_current_joint_q()[5]) + " " +
+                  std::to_string(leader_right->get_current_end()),
               3, 0);
         print("Current eef pose of left: " + std::to_string(leader_left->get_current_pose()[0][0]) + " " +
                   std::to_string(leader_left->get_current_pose()[0][1]) + " " +
@@ -549,7 +554,6 @@ int main(int argc, char** argv) {
     }
   }
 
-
   {
     std::lock_guard<std::shared_mutex> lock(mutex_);
     running = false;
@@ -557,10 +561,10 @@ int main(int argc, char** argv) {
   }
 
   for (auto&& i : threads) i.join();
-  auto reset_leader_left = std::thread([&](){leader_left.reset();});
-  auto reset_follower_left = std::thread([&](){follower_left.reset();});
-  auto reset_leader_right = std::thread([&](){leader_right.reset();});
-  auto reset_follower_right = std::thread([&](){follower_right.reset();});
+  auto reset_leader_left = std::thread([&]() { leader_left.reset(); });
+  auto reset_follower_left = std::thread([&]() { follower_left.reset(); });
+  auto reset_leader_right = std::thread([&]() { leader_right.reset(); });
+  auto reset_follower_right = std::thread([&]() { follower_right.reset(); });
   reset_leader_left.join();
   reset_follower_left.join();
   reset_leader_right.join();
