@@ -11,5 +11,5 @@ airbot-tools:
     - mkdir $CI_PROJECT_DIR/airbot-tools && mv ../*.deb $CI_PROJECT_DIR
   artifacts:
     paths:
-      - "$CI_PROJECT_DIR/airbot-tools*.deb"
+      - "$CI_PROJECT_DIR/airbot_tools*.deb"
     expire_in: 1 week
