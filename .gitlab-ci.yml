@@ -22,9 +22,9 @@ include:
 release:
   stage: release
   needs:
-    - job: ros-upload
+    - job: ros
       artifacts: true
-    - job: python-upload
+    - job: python
       artifacts: true
     - job: airbot-tools
       artifacts: true
