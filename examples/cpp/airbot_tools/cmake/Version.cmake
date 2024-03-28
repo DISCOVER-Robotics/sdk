@@ -24,7 +24,12 @@ execute_process(
 )
 if(DEFINED ENV{CI_COMMIT_TAG})
   # If CI_COMMIT_TAG exists, use its value for VERSION_STR
-  set(VERSION_STR $ENV{CI_COMMIT_TAG})
+  # set(VERSION_STR ${PROJECT_VERSION})
+  if ("v${PROJECT_VERSION}" STREQUAL $ENV{CI_COMMIT_TAG})
+    set(VERSION_STR ${PROJECT_VERSION})
+  else()
+    message(FATAL_ERROR "$ENV{CI_COMMIT_TAG} does not match the project version ${PROJECT_VERSION}")
+  endif()
 else()
   # If CI_COMMIT_TAG does not exist, find git commit hash and use it for VERSION_STR
   if(GIT_CLEAN_CHECK)
