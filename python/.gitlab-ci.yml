@@ -25,5 +25,5 @@ python-upload:
   script:
     - export WHL_FILE=$(ls packages/ | grep whl)
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${WHL_FILE} \
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${WHL_FILE} \
       ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/python-sdk/${CI_COMMIT_REF_NAME}/${WHL_FILE}

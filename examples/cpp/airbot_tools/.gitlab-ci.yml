@@ -25,5 +25,5 @@ airbot-tools-upload:
   script:
     - export DEB_FILE=$(ls packages/ | grep deb)
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file ${DEB_FILE} \
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${DEB_FILE} \
       ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ros1/${CI_COMMIT_REF_NAME}/${DEB_FILE}
