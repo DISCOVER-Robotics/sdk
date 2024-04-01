@@ -18,12 +18,9 @@ constexpr std::array<double, 3> MOTOR_DOWN_ANGLE = {0., 0.1922, -0.1376};
 constexpr std::array<double, 3> RANGE = {0.1, 0.1, 0.1};
 
 constexpr bool in_range(const std::array<double, 3> input) {
-  return (MOTOR_DOWN_ANGLE[0] - RANGE[0] < input[0] &&
-          input[0] < MOTOR_DOWN_ANGLE[0] + RANGE[0] &&
-          MOTOR_DOWN_ANGLE[1] - RANGE[1] < input[1] &&
-          input[1] < MOTOR_DOWN_ANGLE[1] + RANGE[1] &&
-          MOTOR_DOWN_ANGLE[2] - RANGE[2] < input[2] &&
-          input[2] < MOTOR_DOWN_ANGLE[2] + RANGE[2]);
+  return (MOTOR_DOWN_ANGLE[0] - RANGE[0] < input[0] && input[0] < MOTOR_DOWN_ANGLE[0] + RANGE[0] &&
+          MOTOR_DOWN_ANGLE[1] - RANGE[1] < input[1] && input[1] < MOTOR_DOWN_ANGLE[1] + RANGE[1] &&
+          MOTOR_DOWN_ANGLE[2] - RANGE[2] < input[2] && input[2] < MOTOR_DOWN_ANGLE[2] + RANGE[2]);
 }
 
 int main(int argc, char **argv) {
@@ -42,13 +39,14 @@ int main(int argc, char **argv) {
   program.add_argument("-e", "--master-end-mode")
       .default_value("newteacher")
       .choices("teacher", "gripper", "yinshi", "newteacher", "none")
-      .help("The mode of the master arm end effector. Available choices: \n"
-            "\"teacher\": The demonstrator equipped with Damiao motor \n"
-            "\"gripper\": The gripper equipped with Damiao motor \n"
-            "\"yinshi\": The Yinshi two-finger gripper \n"
-            "\"newteacher\": The demonstrator equipped with self-developed "
-            "motor \n"
-            "\"none\": The arm is not equipped with end effector.");
+      .help(
+          "The mode of the master arm end effector. Available choices: \n"
+          "\"teacher\": The demonstrator equipped with Damiao motor \n"
+          "\"gripper\": The gripper equipped with Damiao motor \n"
+          "\"yinshi\": The Yinshi two-finger gripper \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
+          "\"none\": The arm is not equipped with end effector.");
   program.add_argument("-c", "--camera")
       .scan<'i', int>()
       .default_value(-1)
@@ -64,9 +62,7 @@ int main(int argc, char **argv) {
   // setup logger
   std::vector<spdlog::sink_ptr> sinks;
   sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-      (std::string("logs/tool_set_zero_logs") + arm::get_timestring() + ".log")
-          .c_str(),
-      1024 * 1024, 10, false));
+      (std::string("logs/tool_set_zero_logs") + arm::get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
   std::shared_ptr<spdlog::logger> logger = arm::setup_logger(sinks);
   spdlog::flush_every(std::chrono::seconds(1));
   logger->set_level(spdlog::level::info);
@@ -74,9 +70,7 @@ int main(int argc, char **argv) {
   std::string interface = program.get<std::string>("--master");
   std::string gripper_type = program.get<std::string>("--master-end-mode");
   int camera = program.get<int>("--camera");
-  system((std::string("ip link set ") + std::string(interface) +
-          std::string(" up type can bitrate 1000000"))
-             .c_str());
+  system((std::string("ip link set ") + std::string(interface) + std::string(" up type can bitrate 1000000")).c_str());
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
   bool running = true;
@@ -84,28 +78,22 @@ int main(int argc, char **argv) {
   std::shared_ptr<WebCam> camera_obj;
   if (camera >= 0) {
     camera_obj = std::make_shared<WebCam>(camera);
-    camera_thread = std::thread(
-        [&](std::shared_ptr<WebCam> cam) { cam->display_frame(running); },
-        camera_obj);
+    camera_thread = std::thread([&](std::shared_ptr<WebCam> cam) { cam->display_frame(running); }, camera_obj);
   }
   auto release_brake = 1;
   std::vector<std::unique_ptr<arm::MotorDriver>> motor_driver_;
   for (uint8_t i = 0; i < 3; i++) {
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(
-        arm::CAN0, i + 1, interface.c_str(), logger, "OD"));
+    motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "OD"));
     motor_driver_[i]->MotorInit();
     motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
   for (uint8_t i = 3; i < 6; i++) {
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(
-        arm::CAN0, i + 1, interface.c_str(), logger, "DM"));
+    motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "DM"));
     motor_driver_[i]->MotorInit();
     motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
-  if (gripper_type != "none"){
-
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(
-        arm::CAN0, 7, interface.c_str(), logger, "OD"));
+  if (gripper_type != "none") {
+    motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, "OD"));
     motor_driver_[6]->MotorInit();
     motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
@@ -127,8 +115,7 @@ int main(int argc, char **argv) {
     }
   });
 
-  std::cout << blue << "放入标零工具，将机械臂牵引到零点后，按下回车键" << reset
-            << std::endl;
+  std::cout << blue << "放入标零工具，将机械臂牵引到零点后，按下回车键" << reset << std::endl;
   std::string tmp;
   getline(std::cin, tmp);
 
@@ -151,28 +138,23 @@ int main(int argc, char **argv) {
   thread_brake.join();
 
   for (auto &&i : motor_driver_) {
-    i->MotorInit(); // This is to init DM motors after timeout due to
-                    // thread_brake.join()
+    i->MotorInit();  // This is to init DM motors after timeout due to
+                     // thread_brake.join()
     i->set_motor_control_mode(arm::MotorDriver::POS);
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
-  while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[1]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[2]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[3]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[4]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[5]->get_motor_pos()) > 0.1) {
+  while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[1]->get_motor_pos()) > 0.1 ||
+         std::abs(motor_driver_[2]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[3]->get_motor_pos()) > 0.1 ||
+         std::abs(motor_driver_[4]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[5]->get_motor_pos()) > 0.1) {
     for (auto &&i : motor_driver_) {
       i->MotorPosModeCmd(0, 0.5);
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
   }
 
-  for (auto &&i : motor_driver_)
-    i->MotorDeInit();
+  for (auto &&i : motor_driver_) i->MotorDeInit();
 
   running = false;
-  if (camera_thread.joinable())
-    camera_thread.join();
+  if (camera_thread.joinable()) camera_thread.join();
   return 0;
 }
