@@ -98,10 +98,10 @@ int main(int argc, char **argv) {
   std::unique_ptr<arm::Robot> robot;
   try {
     robot = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                           std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                           std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(), master_speed,
-                           master_end_mode, constrained, real_time, false, forearm_type);
-  } catch (const std::runtime_error& e) {
+                                         std::make_unique<arm::AnalyticIKSolver>(urdf_path),
+                                         std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(),
+                                         master_speed, master_end_mode, constrained, real_time, false, forearm_type);
+  } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     endwin();
     return 1;
@@ -119,8 +119,9 @@ int main(int argc, char **argv) {
 
   // Manipulation of Master arm
   auto from_base = true;
-  auto step = 0.01;
-  auto angle_step = 0.1;
+  auto step = 0.1;
+  auto angle_step = 0.5;
+  auto param = 500.;
   auto gripper_state = false;
   double x, y, z, w;
   while (1) {
@@ -240,7 +241,7 @@ int main(int argc, char **argv) {
         case '`':
           robot->set_target_joint_q({0., 0., 0., 0., 0., 0.});
           break;
-
+ 
         case 'm':
           robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
           break;
