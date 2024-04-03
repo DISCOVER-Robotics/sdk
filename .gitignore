@@ -3,3 +3,5 @@
 *.ddeb
 **/logs/
 **/records/
+ri_ws/
+.vscode/

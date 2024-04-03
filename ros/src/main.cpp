@@ -5,7 +5,7 @@
 #include <sensor_msgs/JointState.h>
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/Bool.h>
-#include <std_msgs/String.h>
+#include <std_msgs/Float64.h>
 
 #include <airbot/airbot.hpp>
 #include <kdl/frames.hpp>
@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
   Pose airbot_pose_msg;
   JointState joint_states_msg;
   Joy joy_msgs;
-  std_msgs::String end_state_msg;
+  std_msgs::Float64 end_state_msg;
   /**
    * Initialize ROS node
    */
@@ -54,34 +54,40 @@ int main(int argc, char** argv) {
   node.param("/airbot_arm_ros/interface", can_if, std::string("can0"));
   node.param("/airbot_arm_ros/end_mode", end_mode, std::string("teacher"));
   ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(), can_if.c_str(), end_mode.c_str());
-  arm::Robot robot(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, "down"), can_if.c_str(), M_PI / 2, end_mode, false, false);
+  arm::Robot robot(urdf_path, can_if, "down", M_PI / 2, end_mode, false);
 
   /**
    * Initialize ROS publisher and subscriber
    */
-  auto arm_pose_publisher = node.advertise<Pose>("/airbot_play/arm_pose", 10);
+  auto arm_pose_publisher = node.advertise<Pose>("/airbot_play/end_pose", 10);
   auto joint_states_publisher = node.advertise<JointState>("/airbot_play/joint_states", 10);
-  auto end_state_publisher = node.advertise<std_msgs::String>("/airbot_play/gripper/state", 10);
+  auto end_state_publisher = node.advertise<std_msgs::Float64>("/airbot_play/gripper/position", 10);
 
-  auto arm_pose_subscriber = node.subscribe<Pose>(
-      "/airbot_play/pose_cmd", 10, {[&robot](const PosePtr& pose) {
+  auto subscriber_target_pose = node.subscribe<Pose>(
+      "/airbot_play/set_target_pose", 10, {[&robot](const PosePtr& pose) {
         robot.set_target_pose({pose->position.x, pose->position.y, pose->position.z},
                               {pose->orientation.x, pose->orientation.y, pose->orientation.z, pose->orientation.w});
       }});
-  auto joint_states_subscriber = node.subscribe<JointState>(
-      "/airbot_play/joint_cmd", 10, {[&robot](const JointStatePtr& joints) {
+  auto subscriber_target_joint_pos = node.subscribe<JointState>(
+      "/airbot_play/set_target_joint_q", 10, {[&robot](const JointStatePtr& joints) {
         robot.set_target_joint_q({joints->position[0], joints->position[1], joints->position[2], joints->position[3],
                                   joints->position[4], joints->position[5]});
       }});
-  auto end_subscriber = node.subscribe<std_msgs::Bool>(
-      "/airbot_play/gripper/state_cmd", 10, {[&robot](const std_msgs::Bool::ConstPtr& end) {
+  auto subscriber_target_joint_vel = node.subscribe<JointState>(
+      "/airbot_play/set_target_joint_v", 10, {[&robot](const JointStatePtr& joints) {
+        robot.set_target_joint_v({joints->velocity[0], joints->velocity[1], joints->velocity[2], joints->velocity[3],
+                                  joints->velocity[4], joints->velocity[5]});
+      }});
+  auto subscriber_target_set_position = node.subscribe<std_msgs::Float64>(
+      "/airbot_play/gripper/set_position", 10, {[&robot](const std_msgs::Float64::ConstPtr& end) {
         robot.set_target_end(std::clamp(end->data ? 0.99 : 0.01, 0.0, 1.0));
       }});
-  auto scale = 0.01d;
+
+  auto scale = 0.001d;
   auto angle_scale = 0.2d;
   auto recording = false;
+  auto compensating = false;
+
   auto joy_msgs_subscriber = node.subscribe<Joy>(
       "/joy_latched", 10, {[&robot, &scale, &angle_scale](const JoyPtr& joy) {
         bool flag = false;
@@ -89,10 +95,10 @@ int main(int argc, char** argv) {
         if (joy->buttons[7] == 0) {
           if (std::abs(joy->axes[1]) > 1e-3 || std::abs(joy->axes[0]) > 1e-3 || std::abs(joy->axes[3]) > 1e-3) {
             if (joy->buttons[6] == 1) {  // LT
-              robot.add_target_relative_translation(
-                  {-scale * joy->axes[3], scale * joy->axes[0], scale * joy->axes[1]});
+              robot.add_target_relative_translation({-scale * joy->axes[3], scale * joy->axes[0], scale * joy->axes[1]},
+                                                    false);
             } else {
-              robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]});
+              robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]}, false);
             }
           }
         } else {
@@ -105,13 +111,19 @@ int main(int argc, char** argv) {
             } else {
               KDL::Rotation::Rot(KDL::Vector(0, 0, 1), -angle_scale * joy->axes[4]).GetQuaternion(x, y, z, w);
             }
-            robot.add_target_relative_rotation({x, y, z, w});
+            robot.add_target_relative_rotation({x, y, z, w}, false);
           }
         }
       }});
   auto joy_msgs_diff_subsciber =
       node.subscribe<Joy>("/joy_trigger", 10, [&robot, &scale, &angle_scale, &recording](const JoyPtr& joy) {
-        if (joy->buttons[3] == 1) robot.gravity_compensation();  // Y
+        if (joy->buttons[3] == 1) {
+          if (!compensating)
+            robot.gravity_compensation();
+          else
+            robot.stop_gravity_compensation();
+          compensating = !compensating;
+        }  // Y
         if (joy->buttons[0] == 1) {
           if (robot.get_current_end() < 0.5)
             robot.set_target_end(0.99);
@@ -161,16 +173,7 @@ int main(int argc, char** argv) {
       joint_states_msg.name.push_back("joint" + std::to_string(motor_id));
     joint_states_publisher.publish(joint_states_msg);
 
-    std::string end_status;
-    auto end_pos = robot.get_current_end();
-    if (end_pos > 0.8)
-      end_status = "open";
-    else if (end_pos < 0.2)
-      end_status = "close";
-    else
-      end_status = "moving";
-    end_state_msg.data = end_status;
-
+    end_state_msg.data = robot.get_current_end();
     end_state_publisher.publish(end_state_msg);
 
     // Clear message
