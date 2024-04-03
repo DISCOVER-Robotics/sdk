@@ -173,14 +173,14 @@ int main(int argc, char **argv) {
           if (from_base) {
             robot->add_target_translation({step, 0, 0});
           } else {
-            robot->add_target_relative_translation({step, 0, 0});
+            robot->add_target_relative_translation({0, 0, step});
           }
           break;
         case 's':
           if (from_base) {
             robot->add_target_translation({-step, 0, 0});
           } else {
-            robot->add_target_relative_translation({-step, 0, 0});
+            robot->add_target_relative_translation({0, 0, -step});
           }
           break;
         case 'a':
@@ -201,14 +201,14 @@ int main(int argc, char **argv) {
           if (from_base) {
             robot->add_target_translation({0, 0, step});
           } else {
-            robot->add_target_relative_translation({0, 0, step});
+            robot->add_target_relative_translation({-step, 0, 0});
           }
           break;
         case 'e':
           if (from_base) {
             robot->add_target_translation({0, 0, -step});
           } else {
-            robot->add_target_relative_translation({0, 0, -step});
+            robot->add_target_relative_translation({step, 0, 0});
           }
           break;
         case 'r':
@@ -241,7 +241,6 @@ int main(int argc, char **argv) {
         case '`':
           robot->set_target_joint_q({0., 0., 0., 0., 0., 0.});
           break;
- 
         case 'm':
           robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
           break;
