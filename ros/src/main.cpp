@@ -115,8 +115,8 @@ int main(int argc, char** argv) {
           }
         }
       }});
-  auto joy_msgs_diff_subsciber =
-      node.subscribe<Joy>("/joy_trigger", 10, [&robot, &scale, &angle_scale, &recording](const JoyPtr& joy) {
+  auto joy_msgs_diff_subsciber = node.subscribe<Joy>(
+      "/joy_trigger", 10, [&robot, &scale, &angle_scale, &recording, &compensating](const JoyPtr& joy) {
         if (joy->buttons[3] == 1) {
           if (!compensating)
             robot.gravity_compensation();
