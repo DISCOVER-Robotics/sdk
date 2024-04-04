@@ -14,7 +14,17 @@ variables:
   CI_REGISTRY: registry.qiuzhi.tech
   GIT_SUBMODULE_STRATEGY: recursive
 
-include: 
+style-test:
+  stage: test
+  image: python:3.9
+  before_script:
+    - pip install clang-format
+    - pip install pre-commit
+    - pre-commit install
+  script:
+    - pre-commit run --all-files
+
+include:
   - 'ros/.gitlab-ci.yml'
   - 'python/.gitlab-ci.yml'
   - 'examples/cpp/airbot_tools/.gitlab-ci.yml'
@@ -37,17 +47,17 @@ release:
       export AIRBOT_DEB_TOOLS=$(ls packages/ | grep "airbot_tools") &&
       export AIRBOT_DEB_TOOLS_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/airbot-tools/${CI_COMMIT_REF_NAME}/${AIRBOT_DEB_TOOLS}"
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file  packages/${AIRBOT_DEB_TOOLS} ${AIRBOT_DEB_TOOLS_LINK}  
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file  packages/${AIRBOT_DEB_TOOLS} ${AIRBOT_DEB_TOOLS_LINK}
     - |
       export ROS_DEB=$(ls packages/ | grep "ros-interface") &&
       export ROS_DEB_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ros1/${CI_COMMIT_REF_NAME}/${ROS_DEB}"
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${ROS_DEB} ${ROS_DEB_LINK}  
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${ROS_DEB} ${ROS_DEB_LINK}
     - |
       export PY_WHL=$(ls packages/ | grep "whl") &&
       export PY_WHL_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/python/${CI_COMMIT_REF_NAME}/${PY_WHL}"
     - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${PY_WHL} ${PY_WHL_LINK}  
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${PY_WHL} ${PY_WHL_LINK}
     - |
       release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
         --assets-link "{\"name\":\"${AIRBOT_DEB_TOOLS}\",\"url\":\"${AIRBOT_DEB_TOOLS_LINK}\", \"link_type\":\"package\"}" \

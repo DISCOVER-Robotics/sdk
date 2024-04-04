@@ -4,7 +4,6 @@
 #include <ctime>
 #include <iostream>
 
-#include "airbot/libraries/utils.hpp"
 #undef OK        // Avoid conflict with ncurses
 #undef KEY_UP    // Avoid conflict with ncurses
 #undef KEY_DOWN  // Avoid conflict with ncurses

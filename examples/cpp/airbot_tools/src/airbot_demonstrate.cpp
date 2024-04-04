@@ -2,20 +2,6 @@
 #undef OK
 
 #include <airbot/airbot.hpp>
-#include <array>
-#include <chrono>
-#include <cstdlib>
-#include <filesystem>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <memory>
-#include <queue>
-#include <shared_mutex>
-#include <sstream>
-#include <string>
-#include <thread>
-#include <vector>
 
 #include "argparse/argparse.hpp"
 #include "camera/webcam.hpp"
@@ -105,15 +91,10 @@ inline time_t get_timestamp() {
 
 int main(int argc, char **argv) {
   // argparse
-  argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_sync", AIRBOT_VERSION);
   program.add_argument("-u", "--urdf")
-      .default_value(
-          std::getenv("URDF_PATH")
-              ? std::string(std::getenv("URDF_PATH"))
-              : std::string("/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf"))
-      .help(
-          "URDF file for describing the arm. If not provided, check and read from the "
-          "environment variable URDF_PATH or load from deb install path.");
+      .default_value(std::string())
+      .help("Manually provided URDF path to override default paths.");
   program.add_argument("-m", "--master")
       .required()
       .default_value("can0")
@@ -132,10 +113,6 @@ int main(int argc, char **argv) {
       .help(
           "The mode of the master arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
           "\"newteacher\"");
-  program.add_argument("-f", "--frequency")
-      .scan<'i', int>()
-      .default_value(15)
-      .help("The frequency of the recording action");
   program.add_argument("--follower-end-mode")
       .default_value("gripper")
       .choices("newteacher", "teacher", "gripper", "yinshi")
@@ -150,6 +127,10 @@ int main(int argc, char **argv) {
       .scan<'g', double>()
       .default_value(3.)
       .help("The joint speed of the follower arm in percentage of PI.");
+  program.add_argument("-f", "--frequency")
+      .scan<'i', int>()
+      .default_value(15)
+      .help("The frequency of the recording action");
   program.add_argument("-c", "--camera")
       .default_value<std::vector<std::string>>({})
       .append()
@@ -193,9 +174,19 @@ int main(int argc, char **argv) {
   int max_time_steps = program.get<int>("--max-time-steps");
   int frequency = program.get<int>("--frequency");
   std::vector<double> start_joint_pos = program.get<std::vector<double>>("--start-joint-pos");
-
   std::size_t camera_num = camera_strs.size();
   std::vector<std::shared_ptr<WebCam>> cameras(camera_num);
+  if (urdf_path == "") {
+    if (master_end_mode == "none")
+      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
+    else
+      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf";
+  }
+  if (camera_num == 0) {
+    std::cerr << "No camera device specified." << std::endl;
+    return 1;
+  }
+
   bool running = true;
   std::shared_mutex mutex_;
   std::vector<std::thread> threads;
@@ -214,29 +205,19 @@ int main(int argc, char **argv) {
   }
   for (auto &&ct : camera_threads_init) ct.join();
 
-  // for (auto&& i : cameras)
-  //   if (getenv("DISPLAY") != NULL)
-  //     camera_threads.emplace_back(std::thread([&](std::shared_ptr<WebCam> cam) { cam->display_frame(running); }, i));
-
   assert(start_joint_pos.size() == 7 && "The size of start_joint_pos should be 7.");
   std::vector<double> joint_arm(start_joint_pos.begin(), start_joint_pos.end() - 1);
 
-  auto leader = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), master_can.c_str(), master_speed, master_end_mode);
-  auto follower = std::make_unique<arm::Robot>(
-      std::make_unique<arm::AnalyticFKSolver>(urdf_path), std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-      std::make_unique<arm::ChainIDSolver>(urdf_path, direction), node_can.c_str(), follower_speed, follower_end_mode);
+  auto leader = std::make_unique<arm::Robot>(urdf_path, master_can, direction, master_speed, master_end_mode);
+  auto follower = std::make_unique<arm::Robot>(urdf_path, node_can, direction, follower_speed, follower_end_mode);
 
   threads.emplace_back(std::thread([&]() {
     while (true) {
-      {
-        std::lock_guard<std::shared_mutex> lock(mutex_);
-        if (!running) break;
-      }
-      follower->set_target_joint_q(leader->get_current_joint_q());
+      std::shared_lock<std::shared_mutex> lock(mutex_);
+      if (!running) break;
+      lock.unlock();
+      follower->set_target_joint_q(leader->get_current_joint_q(), false);
       follower->set_target_end(leader->get_current_end());
-      std::this_thread::sleep_for(std::chrono::milliseconds(8));
     }
   }));
 
@@ -280,7 +261,6 @@ int main(int argc, char **argv) {
 
       // Draw the text on the image
       cv::putText(merged, text, org, fontFace, fontScale, color, thickness, lineType);
-
       cv::imshow("Concat", merged);
       cv::waitKey(1);
     }
@@ -462,12 +442,12 @@ int main(int argc, char **argv) {
       break;
     }
   }
+  endwin();
 
-  {
-    std::lock_guard<std::shared_mutex> lock(mutex_);
-    running = false;
-    recording = false;
-  }
+  std::unique_lock<std::shared_mutex> lock(mutex_);
+  running = false;
+  recording = false;
+  lock.unlock();
 
   for (auto &&i : threads) i.join();
   auto reset_leader = std::thread([&]() { leader.reset(); });
@@ -475,6 +455,5 @@ int main(int argc, char **argv) {
   reset_leader.join();
   reset_follower.join();
   for (auto &&i : camera_threads) i.join();
-  endwin();
   return 0;
 }

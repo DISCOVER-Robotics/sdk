@@ -234,22 +234,13 @@ int main(int argc, char** argv) {
   std::vector<double> joint_arm_left(start_joint_pos_left.begin(), start_joint_pos_left.end() - 1);
   std::vector<double> joint_arm_right(start_joint_pos_right.begin(), start_joint_pos_right.end() - 1);
 
-  auto leader_left = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                                  std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                                  std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
-                                                  master_can_left.c_str(), master_speed, master_end_mode);
-  auto follower_left = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                                    std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                                    std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
-                                                    node_can_left.c_str(), follower_speed, follower_end_mode);
-  auto leader_right = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                                   std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                                   std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
-                                                   master_can_right.c_str(), master_speed, master_end_mode);
-  auto follower_right = std::make_unique<arm::Robot>(std::make_unique<arm::AnalyticFKSolver>(urdf_path),
-                                                     std::make_unique<arm::AnalyticIKSolver>(urdf_path),
-                                                     std::make_unique<arm::ChainIDSolver>(urdf_path, direction),
-                                                     node_can_right.c_str(), follower_speed, follower_end_mode);
+  auto leader_left = std::make_unique<arm::Robot>(urdf_path, master_can_left, direction, master_speed, master_end_mode);
+  auto follower_left =
+      std::make_unique<arm::Robot>(urdf_path, node_can_left, direction, follower_speed, follower_end_mode);
+  auto leader_right =
+      std::make_unique<arm::Robot>(urdf_path, master_can_right, direction, master_speed, master_end_mode);
+  auto follower_right =
+      std::make_unique<arm::Robot>(urdf_path, node_can_right, direction, follower_speed, follower_end_mode);
 
   threads.emplace_back(std::thread([&]() {
     while (true) {
