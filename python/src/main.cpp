@@ -73,7 +73,7 @@ PYBIND11_MODULE(airbot, m) {
       .def("record_load", &Robot::record_load, py::arg("filepath"))
       .def("gravity_compensation", &Robot::gravity_compensation)
       .def("stop_gravity_compensation", &Robot::stop_gravity_compensation)
-      .def("set_max_current", &Robot::set_max_current, py::arg("max"));
+      .def("set_max_current", &Robot::set_max_current, py::arg("max"), py::arg("second") = 1.);
 
   m.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
         py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = M_PI,
