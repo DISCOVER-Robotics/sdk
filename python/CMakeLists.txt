@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4...3.18)
 
-project(airbot_pybridge
+project(
+  airbot_pybridge
   LANGUAGES CXX
   VERSION 2.5.0)
 
@@ -18,10 +19,7 @@ find_package(airbot_play REQUIRED)
 
 add_subdirectory(pybind11)
 pybind11_add_module(airbot src/main.cpp)
-target_link_libraries(airbot PRIVATE
-  Python::Python
-  airbot_play
-)
+target_link_libraries(airbot PRIVATE Python::Python airbot_play)
 
 # EXAMPLE_VERSION_INFO is defined by setup.py and passed into the C++ code as a
 # define (VERSION_INFO) here.
