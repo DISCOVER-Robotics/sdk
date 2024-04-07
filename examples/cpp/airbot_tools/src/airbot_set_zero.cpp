@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "argparse/argparse.hpp"
-#include "camera/webcam.hpp"
 const std::string red("\033[0;31m");
 const std::string green("\033[0;32m");
 const std::string yellow("\033[0;33m");
@@ -24,7 +23,7 @@ constexpr bool in_range(const std::array<double, 3> input) {
 }
 
 int main(int argc, char **argv) {
-  argparse::ArgumentParser program("tool_set_zero", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_set_zero", AIRBOT_VERSION);
   program.add_description(
       "This is a tool to set zero points for the motors of AIRBOT Play. This "
       "tool should only be used during "
@@ -47,11 +46,6 @@ int main(int argc, char **argv) {
           "\"newteacher\": The demonstrator equipped with self-developed "
           "motor \n"
           "\"none\": The arm is not equipped with end effector.");
-  program.add_argument("-c", "--camera")
-      .scan<'i', int>()
-      .default_value(-1)
-      .help("The camera device index attached to the master arm");
-
   try {
     program.parse_args(argc, argv);
   } catch (const std::exception &err) {
@@ -69,17 +63,9 @@ int main(int argc, char **argv) {
 
   std::string interface = program.get<std::string>("--master");
   std::string gripper_type = program.get<std::string>("--master-end-mode");
-  int camera = program.get<int>("--camera");
-  system((std::string("ip link set ") + std::string(interface) + std::string(" up type can bitrate 1000000")).c_str());
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
   bool running = true;
-  std::thread camera_thread;
-  std::shared_ptr<WebCam> camera_obj;
-  if (camera >= 0) {
-    camera_obj = std::make_shared<WebCam>(camera);
-    camera_thread = std::thread([&](std::shared_ptr<WebCam> cam) { cam->display_frame(running); }, camera_obj);
-  }
   auto release_brake = 1;
   std::vector<std::unique_ptr<arm::MotorDriver>> motor_driver_;
   for (uint8_t i = 0; i < 3; i++) {
@@ -155,6 +141,5 @@ int main(int argc, char **argv) {
   for (auto &&i : motor_driver_) i->MotorDeInit();
 
   running = false;
-  if (camera_thread.joinable()) camera_thread.join();
   return 0;
 }

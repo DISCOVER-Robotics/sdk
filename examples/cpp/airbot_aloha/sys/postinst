@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Assuming Python3 is the target Python version
+python3 -m pip install -r /usr/share/airbot_aloha/requirements.txt -i https://mirrors.ustc.edu.cn/pypi/web/simple --isolated
+
+exit 0

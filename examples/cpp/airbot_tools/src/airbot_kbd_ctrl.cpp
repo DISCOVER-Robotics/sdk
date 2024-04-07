@@ -21,7 +21,7 @@ namespace fs = std::filesystem;
 
 int main(int argc, char **argv) {
   // argparse
-  argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_kbd_ctrl", AIRBOT_VERSION);
   program.add_description("A simple program to control AIRBOT Play via keyboard.");
   program.add_argument("-m", "--master")
       .required()
