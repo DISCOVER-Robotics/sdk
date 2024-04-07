@@ -47,8 +47,8 @@ add_custom_target(
     ${CMAKE_SOURCE_DIR}/python/requirements.txt -i
     https://mirrors.ustc.edu.cn/pypi/web/simple
   COMMENT "Installing Python requirements from requirements.txt")
-install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} -\
-  -build ${CMAKE_BINARY_DIR} --target install_python_requirements)")
+install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} \
+--build ${CMAKE_BINARY_DIR} --target install_python_requirements)")
 
 add_library(webcam STATIC src/camera/webcam.cpp)
 target_include_directories(webcam PRIVATE ${OpenCV_INCLUDE_DIRS})
