@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
   auto angle_step = M_PI / 10;
   auto param = 500.;
   auto gripper_state = false;
-  robot->set_max_current({0.5, 10, 10, 10, 10, 10});
+  robot->set_max_current({400, 400, 400, 400, 400, 400});
   double x, y, z, w;
   while (1) {
     int ch = getch();
