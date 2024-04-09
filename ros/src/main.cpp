@@ -52,33 +52,43 @@ int main(int argc, char** argv) {
   node.param("/airbot_arm_ros/urdf", urdf_path, std::string(""));
   node.param("/airbot_arm_ros/interface", can_if, std::string("can0"));
   node.param("/airbot_arm_ros/end_mode", end_mode, std::string("teacher"));
-  ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(), can_if.c_str(), end_mode.c_str());
+  ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(),
+           can_if.c_str(), end_mode.c_str());
   arm::Robot robot(urdf_path, can_if, "down", M_PI / 2, end_mode, false);
 
   /**
    * Initialize ROS publisher and subscriber
    */
   auto arm_pose_publisher = node.advertise<Pose>("/airbot_play/end_pose", 10);
-  auto joint_states_publisher = node.advertise<JointState>("/airbot_play/joint_states", 10);
-  auto end_state_publisher = node.advertise<std_msgs::Float64>("/airbot_play/gripper/position", 10);
+  auto joint_states_publisher =
+      node.advertise<JointState>("/airbot_play/joint_states", 10);
+  auto end_state_publisher =
+      node.advertise<std_msgs::Float64>("/airbot_play/gripper/position", 10);
 
   auto subscriber_target_pose = node.subscribe<Pose>(
       "/airbot_play/set_target_pose", 10, {[&robot](const PosePtr& pose) {
-        robot.set_target_pose({pose->position.x, pose->position.y, pose->position.z},
-                              {pose->orientation.x, pose->orientation.y, pose->orientation.z, pose->orientation.w});
+        robot.set_target_pose(
+            {pose->position.x, pose->position.y, pose->position.z},
+            {pose->orientation.x, pose->orientation.y, pose->orientation.z,
+             pose->orientation.w});
       }});
   auto subscriber_target_joint_pos = node.subscribe<JointState>(
-      "/airbot_play/set_target_joint_q", 10, {[&robot](const JointStatePtr& joints) {
-        robot.set_target_joint_q({joints->position[0], joints->position[1], joints->position[2], joints->position[3],
+      "/airbot_play/set_target_joint_q", 10,
+      {[&robot](const JointStatePtr& joints) {
+        robot.set_target_joint_q({joints->position[0], joints->position[1],
+                                  joints->position[2], joints->position[3],
                                   joints->position[4], joints->position[5]});
       }});
   auto subscriber_target_joint_vel = node.subscribe<JointState>(
-      "/airbot_play/set_target_joint_v", 10, {[&robot](const JointStatePtr& joints) {
-        robot.set_target_joint_v({joints->velocity[0], joints->velocity[1], joints->velocity[2], joints->velocity[3],
+      "/airbot_play/set_target_joint_v", 10,
+      {[&robot](const JointStatePtr& joints) {
+        robot.set_target_joint_v({joints->velocity[0], joints->velocity[1],
+                                  joints->velocity[2], joints->velocity[3],
                                   joints->velocity[4], joints->velocity[5]});
       }});
   auto subscriber_target_set_position = node.subscribe<std_msgs::Float64>(
-      "/airbot_play/gripper/set_position", 10, {[&robot](const std_msgs::Float64::ConstPtr& end) {
+      "/airbot_play/gripper/set_position", 10,
+      {[&robot](const std_msgs::Float64::ConstPtr& end) {
         robot.set_target_end(std::clamp(end->data ? 0.99 : 0.01, 0.0, 1.0));
       }});
 
@@ -92,44 +102,53 @@ int main(int argc, char** argv) {
         bool flag = false;
 
         if (joy->buttons[7] == 0) {
-          if (std::abs(joy->axes[1]) > 1e-3 || std::abs(joy->axes[0]) > 1e-3 || std::abs(joy->axes[3]) > 1e-3) {
+          if (std::abs(joy->axes[1]) > 1e-3 || std::abs(joy->axes[0]) > 1e-3 ||
+              std::abs(joy->axes[3]) > 1e-3) {
             if (joy->buttons[6] == 1) {  // LT
-              robot.add_target_relative_translation({-scale * joy->axes[3], scale * joy->axes[0], scale * joy->axes[1]},
-                                                    false);
+              robot.add_target_relative_translation(
+                  {-scale * joy->axes[3], scale * joy->axes[0],
+                   scale * joy->axes[1]},
+                  false);
             } else {
-              robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]}, false);
+              robot.add_target_translation(
+                  {scale * joy->axes[1], scale * joy->axes[0],
+                   scale * joy->axes[3]},
+                  false);
             }
           }
         }
       }});
-  auto joy_msgs_diff_subsciber = node.subscribe<Joy>(
-      "/joy_trigger", 10, [&robot, &scale, &angle_scale, &recording, &compensating](const JoyPtr& joy) {
-        if (joy->buttons[3] == 1) {
-          if (!compensating)
-            robot.gravity_compensation();
-          else
-            robot.stop_gravity_compensation();
-          compensating = !compensating;
-        }  // Y
-        if (joy->buttons[0] == 1) {
-          if (robot.get_current_end() < 0.5)
-            robot.set_target_end(0.99);
-          else
-            robot.set_target_end(0.01);
-        }
-        if (joy->buttons[1] == 1) {  // A
-          if (!recording) {
-            robot.record_start("q");
-            ROS_INFO("record started");
-            recording = true;
-          } else {
-            robot.record_stop();
-            ROS_INFO("record stopped");
-            recording = false;
-          }
-        }
-        if (joy->buttons[2] == 1) robot.record_replay();  // B
-      });
+  auto joy_msgs_diff_subsciber =
+      node.subscribe<Joy>("/joy_trigger", 10,
+                          [&robot, &scale, &angle_scale, &recording,
+                           &compensating](const JoyPtr& joy) {
+                            if (joy->buttons[3] == 1) {
+                              if (!compensating)
+                                robot.gravity_compensation();
+                              else
+                                robot.stop_gravity_compensation();
+                              compensating = !compensating;
+                            }  // Y
+                            if (joy->buttons[0] == 1) {
+                              if (robot.get_current_end() < 0.5)
+                                robot.set_target_end(0.99);
+                              else
+                                robot.set_target_end(0.01);
+                            }
+                            if (joy->buttons[1] == 1) {  // A
+                              if (!recording) {
+                                robot.record_start("q");
+                                ROS_INFO("record started");
+                                recording = true;
+                              } else {
+                                robot.record_stop();
+                                ROS_INFO("record stopped");
+                                recording = false;
+                              }
+                            }
+                            if (joy->buttons[2] == 1)
+                              robot.record_replay();  // B
+                          });
 
   ROS_WARN("arm control begin");
 
