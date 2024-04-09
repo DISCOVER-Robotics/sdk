@@ -36,11 +36,11 @@ int main(int argc, char **argv) {
           "\"newteacher\"");
   program.add_argument("--master-speed")
       .scan<'g', double>()
-      .default_value(1.)
+      .default_value(1 * M_PI)
       .help("The joint speed of the master arm in percentage of PI.");
   program.add_argument("--follower-speed")
       .scan<'g', double>()
-      .default_value(3.)
+      .default_value(3 * M_PI)
       .help("The joint speed of the follower arm in percentage of PI.");
 
   try {
@@ -91,7 +91,6 @@ int main(int argc, char **argv) {
   keypad(stdscr, TRUE);  // Enable special keys
   noecho();              // Disable echoing of characters
   timeout(2);
-  bool gravity_compensation_flag = false;
   while (1) {
     int ch = getch();
     std::this_thread::sleep_for(std::chrono::milliseconds(2));
