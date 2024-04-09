@@ -1,6 +1,7 @@
 #include <airbot/airbot.hpp>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <sstream>
 #include <thread>
 #include <vector>
@@ -36,7 +37,7 @@ int main(int argc, char **argv) {
       .default_value("can0")
       .help("Can device interface of the master arm. Default: can0");
   program.add_argument("-e", "--master-end-mode")
-      .default_value("newteacher")
+      .default_value("none")
       .choices("teacher", "gripper", "yinshi", "newteacher", "none")
       .help(
           "The mode of the master arm end effector. Available choices: \n"
@@ -66,6 +67,8 @@ int main(int argc, char **argv) {
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
   bool running = true;
+  std::string tmp;
+  std::timed_mutex mutex;
   auto release_brake = 1;
   std::vector<std::unique_ptr<arm::MotorDriver>> motor_driver_;
   for (uint8_t i = 0; i < 3; i++) {
@@ -78,49 +81,66 @@ int main(int argc, char **argv) {
     motor_driver_[i]->MotorInit();
     motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
-  if (gripper_type != "none") {
+  if (gripper_type == "newteacher") {
     motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, "OD"));
+    motor_driver_[6]->MotorInit();
+    motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
+  } else if (gripper_type == "gripper" || gripper_type == "teacher") {
+    motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, "DM"));
     motor_driver_[6]->MotorInit();
     motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
   auto thread_brake = std::thread([&]() {
     while (true) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      if (release_brake == 0)
+      mutex.try_lock_for(std::chrono::milliseconds(100));
+      auto brake = release_brake;
+      mutex.unlock();
+      if (brake == 0)
         continue;
-      else if (release_brake == 2)
+      else if (brake == 2)
         break;
       for (int i = 0; i < 3; i++) {
+        motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 2, 0);
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
-      for (int i = 3; i < motor_driver_.size(); i++) {
+      for (int i = 3; i < 6; i++) {
+        motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
         motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 1, 0);
-        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+      }
+      if (motor_driver_.size() == 7) {
+        motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        motor_driver_[6]->MotorMitModeCmd(0, 0, 0, 0, 0);
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
     }
   });
 
   std::cout << blue << "放入标零工具，将机械臂牵引到零点后，按下回车键" << reset << std::endl;
-  std::string tmp;
   getline(std::cin, tmp);
 
+  mutex.lock();
   release_brake = 0;
+  mutex.unlock();
   for (auto &&i : motor_driver_) {
     i->MotorSetZero();
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-  }
-  for (auto &&i : motor_driver_) {
-    i->MotorWriteFlash();
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   std::cout << green << "标零完成。 " << reset << std::endl;
+  mutex.lock();
   release_brake = 1;
+  mutex.unlock();
 
   std::cout << blue << "移去标零工具，按下回车键" << reset << std::endl;
   getline(std::cin, tmp);
+  mutex.lock();
   release_brake = 2;
+  mutex.unlock();
   thread_brake.join();
 
   for (auto &&i : motor_driver_) {
@@ -129,9 +149,9 @@ int main(int argc, char **argv) {
     i->set_motor_control_mode(arm::MotorDriver::POS);
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
-  while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[1]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[2]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[3]->get_motor_pos()) > 0.1 ||
-         std::abs(motor_driver_[4]->get_motor_pos()) > 0.1 || std::abs(motor_driver_[5]->get_motor_pos()) > 0.1) {
+  while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[1]->get_motor_pos()) > 0.01 ||
+         std::abs(motor_driver_[2]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[3]->get_motor_pos()) > 0.01 ||
+         std::abs(motor_driver_[4]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[5]->get_motor_pos()) > 0.01) {
     for (auto &&i : motor_driver_) {
       i->MotorPosModeCmd(0, 0.5);
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
