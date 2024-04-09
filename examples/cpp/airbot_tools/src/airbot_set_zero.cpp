@@ -51,6 +51,10 @@ int main(int argc, char **argv) {
       .scan<'i', int>()
       .default_value(-1)
       .help("The camera device index attached to the master arm");
+  program.add_argument("--forearm-type")
+      .default_value("DM")
+      .choices("DM", "OD")
+      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
 
   try {
     program.parse_args(argc, argv);
@@ -70,7 +74,7 @@ int main(int argc, char **argv) {
   std::string interface = program.get<std::string>("--master");
   std::string gripper_type = program.get<std::string>("--master-end-mode");
   int camera = program.get<int>("--camera");
-  system((std::string("ip link set ") + std::string(interface) + std::string(" up type can bitrate 1000000")).c_str());
+  std::string forearm_type = program.get<std::string>("--forearm-type");
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
   bool running = true;
@@ -82,21 +86,24 @@ int main(int argc, char **argv) {
   }
   auto release_brake = 1;
   std::vector<std::unique_ptr<arm::MotorDriver>> motor_driver_;
-  for (uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < (forearm_type == "OD" ? 6 : 3); i++) {
     motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "OD"));
     motor_driver_[i]->MotorInit();
     motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
-  for (uint8_t i = 3; i < 6; i++) {
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "DM"));
-    motor_driver_[i]->MotorInit();
-    motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+  if (forearm_type == "DM") {
+    for (uint8_t i = 3; i < 6; i++) {
+      motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "DM"));
+      motor_driver_[i]->MotorInit();
+      motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+    }
   }
   if (gripper_type != "none") {
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, "OD"));
+    motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, gripper_type));
     motor_driver_[6]->MotorInit();
     motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
+
   auto thread_brake = std::thread([&]() {
     while (true) {
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -108,8 +115,22 @@ int main(int argc, char **argv) {
         motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 2, 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
       }
-      for (int i = 3; i < motor_driver_.size(); i++) {
-        motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 1, 0);
+      if (forearm_type == "DM") {
+        for (int i = 3; i < 6; i++) {
+          motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 1, 0);
+          std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        }
+      } else {
+        for (int i = 3; i < 6; i++) {
+          motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 0.1, 0);
+          std::this_thread::sleep_for(std::chrono::milliseconds(30));
+        }
+      }
+      if (gripper_type == "gripper" || gripper_type == "teacher") {
+        motor_driver_[6]->MotorMitModeCmd(0, 0, 0, 1, 0);
+        std::this_thread::sleep_for(std::chrono::milliseconds(30));
+      } else if (gripper_type == "newteacher") {
+        motor_driver_[6]->MotorMitModeCmd(0, 0, 0, 0, 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(30));
       }
     }
