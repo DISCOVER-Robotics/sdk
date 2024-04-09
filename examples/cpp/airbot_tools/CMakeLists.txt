@@ -17,6 +17,7 @@ set(CMAKE_BUILD_TYPE Debug)
 find_package(airbot_play REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Curses REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 add_subdirectory(thirdparty/argparse)
 
