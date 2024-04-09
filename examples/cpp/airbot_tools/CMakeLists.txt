@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(
   airbot_tools
-  VERSION 2.6.1
+  VERSION 2.6.2
   LANGUAGES CXX)
 
 option(GIT_CLEAN_CHECK "Check if git workspace is clean" ON)
@@ -14,7 +14,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_BUILD_TYPE Debug)
 
-find_package(airbot_play REQUIRED)
+find_package(airbot_play 2.6.2 REQUIRED)
 find_package(Threads REQUIRED)
 find_package(Curses REQUIRED)
 find_package(OpenSSL REQUIRED)

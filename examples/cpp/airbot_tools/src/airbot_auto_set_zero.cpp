@@ -40,11 +40,17 @@ int main(int argc, char **argv) {
   // Synchronization
   std::unique_ptr<arm::Robot> robot;
   try {
-    robot = std::make_unique<arm::Robot>(urdf_path, master_can, "down", M_PI / 2, "none", false, false, "DM", true);
+    robot =
+        std::make_unique<arm::Robot>(urdf_path, master_can, "down", M_PI / 2, "none", false, false, "DM", true, true);
   } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     return 1;
   }
+  auto current_pos = robot->get_current_joint_q();
+  robot->set_target_joint_q({current_pos[0], current_pos[1], current_pos[2], 0, 0, 0}, false);
+  std::cerr << "Current joint position: " << current_pos[0] << ", " << current_pos[1] << ", " << current_pos[2] << ", "
+            << current_pos[3] << ", " << current_pos[4] << ", " << current_pos[5] << std::endl;
+  while (!robot->reached_target_joint_q()) std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
   double joint_pos[6];
   double read_past, read_now;
@@ -54,6 +60,7 @@ int main(int argc, char **argv) {
   read_past = -20000;
   read_now = -2000;
   robot->set_target_joint_v({-0.5, 0, 0, 0, 0, 0});
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
   while (std::abs(read_now - read_past) > 0.001) {
     read_past = read_now;
     read_now = robot->get_current_joint_q()[0];
@@ -64,6 +71,7 @@ int main(int argc, char **argv) {
   read_past = -20000;
   read_now = -2000;
   robot->set_target_joint_v({0, 0.5, 0, 0, 0, 0});
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
   while (std::abs(read_now - read_past) > 0.001) {
     read_past = read_now;
     read_now = robot->get_current_joint_q()[1];
@@ -76,6 +84,7 @@ int main(int argc, char **argv) {
   robot->set_max_current({1, 1, 2, 10, 10, 10});
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   robot->set_target_joint_v({0, 0, -0.5, 0, 0, 0});
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
   while (std::abs(read_now - read_past) > 0.001) {
     read_past = read_now;
     read_now = robot->get_current_joint_q()[2];
@@ -83,18 +92,19 @@ int main(int argc, char **argv) {
   }
   joint_pos[2] = read_now;
 
-  std::cerr << "Joint position: " << joint_pos[0] << ", " << joint_pos[1] << ", " << joint_pos[2] << std::endl;
+  std::cerr << "Joint position: " << joint_pos[0] << ", " << joint_pos[1] << ", " << joint_pos[2] << ", "
+            << joint_pos[3] << ", " << joint_pos[4] << ", " << joint_pos[5] << std::endl;
 
   robot->set_max_current({10, 10, 10, 10, 10, 10});
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   robot->set_ignore_limit(true);
   robot->set_target_joint_q(
       {joint_pos[0] - ZERO_POINT[0], joint_pos[1] - ZERO_POINT[1], joint_pos[2] - ZERO_POINT[2], 0, 0, 0}, true);
-  while (std::abs(robot->get_current_joint_q()[0] - (joint_pos[0] - ZERO_POINT[0])) > 0.001) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(10));
-  }
-  robot->set_ignore_limit(false);
+
+  while (!robot->reached_target_joint_q()) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+
   robot->set_zero();
+  robot->set_ignore_limit(false);
 
   return 0;
 }

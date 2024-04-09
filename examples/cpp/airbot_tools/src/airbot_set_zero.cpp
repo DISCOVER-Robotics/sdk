@@ -142,18 +142,18 @@ int main(int argc, char **argv) {
   release_brake = 2;
   mutex.unlock();
   thread_brake.join();
-
-  for (auto &&i : motor_driver_) {
-    i->MotorInit();  // This is to init DM motors after timeout due to
-                     // thread_brake.join()
-    i->set_motor_control_mode(arm::MotorDriver::POS);
+  for (int i = 0; i < 6; i++) {
+    motor_driver_[i]->MotorInit();  // This is to init DM motors after timeout due to
+                                    // thread_brake.join()
+    motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::POS);
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
+
   while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[1]->get_motor_pos()) > 0.01 ||
          std::abs(motor_driver_[2]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[3]->get_motor_pos()) > 0.01 ||
          std::abs(motor_driver_[4]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[5]->get_motor_pos()) > 0.01) {
-    for (auto &&i : motor_driver_) {
-      i->MotorPosModeCmd(0, 0.5);
+    for (int i = 0; i < 6; i++) {
+      motor_driver_[i]->MotorPosModeCmd(0, 0.5);
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
   }
