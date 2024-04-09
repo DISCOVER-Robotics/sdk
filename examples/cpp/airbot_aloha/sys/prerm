@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Assuming Python3 is the target Python version
+python3 -m pip uninstall -y -r /usr/share/airbot_aloha/requirements.txt --isolated
+
+rm -f /usr/share/airbot_aloha/requirements.txt
+exit 0

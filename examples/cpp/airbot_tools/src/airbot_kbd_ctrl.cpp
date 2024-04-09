@@ -18,10 +18,10 @@
 #include "http.hpp"
 
 namespace fs = std::filesystem;
-
+constexpr const double TIME = 1.5;
 int main(int argc, char **argv) {
   // argparse
-  argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_kbd_ctrl", AIRBOT_VERSION);
   program.add_description("A simple program to control AIRBOT Play via keyboard.");
   program.add_argument("-m", "--master")
       .required()
@@ -110,122 +110,133 @@ int main(int argc, char **argv) {
 
   // Manipulation of Master arm
   auto from_base = true;
-  auto step = 0.1;
+  auto step = 0.01;
   auto angle_step = M_PI / 10;
+  auto use_planning = true;
   auto param = 500.;
   auto gripper_state = false;
-  robot->set_max_current({0.5, 10, 10, 10, 10, 10});
+  robot->set_max_current({400, 400, 400, 400, 400, 400});
   double x, y, z, w;
   while (1) {
     int ch = getch();
     switch (ch) {
+      case 'y':
+        use_planning = !use_planning;
+        break;
       case '1':
-        robot->add_target_joint_q({angle_step, 0, 0, 0, 0, 0});
+        robot->add_target_joint_q({angle_step, 0, 0, 0, 0, 0}, use_planning, TIME);
         break;
       case '2':
-        robot->add_target_joint_q({-angle_step, 0, 0, 0, 0, 0});
+        robot->add_target_joint_q({-angle_step, 0, 0, 0, 0, 0}, use_planning, TIME);
         break;
       case '3':
-        robot->add_target_joint_q({0, angle_step, 0, 0, 0, 0});
+        robot->add_target_joint_q({0, angle_step, 0, 0, 0, 0}, use_planning, TIME);
         break;
       case '4':
-        robot->add_target_joint_q({0, -angle_step, 0, 0, 0, 0});
+        robot->add_target_joint_q({0, -angle_step, 0, 0, 0, 0}, use_planning, TIME);
         break;
       case '5':
-        robot->add_target_joint_q({0, 0, angle_step, 0, 0, 0});
+        robot->add_target_joint_q({0, 0, angle_step, 0, 0, 0}, use_planning, TIME);
         break;
       case '6':
-        robot->add_target_joint_q({0, 0, -angle_step, 0, 0, 0});
+        robot->add_target_joint_q({0, 0, -angle_step, 0, 0, 0}, use_planning, TIME);
         break;
       case '7':
-        robot->add_target_joint_q({0, 0, 0, angle_step, 0, 0});
+        robot->add_target_joint_q({0, 0, 0, angle_step, 0, 0}, use_planning, TIME);
         break;
       case '8':
-        robot->add_target_joint_q({0, 0, 0, -angle_step, 0, 0});
+        robot->add_target_joint_q({0, 0, 0, -angle_step, 0, 0}, use_planning, TIME);
         break;
       case '9':
-        robot->add_target_joint_q({0, 0, 0, 0, angle_step, 0});
+        robot->add_target_joint_q({0, 0, 0, 0, angle_step, 0}, use_planning, TIME);
         break;
       case '0':
-        robot->add_target_joint_q({0, 0, 0, 0, -angle_step, 0});
+        robot->add_target_joint_q({0, 0, 0, 0, -angle_step, 0}, use_planning, TIME);
         break;
       case '-':
-        robot->add_target_joint_q({0, 0, 0, 0, 0, angle_step});
+        robot->add_target_joint_q({0, 0, 0, 0, 0, angle_step}, use_planning, TIME);
         break;
       case '=':
-        robot->add_target_joint_q({0, 0, 0, 0, 0, -angle_step});
+        robot->add_target_joint_q({0, 0, 0, 0, 0, -angle_step}, use_planning, TIME);
         break;
       case 'w':
         if (from_base) {
-          robot->add_target_translation({step, 0, 0});
+          robot->add_target_translation({step, 0, 0}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({0, 0, step});
+          robot->add_target_relative_translation({0, 0, step}, use_planning, TIME);
         }
         break;
       case 's':
         if (from_base) {
-          robot->add_target_translation({-step, 0, 0});
+          robot->add_target_translation({-step, 0, 0}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({0, 0, -step});
+          robot->add_target_relative_translation({0, 0, -step}, use_planning, TIME);
         }
         break;
       case 'a':
         if (from_base) {
-          robot->add_target_translation({0, step, 0});
+          robot->add_target_translation({0, step, 0}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({0, step, 0});
+          robot->add_target_relative_translation({0, step, 0}, use_planning, TIME);
         }
         break;
       case 'd':
         if (from_base) {
-          robot->add_target_translation({0, -step, 0});
+          robot->add_target_translation({0, -step, 0}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({0, -step, 0});
+          robot->add_target_relative_translation({0, -step, 0}, use_planning, TIME);
         }
         break;
       case 'q':
         if (from_base) {
-          robot->add_target_translation({0, 0, step});
+          robot->add_target_translation({0, 0, step}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({-step, 0, 0});
+          robot->add_target_relative_translation({-step, 0, 0}, use_planning, TIME);
         }
         break;
       case 'e':
         if (from_base) {
-          robot->add_target_translation({0, 0, -step});
+          robot->add_target_translation({0, 0, -step}, use_planning, TIME);
         } else {
-          robot->add_target_relative_translation({step, 0, 0});
+          robot->add_target_relative_translation({step, 0, 0}, use_planning, TIME);
         }
         break;
       case 'r':
         from_base = !from_base;
         break;
+      case 't':
+        if (step == 0.01) {
+          step = 0.1;
+        } else {
+          step = 0.01;
+        }
+        break;
       case 'j':
         KDL::Rotation::RPY(0, 0, angle_step).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case 'l':
         KDL::Rotation::RPY(0, 0, -angle_step).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case 'i':
         KDL::Rotation::RPY(0, angle_step, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case 'k':
         KDL::Rotation::RPY(0, -angle_step, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case 'u':
         KDL::Rotation::RPY(angle_step, 0, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case 'o':
         KDL::Rotation::RPY(-angle_step, 0, 0).GetQuaternion(x, y, z, w);
-        robot->add_target_relative_rotation({x, y, z, w});
+        robot->add_target_relative_rotation({x, y, z, w}, use_planning, TIME);
         break;
       case '`':
-        robot->set_target_joint_q({0., 0., 0., 0., 0., 0.});
+        robot->set_target_joint_q({0., 0., 0., 0., 0., 0.}, use_planning, TIME);
         break;
       case 'm':
         robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
