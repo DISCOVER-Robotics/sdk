@@ -45,7 +45,7 @@ add_custom_target(
   COMMAND
     ${Python_EXECUTABLE} -m pip install -r
     ${CMAKE_SOURCE_DIR}/python/requirements.txt -i
-    https://mirrors.ustc.edu.cn/pypi/web/simple
+    https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
   COMMENT "Installing Python requirements from requirements.txt")
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} \
 --build ${CMAKE_BINARY_DIR} --target install_python_requirements)")
