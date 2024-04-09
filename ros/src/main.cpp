@@ -8,7 +8,6 @@
 #include <std_msgs/Float64.h>
 
 #include <airbot/airbot.hpp>
-#include <kdl/frames.hpp>
 
 using Pose = geometry_msgs::Pose;
 using PosePtr = geometry_msgs::Pose::ConstPtr;
@@ -100,18 +99,6 @@ int main(int argc, char** argv) {
             } else {
               robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]}, false);
             }
-          }
-        } else {
-          if (std::abs(joy->axes[2]) > 1e-3 || std::abs(joy->axes[3]) > 1e-3 || joy->axes[4] != 0) {
-            double x = 0, y = 0, z = 0, w = 0;
-            if (joy->axes[4] == 0) {
-              KDL::Rotation::Rot(KDL::Vector(joy->axes[2], joy->axes[3], 0),
-                                 angle_scale * (joy->axes[3] * joy->axes[3] + joy->axes[2] * joy->axes[2]))
-                  .GetQuaternion(x, y, z, w);
-            } else {
-              KDL::Rotation::Rot(KDL::Vector(0, 0, 1), -angle_scale * joy->axes[4]).GetQuaternion(x, y, z, w);
-            }
-            robot.add_target_relative_rotation({x, y, z, w}, false);
           }
         }
       }});

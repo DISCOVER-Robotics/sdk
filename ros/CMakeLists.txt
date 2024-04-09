@@ -6,8 +6,7 @@ project(
 
 find_package(
   catkin REQUIRED
-  COMPONENTS kdl_parser
-             message_generation
+  COMPONENTS message_generation
              message_runtime
              roscpp
              rospy
@@ -39,12 +38,11 @@ catkin_package(
   geometry_msgs)
 
 include_directories(${catkin_INCLUDE_DIRS})
-find_library(KDL_LIB kdl_parser /opt/ros/noetic/lib)
 
 add_executable(airbot_arm_ros src/main.cpp)
 add_dependencies(airbot_arm_ros ${${PROJECT_NAME}_EXPORTED_TARGETS}
                  ${catkin_EXPORTED_TARGETS})
-target_link_libraries(airbot_arm_ros ${catkin_LIBRARIES} airbot_play ${KDL_LIB})
+target_link_libraries(airbot_arm_ros ${catkin_LIBRARIES} airbot_play)
 
 add_executable(joy_proxy src/joy_proxy.cpp)
 add_dependencies(airbot_arm_ros ${${PROJECT_NAME}_EXPORTED_TARGETS}
