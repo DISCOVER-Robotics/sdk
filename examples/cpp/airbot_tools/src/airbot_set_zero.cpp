@@ -47,6 +47,11 @@ int main(int argc, char **argv) {
           "\"newteacher\": The demonstrator equipped with self-developed "
           "motor \n"
           "\"none\": The arm is not equipped with end effector.");
+  program.add_argument("--forearm-type")
+      .default_value("DM")
+      .choices("DM", "OD")
+      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
+
   try {
     program.parse_args(argc, argv);
   } catch (const std::exception &err) {
@@ -64,6 +69,7 @@ int main(int argc, char **argv) {
 
   std::string interface = program.get<std::string>("--master");
   std::string gripper_type = program.get<std::string>("--master-end-mode");
+  std::string forearm_type = program.get<std::string>("--forearm-type");
   std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
   bool running = true;
@@ -71,15 +77,17 @@ int main(int argc, char **argv) {
   std::timed_mutex mutex;
   auto release_brake = 1;
   std::vector<std::unique_ptr<arm::MotorDriver>> motor_driver_;
-  for (uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < (forearm_type == "OD" ? 6 : 3); i++) {
     motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "OD"));
     motor_driver_[i]->MotorInit();
     motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
-  for (uint8_t i = 3; i < 6; i++) {
-    motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "DM"));
-    motor_driver_[i]->MotorInit();
-    motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+  if (forearm_type == "DM") {
+    for (uint8_t i = 3; i < 6; i++) {
+      motor_driver_.push_back(arm::MotorDriver::MotorCreate(i + 1, interface.c_str(), logger, "DM"));
+      motor_driver_[i]->MotorInit();
+      motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
+    }
   }
   if (gripper_type == "newteacher") {
     motor_driver_.push_back(arm::MotorDriver::MotorCreate(7, interface.c_str(), logger, "OD"));
@@ -90,6 +98,7 @@ int main(int argc, char **argv) {
     motor_driver_[6]->MotorInit();
     motor_driver_[6]->set_motor_control_mode(arm::MotorDriver::MIT);
   }
+
   auto thread_brake = std::thread([&]() {
     while (true) {
       mutex.try_lock_for(std::chrono::milliseconds(100));
@@ -108,7 +117,7 @@ int main(int argc, char **argv) {
       for (int i = 3; i < 6; i++) {
         motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::MIT);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        motor_driver_[i]->MotorMitModeCmd(0, 0, 0, 1, 0);
+        motor_driver_[i]->MotorMitModeCmd(0, 0, 0, forearm_type == "DM" ? 1 : 0.1, 0);
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
       if (motor_driver_.size() == 7) {
