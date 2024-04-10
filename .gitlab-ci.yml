@@ -16,7 +16,7 @@ variables:
 
 style-test:
   stage: test
-  image: python:3.9
+  image: registry.qiuzhi.tech/library/python:3.9
   before_script:
     - pip install clang-format
     - pip install pre-commit

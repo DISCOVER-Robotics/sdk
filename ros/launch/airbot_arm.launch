@@ -1,7 +1,7 @@
 <launch>
-    <arg name="urdf" default="/usr/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf" />
+    <arg name="urdf" default="/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf" />
     <arg name="interface" default="can0" />
-    <arg name="end_mode" default="teacher" />
+    <arg name="end_mode" default="newteacher" />
     <node name="airbot_arm_ros" pkg="ros_interface" type="airbot_arm_ros" output="screen">
         <param name="urdf" value="$(arg urdf)" />
         <param name="interface" value="$(arg interface)" />
