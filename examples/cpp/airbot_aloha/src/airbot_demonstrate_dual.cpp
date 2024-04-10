@@ -248,9 +248,9 @@ int main(int argc, char** argv) {
         std::lock_guard<std::shared_mutex> lock(mutex_);
         if (!running) break;
       }
-      follower_left->set_target_joint_q(leader_left->get_current_joint_q());
+      follower_left->set_target_joint_q(leader_left->get_current_joint_q(), false);
       follower_left->set_target_end(leader_left->get_current_end());
-      follower_right->set_target_joint_q(leader_right->get_current_joint_q());
+      follower_right->set_target_joint_q(leader_right->get_current_joint_q(), false);
       follower_right->set_target_end(leader_right->get_current_end());
       std::this_thread::sleep_for(std::chrono::milliseconds(8));
     }
