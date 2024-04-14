@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
   // setup logger
   std::vector<spdlog::sink_ptr> sinks;
   sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-      (std::string("logs/tool_set_zero_logs") + arm::get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
+      (std::string("logs/tool_set_zero_logs") + get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
   std::shared_ptr<spdlog::logger> logger = arm::setup_logger(sinks);
   spdlog::flush_every(std::chrono::seconds(1));
   logger->set_level(spdlog::level::info);
