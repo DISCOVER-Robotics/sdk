@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 
   vector<double> follower_joint_kps = vector<double>{75.0f, 75.0f, 75.0f, 3.0f, 3.0f, 3.0f};
   vector<double> follower_joint_kds = vector<double>{1.0f, 1.0f, 1.0f, 0.02f, 0.02f, 0.02f};
-  vector<double> follower_joint_p_gains = vector<double>{3.f, 3.f, 3.f, 0.1f, 0.1f, 0.1f};
+  vector<double> follower_joint_p_gains = vector<double>{5.f, 5.f, 5.f, 0.2f, 0.2f, 0.2f};
 
   float MAX_EFFORT = 2.f;
   double clip_joint_range[6];
@@ -109,16 +109,11 @@ int main(int argc, char **argv) {
           clip_joint_diff[i_m] =
               static_cast<float>(std::clamp(joint_diff[i_m], -clip_joint_range[i_m], clip_joint_range[i_m]));
           set_q_follower[i_m] = q_follower[i_m] + clip_joint_diff[i_m];
-          //////////////////////////////////这里是自研电机的bug////////////////////////////
-          if (i_m < 3) {
-            set_q_follower[i_m] *= 1.25f;
-          }
-          //////////////////////////////////这里是自研电机的bug////////////////////////////
         }
         // 只有1控1的时候 力反馈
         std::vector<double> fb_force;
         for (size_t i_m = 0; i_m < 6; i_m++) {
-          fb_force.push_back(0.5 * follower_joint_kps[i_m] * joint_diff[i_m]);
+          fb_force.push_back(1.5 * follower_joint_p_gains[i_m] * joint_diff[i_m]);
         }
         leader->set_mit_feedback(fb_force);
         follower->set_target_joint_qt(set_q_follower, t_tau_follower);
