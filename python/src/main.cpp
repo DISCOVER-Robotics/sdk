@@ -5,6 +5,8 @@
 #include <airbot/airbot.hpp>
 #include <memory>
 
+#include "docstrings.h"
+
 namespace py = pybind11;
 using namespace arm;
 
@@ -77,5 +79,24 @@ PYBIND11_MODULE(airbot, m) {
 
   m.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
         py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = M_PI,
-        py::arg("end_mode") = "newteacher", py::arg("constraint") = false);
+        py::arg("end_mode") = "newteacher", py::arg("constraint") = falsem.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
+        py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = M_PI,
+        py::arg("end_mode") = "newteacher", py::arg("constraint") = false, R"doc(
+        Create an instance of the Robot class.
+
+        :param urdf_path: The path to the URDF file.
+        :type urdf_path: str
+        :param direction: The direction of the robot.
+        :type direction: str
+        :param can_interface: The CAN interface to use.
+        :type can_interface: str
+        :param vel: The velocity of the robot.
+        :type vel: float
+        :param end_mode: The end mode of the robot.
+        :type end_mode: str
+        :param constraint: Whether to use constraint.
+        :type constraint: bool
+        :return: An instance of the Robot class.
+        :rtype: Robot
+        )doc");
 };
