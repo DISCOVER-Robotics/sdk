@@ -13,3 +13,6 @@
 [submodule "examples/cpp/airbot_aloha/thirdparty/argparse"]
 	path = examples/cpp/airbot_aloha/thirdparty/argparse
 	url = https://github.com/p-ranav/argparse
+[submodule "python/docs"]
+	path = python/docs
+	url = https://github.com/RoboticsChen/docs.git

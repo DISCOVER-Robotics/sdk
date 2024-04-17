@@ -23,12 +23,364 @@
 #endif
 
 
+static const char *__doc_arm_MotorDriver = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorBoundary = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorCommunicationDetect = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorControlMode_e = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorControlMode_e_MIT = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorControlMode_e_NONE = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorControlMode_e_POS = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorControlMode_e_SPD = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorCreate = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorCurrentDetect = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorDeInit =
+R"doc(Deinitializes the motor.
+
+This function deinitializes the motor. It performs cleanup and
+releases resources associated with motor control.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorDriver = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorDriver_2 = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorDetect = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorModeCmd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorType_e = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorType_e_COMMUNICATION_ERROR = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorType_e_NONE_ERROR = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorType_e_OVER_CURRENT = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorErrorType_e_OVER_TEMPERATURE = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorGetParam =
+R"doc(Requests motor parameters based on a specific command.
+
+This function sends a request to retrieve specific parameters from the
+motor. The parameter to be retrieved is identified by the `param_cmd`
+argument.
+
+Parameter ``param_cmd``:
+    The command code specifying which parameter to retrieve.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorInit =
+R"doc(Initializes the motor.
+
+This function initializes the motor for operation. It performs
+necessary setup and configuration for motor control.
+
+Returns:
+    True if motor initialization is successful; otherwise, false.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorLock =
+R"doc(Locks the motor to prevent movement.
+
+This function locks the motor to prevent any movement. Once locked,
+the motor will not respond to commands for movement.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorMitModeCmd =
+R"doc(Commands the motor to operate in impedance mode with specific
+parameters.
+
+This function sets the motor to operate in an impedance control mode,
+where it applies force based on the provided parameters.
+
+Parameter ``f_p``:
+    Proportional force value.
+
+Parameter ``f_v``:
+    Velocity-based force value.
+
+Parameter ``f_kp``:
+    Proportional stiffness coefficient.
+
+Parameter ``f_kd``:
+    Damping coefficient.
+
+Parameter ``f_t``:
+    Desired torque value.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorPosModeCmd =
+R"doc(Commands the motor to move to a specified position at a specified
+speed.
+
+This function is responsible for commanding the motor to move to a
+desired position with a specified speed.
+
+Parameter ``pos``:
+    The target position to move the motor to.
+
+Parameter ``spd``:
+    The speed at which the motor should move to the target position.
+
+Parameter ``ignore_limit``:
+    If true, ignores any position limits that may be set.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorResetID = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorSetFilterParam =
+R"doc(Sets the filter parameters for position and speed control.
+
+This function configures the filter parameters used in position and
+speed control.
+
+Parameter ``position_kd_filter``:
+    Filter coefficient for position control derivative term.
+
+Parameter ``kd_spd``:
+    Filter coefficient for speed control derivative term.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorSetPosParam =
+R"doc(Sets the position control parameters (proportional gain and derivative
+gain) for the motor.
+
+This function configures the position control parameters (PID gains)
+for the motor.
+
+Parameter ``kp``:
+    Proportional gain for position control.
+
+Parameter ``kd``:
+    Derivative gain for position control.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorSetSpdParam =
+R"doc(Sets the speed control parameters (proportional gain and integral
+gain) for the motor.
+
+This function configures the speed control parameters (PI gains) for
+the motor.
+
+Parameter ``kp``:
+    Proportional gain for speed control.
+
+Parameter ``ki``:
+    Integral gain for speed control.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorSetZero =
+R"doc(Sets the motor position to zero.
+
+This function sets the current motor position to zero. It establishes
+a new reference point for position measurement.
+
+Returns:
+    True if setting motor position to zero is successful; otherwise,
+    false.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorSpdModeCmd =
+R"doc(Commands the motor to rotate at a specified speed.
+
+This function commands the motor to rotate at the specified speed.
+
+Parameter ``spd``:
+    The speed at which the motor should rotate.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorTemperatureDetect = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_MotorUnlock =
+R"doc(Unlocks the motor to allow movement.
+
+This function unlocks the motor to enable movement. After unlocking,
+the motor can respond to movement commands.)doc";
+
+static const char *__doc_arm_MotorDriver_MotorWriteFlash = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_error_id = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_gear_ratio = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_error_id =
+R"doc(Retrieves the error ID associated with the motor.
+
+This function returns the error ID that indicates any error condition
+of the motor.
+
+Returns:
+    The error ID of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_gear_ratio =
+R"doc(Retrieves the gear ratio of the motor.
+
+This function returns the gear ratio of the motor.
+
+Returns:
+    The gear ratio of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_max_current = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_acceleration =
+R"doc(Retrieves the acceleration of the motor.
+
+This function returns the current acceleration of the motor.
+
+Returns:
+    The acceleration of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_control_mode =
+R"doc(Retrieves the control mode of the motor.
+
+This function returns the current control mode of the motor.
+
+Returns:
+    The control mode of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_current =
+R"doc(Retrieves the current current (electric current) of the motor.
+
+This function returns the electric current flowing through the motor.
+
+Returns:
+    The current (electric current) of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_error_id =
+R"doc(Retrieves the error ID associated with the motor.
+
+This function returns the error ID that indicates any error condition
+of the motor.
+
+Returns:
+    The error ID of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_id =
+R"doc(Retrieves the ID of the motor.
+
+This function returns the unique identifier (ID) of the motor.
+
+Returns:
+    The ID of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_kd_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_kd_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_ki_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_ki_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_kp_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_kp_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_pos =
+R"doc(Retrieves the current position of the motor.
+
+This function returns the current position of the motor.
+
+Returns:
+    The current position of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_spd =
+R"doc(Retrieves the current speed of the motor.
+
+This function returns the current speed of the motor.
+
+Returns:
+    The current speed of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_motor_temperature =
+R"doc(Retrieves the temperature of the motor.
+
+This function returns the current temperature of the motor.
+
+Returns:
+    The temperature of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_response_count =
+R"doc(Retrieves the count of responses received from the motor.
+
+This function returns the number of responses received from the motor.
+
+Returns:
+    The count of responses received from the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_get_timeout =
+R"doc(Retrieves the timeout value configured for the motor.
+
+This function returns the timeout value set for the motor operations.
+
+Returns:
+    The timeout value in milliseconds.)doc";
+
+static const char *__doc_arm_MotorDriver_get_write_para_res =
+R"doc(Retrieves the result of writing parameters to the motor.
+
+This function returns the result of writing parameters to the motor.
+
+Returns:
+    True if writing parameters was successful; otherwise, false.)doc";
+
+static const char *__doc_arm_MotorDriver_get_write_para_res_and_clear = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_heartbeat_detect_counter = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_logger = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_max_current = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_acceleration = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_control_mode = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_current = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_kd_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_kd_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_ki_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_ki_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_kp_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_kp_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_pos = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_spd = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_motor_temperature = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_set_max_current = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_set_motor_control_mode =
+R"doc(Sets the control mode for the motor.
+
+This function specifies the control mode for the motor.
+
+Parameter ``motor_control_mode``:
+    The control mode to be set for the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_set_motor_id =
+R"doc(Sets the ID of the motor.
+
+This function assigns a unique identifier (ID) to the motor.
+
+Parameter ``motor_id``:
+    The ID of the motor.)doc";
+
+static const char *__doc_arm_MotorDriver_timeout = R"doc()doc";
+
+static const char *__doc_arm_MotorDriver_write_para_res = R"doc()doc";
+
 static const char *__doc_arm_Robot =
 R"doc(The Robot class for controlling the robot arm
 
-1. plug-to-play 
-2. control mode and light effect 
-3. Demonstrate Mode / Replay Mode / Online Mode)doc";
+1. plug-to-play 2. control mode and light effect 3. Demonstrate Mode /
+Replay Mode / Online Mode)doc";
 
 static const char *__doc_arm_Robot_ArmMode = R"doc()doc";
 
