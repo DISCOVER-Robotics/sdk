@@ -129,43 +129,30 @@ int main(int argc, char **argv) {
     }
   });
 
-  std::cout << blue << "放入标零工具，将机械臂牵引到零点后，按下回车键" << reset << std::endl;
+  std::cout << blue << "将机械臂牵引到硬件零点后，按下回车键" << reset << std::endl;
   getline(std::cin, tmp);
 
   mutex.lock();
   release_brake = 0;
   mutex.unlock();
   for (auto &&i : motor_driver_) {
-    i->MotorSetZero();
+    if (i->get_board_id() == 2) {
+      arm::OdMotorDriver *od_motor = dynamic_cast<arm::OdMotorDriver *>(i.get());
+      od_motor->MotorSetPosBias(arm::MotorDriver::joint_upper_bounder_[1] * 180 / M_PI);
+    } else if (i->get_board_id() == 3) {
+      arm::OdMotorDriver *od_motor = dynamic_cast<arm::OdMotorDriver *>(i.get());
+      od_motor->MotorSetPosBias(arm::MotorDriver::joint_lower_bounder_[2] * 180 / M_PI);
+    } else
+      i->MotorSetZero();
     std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 
   std::cout << green << "标零完成。 " << reset << std::endl;
-  mutex.lock();
-  release_brake = 1;
-  mutex.unlock();
 
-  std::cout << blue << "移去标零工具，按下回车键" << reset << std::endl;
-  getline(std::cin, tmp);
   mutex.lock();
   release_brake = 2;
   mutex.unlock();
   thread_brake.join();
-  for (int i = 0; i < 6; i++) {
-    motor_driver_[i]->MotorInit();  // This is to init DM motors after timeout due to
-                                    // thread_brake.join()
-    motor_driver_[i]->set_motor_control_mode(arm::MotorDriver::POS);
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-  }
-
-  while (std::abs(motor_driver_[0]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[1]->get_motor_pos()) > 0.01 ||
-         std::abs(motor_driver_[2]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[3]->get_motor_pos()) > 0.01 ||
-         std::abs(motor_driver_[4]->get_motor_pos()) > 0.01 || std::abs(motor_driver_[5]->get_motor_pos()) > 0.01) {
-    for (int i = 0; i < 6; i++) {
-      motor_driver_[i]->MotorPosModeCmd(0, 0.5);
-      std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    }
-  }
 
   for (auto &&i : motor_driver_) i->MotorDeInit();
 
