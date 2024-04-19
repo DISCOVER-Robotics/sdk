@@ -79,12 +79,18 @@ int main(int argc, char **argv) {
 
   vector<double> follower_joint_kps = vector<double>{75.0f, 75.0f, 75.0f, 3.0f, 3.0f, 3.0f};
   vector<double> follower_joint_kds = vector<double>{1.0f, 1.0f, 1.0f, 0.02f, 0.02f, 0.02f};
-  vector<double> follower_joint_p_gains = vector<double>{3.f, 3.f, 3.f, 0.1f, 0.1f, 0.1f};
+  vector<double> follower_joint_p_gains = vector<double>{7.f, 7.f, 7.f, .5f, 1.f, 1.f};
+  double follower_gain = 2.5;
+  if (master_end_mode != "none") {
+    follower_joint_kps = vector<double>{100.0f, 125.0f, 125.0f, 7.5f, 7.5f, 7.5f};
+    follower_joint_kds = vector<double>{0.2f, .35f, 0.35f, 0.075f, 0.075f, 0.075f};
+    follower_joint_p_gains = vector<double>{5.f, 5.f, 5.f, 1.f, 1.f, 1.f};
+  }
 
   float MAX_EFFORT = 2.f;
   double clip_joint_range[6];
   for (size_t i = 0; i < 6; i++) {
-    clip_joint_range[i] = 2. * MAX_EFFORT / (follower_joint_kps[i] + 1e-6);
+    clip_joint_range[i] = 3. * MAX_EFFORT / (follower_joint_kps[i] + 1e-6);
   }
   if (force_feedback) {
     follower->set_mit_params(follower_joint_kps, follower_joint_kds);
@@ -109,24 +115,20 @@ int main(int argc, char **argv) {
           clip_joint_diff[i_m] =
               static_cast<float>(std::clamp(joint_diff[i_m], -clip_joint_range[i_m], clip_joint_range[i_m]));
           set_q_follower[i_m] = q_follower[i_m] + clip_joint_diff[i_m];
-          //////////////////////////////////这里是自研电机的bug////////////////////////////
-          if (i_m < 3) {
-            set_q_follower[i_m] *= 1.25f;
-          }
-          //////////////////////////////////这里是自研电机的bug////////////////////////////
         }
         // 只有1控1的时候 力反馈
         std::vector<double> fb_force;
         for (size_t i_m = 0; i_m < 6; i_m++) {
-          fb_force.push_back(0.5 * follower_joint_kps[i_m] * joint_diff[i_m]);
+          fb_force.push_back(follower_joint_p_gains[i_m] * joint_diff[i_m]);
         }
         leader->set_mit_feedback(fb_force);
         follower->set_target_joint_qt(set_q_follower, t_tau_follower);
         vector<double> follower_mit_feedback;
         for (size_t i_m = 0; i_m < 6; i_m++) {
-          follower_mit_feedback.push_back(-follower_joint_p_gains[i_m] * clip_joint_diff[i_m]);
+          follower_mit_feedback.push_back(-follower_gain * follower_joint_p_gains[i_m] * clip_joint_diff[i_m]);
         }
         follower->set_mit_feedback(follower_mit_feedback);
+        if (master_end_mode != "none") follower->set_target_end(leader->get_current_end());
       } else {
         follower->set_target_joint_q(leader->get_current_joint_q(), false);
         follower->set_target_end(leader->get_current_end());
