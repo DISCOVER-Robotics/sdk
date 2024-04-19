@@ -15,4 +15,4 @@
 	url = https://github.com/p-ranav/argparse
 [submodule "python/docs"]
 	path = python/docs
-	url = https://github.com/RoboticsChen/docs.git
+	url = ssh://git@git.qiuzhi.tech:20002/airbot-play/control/python-interface-doc.git

@@ -1,18 +1,21 @@
 #include <pybind11/functional.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <stdint.h>
-#include <string.h>
 
 #include <airbot/airbot.hpp>
-#include <airbot/drivers/can.hpp>
 #include <airbot/modules/tools/logger/log.hpp>
 #include <cmath>
+#include <cstdint>
+#include <cstring>
 #include <memory>
 #include <string>
 #include <vector>
 
+#ifdef DOCSTRINGS_EXISTS
 #include "docstrings.h"
+#else
+#define DOC(...) R"doc()doc"
+#endif
 
 namespace py = pybind11;
 using namespace arm;
@@ -26,7 +29,7 @@ std::unique_ptr<Robot> createAgent(std::string urdf_path = URDF_INSTALL_PATH + "
 std::unique_ptr<MotorDriver> createMotor(uint16_t id, const char *interface, std::string type) {
   std::vector<spdlog::sink_ptr> sinks;
   sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
-      (std::string("logs/airbot_play-") + arm::get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
+      (std::string("logs/airbot_play-") + get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
   auto logger_ = arm::setup_logger(sinks);
   spdlog::flush_every(std::chrono::seconds(1));
   logger_->set_level(spdlog::level::info);
