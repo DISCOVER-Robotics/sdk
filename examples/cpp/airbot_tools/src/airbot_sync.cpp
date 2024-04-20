@@ -82,15 +82,15 @@ int main(int argc, char **argv) {
   vector<double> follower_joint_p_gains = vector<double>{7.f, 7.f, 7.f, .5f, 1.f, 1.f};
   double follower_gain = 2.5;
   if (master_end_mode != "none") {
-    follower_joint_kps = vector<double>{100.0f, 125.0f, 125.0f, 7.5f, 7.5f, 7.5f};
-    follower_joint_kds = vector<double>{0.2f, .35f, 0.35f, 0.075f, 0.075f, 0.075f};
-    follower_joint_p_gains = vector<double>{5.f, 5.f, 5.f, 1.f, 1.f, 1.f};
+    follower_joint_kps = vector<double>{10.0f, 35.0f, 55.0f, 7.5f, 7.5f, 7.5f};
+    follower_joint_kds = vector<double>{1.5f, 1.75f, 1.5f, 0.25f, 0.25f, 0.25f};
+    follower_joint_p_gains = vector<double>{2.5f, 2.5f, 2.5f, 0.5f, 0.5f, 0.5f};
   }
 
   float MAX_EFFORT = 2.f;
   double clip_joint_range[6];
   for (size_t i = 0; i < 6; i++) {
-    clip_joint_range[i] = 3. * MAX_EFFORT / (follower_joint_kps[i] + 1e-6);
+    clip_joint_range[i] = 4. * MAX_EFFORT / (follower_joint_kps[i] + 1e-6);
   }
   if (force_feedback) {
     follower->set_mit_params(follower_joint_kps, follower_joint_kds);
@@ -123,11 +123,11 @@ int main(int argc, char **argv) {
         }
         leader->set_mit_feedback(fb_force);
         follower->set_target_joint_qt(set_q_follower, t_tau_follower);
-        vector<double> follower_mit_feedback;
-        for (size_t i_m = 0; i_m < 6; i_m++) {
-          follower_mit_feedback.push_back(-follower_gain * follower_joint_p_gains[i_m] * clip_joint_diff[i_m]);
-        }
-        follower->set_mit_feedback(follower_mit_feedback);
+        // vector<double> follower_mit_feedback;
+        // for (size_t i_m = 0; i_m < 6; i_m++) {
+        //   follower_mit_feedback.push_back(0.0 * -follower_gain * follower_joint_p_gains[i_m] * clip_joint_diff[i_m]);
+        // }
+        // follower->set_mit_feedback(follower_mit_feedback);
         if (master_end_mode != "none") follower->set_target_end(leader->get_current_end());
       } else {
         follower->set_target_joint_q(leader->get_current_joint_q(), false);

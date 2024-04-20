@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "airbot_pytools"
-version = "2.6.0"
+version = "2.7.0"
 description = "Python tools for AIRBOT"
 authors = ["Beiwen Tian <tianbeiwen88@gmail.com>"]
 license = "GPL-3.0"
