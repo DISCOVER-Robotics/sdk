@@ -91,7 +91,7 @@ inline time_t get_timestamp() {
 
 int main(int argc, char **argv) {
   // argparse
-  argparse::ArgumentParser program("airbot_sync", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_demonstrate", AIRBOT_VERSION);
   program.add_argument("-u", "--urdf")
       .default_value(std::string())
       .help("Manually provided URDF path to override default paths.");

@@ -105,7 +105,7 @@ inline time_t get_timestamp() {
 
 int main(int argc, char** argv) {
   // argparse
-  argparse::ArgumentParser program("airbot_play_node", AIRBOT_VERSION);
+  argparse::ArgumentParser program("airbot_demonstrate_dual", AIRBOT_VERSION);
   program.add_argument("-u", "--urdf")
       .default_value(
           std::getenv("URDF_PATH")
