@@ -3,7 +3,7 @@ import math
 import time
 
 urdf_path = airbot.AIRBOT_PLAY_URDF
-bot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "gripper", False, False)
+bot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "gripper", False)
 
 step = 0
 bot.set_target_joint_q([0, 0, math.pi / 2, 0, 0, math.pi / 4])
