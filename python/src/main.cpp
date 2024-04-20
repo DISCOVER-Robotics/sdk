@@ -6,9 +6,6 @@
 #include <memory>
 
 #include "doc.hpp"
-#ifndef DOC
-#define DOC(...) ""
-#endif
 
 namespace py = pybind11;
 using namespace arm;
