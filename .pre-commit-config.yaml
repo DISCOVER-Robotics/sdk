@@ -8,8 +8,10 @@ repos:
     - id: trailing-whitespace
       exclude: '\bdocstrings\.h$'
     - id: check-json
+      exclude: '\brecord\.json$'
     - id: check-xml
     - id: pretty-format-json
+      exclude: '\brecord\.json$'
 - repo: https://github.com/psf/black
   rev: 24.3.0
   hooks:
