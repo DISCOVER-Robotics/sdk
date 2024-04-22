@@ -2,6 +2,7 @@ import can
 import struct
 import os
 import time
+import rich.progress
 
 
 def send_can_data(bus, can_id, data):
@@ -128,75 +129,79 @@ def main(can_channel: str, device_id: int, firmware_path: str, device_name: str)
     if device_name == "arm-interface-board-end":
         time.sleep(3)
 
-    while index1 * 256 + index2 < len(bin_data) / 6:  # 当所有数据都成功发送完时结束
-        # 构建CAN数据帧
-        can_data = (
-            struct.pack(">BB", index1 % 256, index2 % 256)
-            + bin_data[
-                index1 * 256 * 6 + index2 * 6 : index1 * 256 * 6 + index2 * 6 + 6
-            ]
-        )
-
+    with rich.progress.Progress() as progress:
+        task = progress.add_task("[cyan]Transmitting data...", total=len(bin_data) / 6)
         # 发送CAN数据
-        send_can_data(bus, can_id, can_data)
-        if version >= "2.5.0" and device_name != "arm-interface-board-end":
-            index2 += 1
-            time.sleep(0.0005)
-            if index2 == 256:
-                # 等待接收返回数据
-                response_msg = receive_can_data(bus)
+        while index1 * 256 + index2 < len(bin_data) / 6:  # 当所有数据都成功发送完时结束
+            # 构建CAN数据帧
+            can_data = (
+                struct.pack(">BB", index1 % 256, index2 % 256)
+                + bin_data[
+                    index1 * 256 * 6 + index2 * 6 : index1 * 256 * 6 + index2 * 6 + 6
+                ]
+            )
 
-                while (
-                    response_msg == None
-                    or response_msg.arbitration_id != 0x780 | device_id
-                ):
-                    # print(response_msg)
+            # 发送CAN数据
+            send_can_data(bus, can_id, can_data)
+            if version >= "2.5.0" and device_name != "arm-interface-board-end":
+                index2 += 1
+                time.sleep(0.0001)
+                if index2 == 256:
+                    # 等待接收返回数据
                     response_msg = receive_can_data(bus)
 
-                # print(response_msg)
+                    while (
+                        response_msg == None
+                        or response_msg.arbitration_id != 0x780 | device_id
+                    ):
+                        # print(response_msg)
+                        response_msg = receive_can_data(bus)
 
-                # 处理返回数据
-                response_data = struct.unpack(">BB6s", response_msg.data)
-                response_index1, response_index2, response_status = response_data
-                # print (response_index1, response_index2, response_status, response_crc)
-                # 检查返回数据是否成功
-                if response_status[0] == 0x01:
-                    print(f"Packet {index1} sent successfully.")
-                    if index2 == 256:
-                        index2 = 0
-                    # time.sleep(0.05)
-                else:
-                    print(f"Packet {index1} failed. Retrying...")
-                    continue
-        else:
-            response_msg = receive_can_data(bus)
-            # 处理返回数据
-            if (
-                response_msg is not None
-                and response_msg.arbitration_id == 0x780 | device_id
-            ):
-                response_data = struct.unpack(">BB6s", response_msg.data)
-                response_index1, response_index2, response_status = response_data
-                # print (response_index1, response_index2, response_status, response_crc)
-                # 检查返回数据是否成功
-                if response_status[0] == 0x01:
-                    print(f"Frame {index1}-{index2} sent successfully.")
-                    index2 += 1
-                    if index2 == 256:
-                        index2 = 0
-                    # time.sleep(0.01)
-                else:
-                    print(f"Frame {index1}-{index2} failed. Retrying...")
-                    continue
+                    # print(response_msg)
+
+                    # 处理返回数据
+                    response_data = struct.unpack(">BB6s", response_msg.data)
+                    response_index1, response_index2, response_status = response_data
+                    # print (response_index1, response_index2, response_status, response_crc)
+                    # 检查返回数据是否成功
+                    index2 = 0
+                    if response_status[0] == 0x01:
+                        progress.update(task, advance=256)
+                        # print(f"Packet {index1} sent successfully.")
+                        # time.sleep(0.05)
+                    else:
+                        print(f"Packet {index1} failed. Retrying...")
+                        continue
             else:
-                print(
-                    f"Error receiving response for Frame {index1}-{index2}. Retrying..."
-                )
-                continue
+                response_msg = receive_can_data(bus)
+                # 处理返回数据
+                if (
+                    response_msg is not None
+                    and response_msg.arbitration_id == 0x780 | device_id
+                ):
+                    response_data = struct.unpack(">BB6s", response_msg.data)
+                    response_index1, response_index2, response_status = response_data
+                    # print (response_index1, response_index2, response_status, response_crc)
+                    # 检查返回数据是否成功
+                    if response_status[0] == 0x01:
+                        progress.update(task, advance=1)
+                        # print(f"Frame {index1}-{index2} sent successfully.")
+                        index2 += 1
+                        if index2 == 256:
+                            index2 = 0
+                        # time.sleep(0.01)
+                    else:
+                        print(f"Frame {index1}-{index2} failed. Retrying...")
+                        continue
+                else:
+                    print(
+                        f"Error receiving response for Frame {index1}-{index2}. Retrying..."
+                    )
+                    continue
 
-        # 更新索引
-        if index2 == 0:
-            index1 += 1
+            # 更新索引
+            if index2 == 0:
+                index1 += 1
 
     # 发送结束请求数据
     send_end_request_data(bus, 0x700 | device_id)
@@ -210,7 +215,7 @@ def main(can_channel: str, device_id: int, firmware_path: str, device_name: str)
         ):
             response_data = struct.unpack("B", response_msg.data)
             if response_data[0] == 0x02:
-                print(f"Packet {index1} sent successfully.")
+                # print(f"Packet {index1} sent successfully.")
                 print("End request successful. Data transmit finished.")
                 print(
                     "\033[0;31m",
@@ -221,34 +226,46 @@ def main(can_channel: str, device_id: int, firmware_path: str, device_name: str)
                 break
         time.sleep(0.1)
 
-    time.sleep(5)
     burned_flag = False
-    while not burned_flag:
-        send_version_request_data(bus, device_id)
-        time.sleep(0.1)
-        response_msg = receive_can_data(bus)
-        if (
-            response_msg is not None
-            and response_msg.arbitration_id == 0x100 | device_id
-        ):
-            if len(response_msg.data) == 6:
-                response_data = struct.unpack(">BB4s", response_msg.data)
-                response_index1, response_index2, response_status = response_data
-            elif len(response_msg.data) == 8:
-                response_data = struct.unpack(">BB4s2s", response_msg.data)
-                response_index1, response_index2, response_status, crc = response_data
-            if response_index1 == 0x02 and response_index2 == 0x01:
-                print("Burn finished.")
-                print(
-                    "Version: ",
-                    response_status[1],
-                    ".",
-                    response_status[2],
-                    ".",
-                    response_status[3],
-                    sep="",
-                )
-                burned_flag = True
+    with rich.progress.Progress() as burn_progress:
+        burn_task = burn_progress.add_task("[green]Burning firmware...", total=100)
+        progress_cnt = 0
+        while not burned_flag:
+            time.sleep(0.1)
+            if progress_cnt < 40:
+                progress_cnt += 0.75
+                burn_progress.update(burn_task, completed=progress_cnt)
+                continue
+            send_version_request_data(bus, device_id)
+            progress_cnt = min(progress_cnt + 0.75, 99)
+            burn_progress.update(burn_task, completed=progress_cnt)
+            response_msg = receive_can_data(bus)
+            if (
+                response_msg is not None
+                and response_msg.arbitration_id == 0x100 | device_id
+            ):
+                if len(response_msg.data) == 6:
+                    response_data = struct.unpack(">BB4s", response_msg.data)
+                    response_index1, response_index2, response_status = response_data
+                elif len(response_msg.data) == 8:
+                    response_data = struct.unpack(">BB4s2s", response_msg.data)
+                    response_index1, response_index2, response_status, crc = (
+                        response_data
+                    )
+                if response_index1 == 0x02 and response_index2 == 0x01:
+                    burn_progress.update(burn_task, completed=100)
+                    burned_flag = True
+
+    print("Burn finished.")
+    print(
+        "Version: ",
+        response_status[1],
+        ".",
+        response_status[2],
+        ".",
+        response_status[3],
+        sep="",
+    )
     # 结束计时
     end_time = time.time()
     print(f"Time elapsed: {end_time - start_time} seconds")

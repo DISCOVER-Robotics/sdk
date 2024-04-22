@@ -239,7 +239,7 @@ int main(int argc, char **argv) {
         robot->set_target_joint_q({0., 0., 0., 0., 0., 0.}, use_planning, TIME);
         break;
       case 'm':
-        robot->record_save("records/" + std::to_string(arm::get_timestamp()) + ".json");
+        robot->record_save("records/" + get_timestring() + ".json");
         break;
       case '[':
         robot->set_target_end(0);
