@@ -15,7 +15,7 @@ sidebar: true
 !!! info "`airbot_play` "
     The `airbot_play` package is the core package of AIRBOT Play robotic arm. It provides the basic control library for the robotic arm.
 
-Download the deb package from [releases of `arm-control`](https://git.qiuzhi.tech:20000/airbot-play/control/arm-control/-/releases).  The package file name should be in the format of `airbot_play_<version>_<arch>.deb`. 
+Download the deb package from [releases of `arm-control`](https://git.qiuzhi.tech:20000/airbot-play/control/arm-control/-/releases).  The package file name should be in the format of `airbot_play_<version>_<arch>.deb`.
 
 Then install the package with the following command:
 ```shell
@@ -32,7 +32,7 @@ Download the deb package `ros_interface` from [releases of `sdk`](https://git.qi
 `
 
 Then install the package with the following command:
-```shell 
+```shell
 # Run with root privileges
 apt install ./ros-noetic-ros-interface_<version>-0focal_amd64.deb
 ```
@@ -56,7 +56,7 @@ Now you can control AIRBOT Play via ROS 1 and JoyStick.
 ### Launch ROS Interface
 
 !!! tip "ROS 1 Environment"
-    Before launching the ROS interface, make sure you have set up the ROS 1 environment correctly. This is typically done by sourcing the `setup.bash` file: 
+    Before launching the ROS interface, make sure you have set up the ROS 1 environment correctly. This is typically done by sourcing the `setup.bash` file:
     ```shell
     # Bash
     source /opt/ros/noetic/setup.bash
@@ -78,12 +78,12 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
 #### Subscriber
 
 1. `/airbot_play/set_target_pose`
-    
+
     Topic type: `geometry_msgs::Pose`.
-    
-    Set the target gripping pose of the end effector (if end effector exists) or the center of the 6-th motor (if no end effector exists). 
-    
-    The origin of the reference frame is the base of the robotic arm. X points to the front, Y points to the left, and Z points upwards. The orientation is represented by a quaternion representing the rotation from `(1, 0, 0)` to the target direction. 
+
+    Set the target gripping pose of the end effector (if end effector exists) or the center of the 6-th motor (if no end effector exists).
+
+    The origin of the reference frame is the base of the robotic arm. X points to the front, Y points to the left, and Z points upwards. The orientation is represented by a quaternion representing the rotation from `(1, 0, 0)` to the target direction.
 
     If an invalid target pose is received by the robotic arm, the robotic arm **will not move**.
 
@@ -97,14 +97,14 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
     x: 0.0
     y: 0.707
     z: 0.0
-    w: 0.707" 
+    w: 0.707"
     ```
 
 
 2. `/airbot_play/set_target_joint_q`
 
     Topic type: `sensor_msgs::JointState`.
-    
+
     Set the target joint angles of the robotic arm. The order of the joint angles should be consistent with the order of the joints in the URDF model (from the base to the end).
 
     Infomation other than the target joint angles will be ignored.
@@ -126,7 +126,7 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
 3. `/airbot_play/set_target_joint_v`
 
     Topic type: `sensor_msgs::JointState`.
-    
+
     Set the target joint velocities of the robotic arm. The order of the joint velocities should be consistent with the order of the joints in the URDF model (from the base to the end).
 
     Infomation other than the target joint velocities will be ignored.
@@ -149,7 +149,7 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
 4. `/airbot_play/gripper/set_position`
 
     Topic type: `std_msgs::Float64`.
-    
+
     Set the target status of the gripper. The target status is a normalized value between `0` and `1` where `0` means close, `1` means open.
 
     If an invalid target status is received by the robotic arm, the gripper **will not move**.
@@ -157,7 +157,7 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
     An example of a valid target status published by `rostopic`:
 
     ```shell
-    rostopic pub -1 /airbot_play/gripper/set_position std_msgs/Float64 "data: 1.0" 
+    rostopic pub -1 /airbot_play/gripper/set_position std_msgs/Float64 "data: 1.0"
     ```
 
 #### Publisher
@@ -165,20 +165,20 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
 1. `/airbot_play/end_pose`
 
     Topic type: `geometry_msgs::Pose`.
-    
+
     Publish the current pose of the end effector relative to the base of the robotic arm.
-    
+
     The origin of the reference frame is the base of the robotic arm. X points to the front, Y points to the left, and Z points upwards. The orientation is represented by a quaternion representing the rotation from `(1, 0, 0)` to the target direction.
 
     An example of the published end pose:
 
     ```yaml
     # rostopic echo -n 1 /airbot_play/end_pose
-    position: 
+    position:
       x: 0.12846235946081982
       y: -0.011717509217491769
       z: 0.21345294013754434
-    orientation: 
+    orientation:
       x: 0.0017778062709710638
       y: 0.7131848423783093
       z: 0.0019247148770529623
@@ -187,22 +187,22 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
     ```
 
 2. `/airbot_play/joint_states`
-  
+
     Topic type: `sensor_msgs::JointState`.
-    
+
     Publish the current joint angles of the robotic arm. The order of the joint angles is consistent with the order of the joints in the URDF model (from the base to the end).
 
     An example of the published joint angles:
 
     ```yaml
     # rostopic echo -n 1 /airbot_play/joint_states
-    header: 
+    header:
       seq: 13838
-      stamp: 
+      stamp:
         secs: 1713452918
         nsecs: 548530541
       frame_id: "airbot_arm"
-    name: 
+    name:
       - joint1
       - joint2
       - joint3
@@ -217,7 +217,7 @@ roslaunch ros_interface airbot_arm.launch [end_mode:=gripper] [urdf:=</path/to/u
 3. `/airbot_play/gripper/position`
 
     Topic type: `std_msgs::Float64`.
-    
+
     Publish the current status of the gripper. The status is a normalized value between `0` and `1` where `0` means close, `1` means open.
 
     An example of the published gripper status:
@@ -252,8 +252,8 @@ Launch the control node after connecting the 2.4G receiver of the joystick:
 ```bash
 roslaunch ros_interface airbot_arm.launch
 ```
-!!! tip 
-    A red error message might appear in the screen saying 
+!!! tip
+    A red error message might appear in the screen saying
     ```
     Couldn't open joystick force feedback!
     ```
@@ -290,4 +290,3 @@ To understand how the joystick buttons map to controlling the robot, look at the
 The Logitech gamepad (joystick) supports both XInput and DirectInput  interface modes. You can switch between these two modes by sliding a switch on the side of the gamepad. It’s recommended that you leave the gamepad in XInput mode, which is marked “X” (1)  on the gamepad side. In XInput mode, the gamepad uses standard Windows XInput gamepad drivers. It is not necessary to install Logitech Gaming software unless you are using the gamepad in DirectInput mode.
 
 ![](images/ros1-image-2.png)
-
