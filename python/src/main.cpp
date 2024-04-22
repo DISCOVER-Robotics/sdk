@@ -3,7 +3,13 @@
 #include <pybind11/stl.h>
 
 #include <airbot/airbot.hpp>
+#include <airbot/modules/tools/logger/log.hpp>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "doc.hpp"
 
@@ -14,6 +20,16 @@ std::unique_ptr<Robot> createAgent(std::string urdf_path = URDF_INSTALL_PATH + "
                                    std::string direction = "down", std::string can_interface = "can0",
                                    double vel = M_PI, std::string end_mode = "newteacher", bool constraint = false) {
   return std::make_unique<Robot>(urdf_path, can_interface, direction, vel, end_mode, constraint);
+}
+
+std::unique_ptr<MotorDriver> createMotor(uint16_t id, const char *interface, std::string type) {
+  std::vector<spdlog::sink_ptr> sinks;
+  sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
+      (std::string("logs/airbot_play-") + get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
+  auto logger_ = arm::setup_logger(sinks);
+  spdlog::flush_every(std::chrono::seconds(1));
+  logger_->set_level(spdlog::level::info);
+  return MotorDriver::MotorCreate(id, interface, logger_, type);
 }
 
 PYBIND11_MODULE(airbot, m) {
@@ -46,11 +62,6 @@ PYBIND11_MODULE(airbot, m) {
       .def("set_target_pose",
            py::overload_cast<const std::vector<std::vector<double>> &, bool, double>(&Robot::set_target_pose),
            py::arg("target_pose"), py::arg("use_planning") = true, py::arg("time") = 1., DOC(Robot, set_target_pose))
-      .def("set_target_pose",
-           py::overload_cast<const std::vector<double> &, const std::vector<double> &, bool, double>(
-               &Robot::set_target_pose),
-           py::arg("target_translation"), py::arg("target_rotation"), py::arg("use_planning") = true,
-           py::arg("time") = 1., DOC(Robot, set_target_pose))
       .def("set_target_translation", &Robot::set_target_translation, py::arg("target_translation"),
            py::arg("use_planning") = true, py::arg("time") = 1., DOC(Robot, set_target_translation))
       .def("add_target_translation", &Robot::add_target_translation, py::arg("target_d_translation"),
@@ -81,7 +92,69 @@ PYBIND11_MODULE(airbot, m) {
       .def("set_max_current", &Robot::set_max_current, py::arg("max"), py::arg("second") = 1.,
            DOC(Robot, set_max_current));
 
+  py::class_<MotorDriver, std::unique_ptr<MotorDriver>>(m, "MotorDriver")
+      .def("MotorLock", &MotorDriver::MotorLock, DOC(arm, MotorDriver, MotorLock))
+      .def("MotorUnlock", &MotorDriver::MotorUnlock, DOC(arm, MotorDriver, MotorUnlock))
+      .def("MotorInit", &MotorDriver::MotorInit, DOC(arm, MotorDriver, MotorInit))
+      .def("MotorDeInit", &MotorDriver::MotorDeInit, DOC(arm, MotorDriver, MotorDeInit))
+      .def("MotorSetZero", &MotorDriver::MotorSetZero, DOC(arm, MotorDriver, MotorSetZero))
+      .def("MotorWriteFlash", &MotorDriver::MotorWriteFlash, DOC(arm, MotorDriver, MotorWriteFlash))
+      .def("MotorBoundary", &MotorDriver::MotorBoundary, DOC(arm, MotorDriver, MotorBoundary))
+      .def("MotorGetParam", &MotorDriver::MotorGetParam, py::arg("target_joint_t"),
+           DOC(arm, MotorDriver, MotorGetParam))
+      .def("MotorPosModeCmd", &MotorDriver::MotorPosModeCmd, py::arg("pos"), py::arg("spd"),
+           py::arg("ignore_limit") = false, DOC(arm, MotorDriver, MotorPosModeCmd))
+
+      .def("MotorSpdModeCmd", &MotorDriver::MotorSpdModeCmd, py::arg("spd"), DOC(arm, MotorDriver, MotorSpdModeCmd))
+      .def("MotorMitModeCmd", &MotorDriver::MotorMitModeCmd, py::arg("f_p"), py::arg("f_v"), py::arg("f_kp"),
+           py::arg("f_kd"), py::arg("f_t"), DOC(arm, MotorDriver, MotorMitModeCmd))
+      .def("MotorSetPosParam", &MotorDriver::MotorSetPosParam, py::arg("kp"), py::arg("kd"),
+           DOC(arm, MotorDriver, MotorSetPosParam))
+      .def("MotorSetSpdParam", &MotorDriver::MotorSetSpdParam, py::arg("kp"), py::arg("ki"),
+           DOC(arm, MotorDriver, MotorSetSpdParam))
+      .def("MotorSetFilterParam", &MotorDriver::MotorSetFilterParam, py::arg("position_kd_filter"), py::arg("kd_spd"),
+           DOC(arm, MotorDriver, MotorSetFilterParam))
+      .def("set_motor_id", &MotorDriver::set_motor_id, py::arg("motor_id"), DOC(arm, MotorDriver, set_motor_id))
+      .def("set_motor_control_mode", &MotorDriver::set_motor_control_mode, py::arg("motor_control_mode"),
+           DOC(arm, MotorDriver, set_motor_control_mode))
+      .def("get_response_count", &MotorDriver::get_response_count, DOC(arm, MotorDriver, get_response_count))
+      .def("MotorResetID", &MotorDriver::MotorResetID, DOC(arm, MotorDriver, MotorResetID))
+      .def("MotorErrorModeCmd", &MotorDriver::MotorErrorModeCmd, DOC(arm, MotorDriver, MotorErrorModeCmd))
+      .def("MotorCurrentDetect", &MotorDriver::MotorCurrentDetect, DOC(arm, MotorDriver, MotorCurrentDetect))
+      .def("MotorCommunicationDetect", &MotorDriver::MotorCommunicationDetect,
+           DOC(arm, MotorDriver, MotorCommunicationDetect))
+      .def("MotorTemperatureDetect", &MotorDriver::MotorTemperatureDetect,
+           DOC(arm, MotorDriver, MotorTemperatureDetect))
+      .def("MotorErrorDetect", &MotorDriver::MotorErrorDetect, DOC(arm, MotorDriver, MotorErrorDetect))
+      .def("MotorErrorModeCmd", &MotorDriver::MotorErrorModeCmd, DOC(arm, MotorDriver, MotorErrorModeCmd))
+      .def("get_motor_id", &MotorDriver::get_motor_id, DOC(arm, MotorDriver, get_motor_id))
+      .def("get_motor_control_mode", &MotorDriver::get_motor_control_mode,
+           DOC(arm, MotorDriver, get_motor_control_mode))
+      .def("get_error_id", &MotorDriver::get_error_id, DOC(arm, MotorDriver, get_error_id))
+      .def("get_timeout", &MotorDriver::get_timeout, DOC(arm, MotorDriver, get_timeout))
+      .def("get_gear_ratio", &MotorDriver::get_gear_ratio, DOC(arm, MotorDriver, get_gear_ratio))
+      .def("get_write_para_res", &MotorDriver::get_write_para_res, DOC(arm, MotorDriver, get_write_para_res))
+      .def("get_motor_pos", &MotorDriver::get_motor_pos, DOC(arm, MotorDriver, get_motor_pos))
+      .def("get_motor_spd", &MotorDriver::get_motor_spd, DOC(arm, MotorDriver, get_motor_spd))
+      .def("get_motor_current", &MotorDriver::get_motor_current, DOC(arm, MotorDriver, get_motor_current))
+
+      .def("get_motor_error_id", &MotorDriver::get_motor_error_id, DOC(arm, MotorDriver, get_motor_error_id))
+      .def("get_motor_temperature", &MotorDriver::get_motor_temperature, DOC(arm, MotorDriver, get_motor_temperature))
+      .def("get_motor_acceleration", &MotorDriver::get_motor_acceleration,
+           DOC(arm, MotorDriver, get_motor_acceleration))
+      .def("get_motor_kp_spd", &MotorDriver::get_motor_kp_spd, DOC(arm, MotorDriver, get_motor_kp_spd))
+      .def("get_motor_ki_spd", &MotorDriver::get_motor_ki_spd, DOC(arm, MotorDriver, get_motor_ki_spd))
+      .def("get_motor_kd_spd", &MotorDriver::get_motor_kd_spd, DOC(arm, MotorDriver, get_motor_kd_spd))
+      .def("get_motor_kp_pos", &MotorDriver::get_motor_kp_pos, DOC(arm, MotorDriver, get_motor_kp_pos))
+      .def("get_motor_ki_pos", &MotorDriver::get_motor_ki_pos, DOC(arm, MotorDriver, get_motor_ki_pos))
+      .def("get_motor_kd_pos", &MotorDriver::get_motor_kd_pos, DOC(arm, MotorDriver, get_motor_kd_pos))
+      .def("set_max_current", &MotorDriver::set_max_current, DOC(arm, MotorDriver, set_max_current))
+      .def("get_max_current", &MotorDriver::get_max_current, DOC(arm, MotorDriver, get_max_current))
+      .def("get_write_para_res_and_clear", &MotorDriver::get_write_para_res_and_clear,
+           DOC(arm, MotorDriver, get_write_para_res_and_clear));
+
   m.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
         py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = M_PI,
-        py::arg("end_mode") = "newteacher", py::arg("constraint") = false);
+        py::arg("end_mode") = "newteacher", py::arg("constraint") = false, DOC(Robot, Robot));
+  m.def("create_motor", &createMotor, py::arg("motor_id"), py::arg("interface"), py::arg("type"));
 };

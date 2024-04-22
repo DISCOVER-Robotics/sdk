@@ -5,3 +5,7 @@
 **/records/
 ri_ws/
 .vscode/
+**docstrings.h
+**.so
+**.egg-info/
+**/__pycache__/
