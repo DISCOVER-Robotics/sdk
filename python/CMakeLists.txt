@@ -11,10 +11,6 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_BUILD_TYPE Debug)
 
-if(DOCSTRINGSH)
-  add_compile_definitions(DOCSTRINGS_EXISTS)
-endif()
-
 find_package(
   Python
   COMPONENTS Interpreter Development

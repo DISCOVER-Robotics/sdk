@@ -11,11 +11,7 @@
 #include <string>
 #include <vector>
 
-#ifdef DOCSTRINGS_EXISTS
-#include "docstrings.h"
-#else
-#define DOC(...) R"doc()doc"
-#endif
+#include "doc.hpp"
 
 namespace py = pybind11;
 using namespace arm;
