@@ -15,10 +15,10 @@ python:
     - git config --global user.email "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647@noreply.example.com"
     - git config --global user.name "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647"
     - git add .
-    - git checkout -b html_sdk_python
+    - git checkout -b html/python
     - git commit -m "doc push"
     - git remote add origin "https://oauth2:$DOC_ACCESS_TOKEN@git.qiuzhi.tech/${CI_PROJECT_PATH}"
-    - git push --set-upstream origin html_sdk_python --force
+    - git push --set-upstream origin html/python --force
 
   artifacts:
     paths:
