@@ -1,7 +1,6 @@
 import os
 import time
 import h5py
-import h5py_cache
 import numpy as np
 import cv2
 
@@ -50,20 +49,20 @@ def save_one_episode(
                                         left_gripper_velocity (1),  # normalized gripper velocity (pos: opening, neg: closing)
                                         right_arm_qvel (6),         # absolute joint velocity (rad)
                                         right_gripper_qvel (1)]     # normalized gripper velocity (pos: opening, neg: closing)
-                        "images": {"cam_high": (480x640x3),         # h, w, c, dtype='uint8'
-                                   "cam_low": (480x640x3),          # h, w, c, dtype='uint8'
-                                   "cam_left_wrist": (480x640x3),   # h, w, c, dtype='uint8'
-                                   "cam_right_wrist": (480x640x3)}  # h, w, c, dtype='uint8'
+                        "images": {"cam_0": (480x640x3),  # h, w, c, dtype='uint8'
+                                   "cam_1": (480x640x3),  # h, w, c, dtype='uint8'
+                                   "cam_2": (480x640x3),  # h, w, c, dtype='uint8'
+                                   "cam_3": (480x640x3)}  # h, w, c, dtype='uint8'
 
     base_action: [base_linear_vel, base_angular_vel]  # base action which is the velocity of the base
 
     Args:
         data:
-            可以是列表、元组等非字典类型（不推荐）：
+            can be list, tuple and other non-dict types(not recommended:
                 data[0]: each element is a dict, containing the arm observation and base action data
                 data[1]: each element is an array, containing the arm action data
                 data[2]: each element is an array, containing the actual_dt_history data
-            也可以是字典类型（推荐）：
+            can also be dict(recommended):
                 data['/observations/qpos']: list, containing the arm joint position data
                 data['/observations/qvel']: list, containing the arm joint velocity data
                 data['/observations/effort']: list, containing the arm joint effort data
@@ -95,12 +94,12 @@ def save_one_episode(
             f"Dataset already exist at \n{dataset_path}\nHint: set overwrite to True."
         )
         exit()
-
-    # Data collection
-    # 主要的观测数据是timesteps和actions，此外还有actual_dt_history：
-    # 其中timesteps是一个list，每个元素是一个dict，包含了观测数据
-    # actions是一个list，每个元素是一个array，包含了action数据
-    # actual_dt_history是一个list，每个元素是一个array，包含了每个timestep的起始时间、action采取时间、观测采取时间
+    """Data collection
+    The main observation data are timesteps and actions, in addition to actual_dt_history:
+    where timesteps is a list, each element is a dict, containing observation data
+    actions is a list, each element is an array, containing action data
+    actual_dt_history is a list, each element is an array, including the starting time, action time, and observation time of each timestep.
+    """
 
     if not isinstance(data, dict):
         timesteps, actions, actual_dt_history = data
@@ -119,6 +118,7 @@ def save_one_episode(
             )
             return False
 
+        # TODO: change names easily
         data_dict = {
             "/observations/qpos": [],
             "/observations/qvel": [],
@@ -307,7 +307,7 @@ if __name__ == "__main__":
         "--dataset_dir",
         type=str,
         help="The directory to save the dataset",
-        default="../hdf5_data/test_task",
+        default="./data/hdf5/wipe_water",
     )
     parser.add_argument(
         "-dn",
@@ -321,10 +321,7 @@ if __name__ == "__main__":
         "--camera_names",
         type=str,
         help="Camera names",
-        default="cam_high,cam_low,cam_left_wrist",
-    )
-    parser.add_argument(
-        "-os", "--one_side", action="store_true", help="One side", default=False
+        default="0,1,2",
     )
     parser.add_argument(
         "-ts",
@@ -340,7 +337,7 @@ if __name__ == "__main__":
     dataset_name = args.dataset_name
 
     if args.test_save:
-        ONE_SIDE = args.one_side
+        ONE_SIDE = True
         # test save_one_episode
         states_num = 7 if ONE_SIDE else 14
         data_lenth = 100
@@ -379,6 +376,7 @@ if __name__ == "__main__":
             slices,
         )
     else:
+        print("Start reading...")
         # test read_one_episode
         qpos, actions, images, other_data = read_one_episode(
             camera_names,
@@ -386,14 +384,16 @@ if __name__ == "__main__":
             dataset_name,
         )
         assert (
-            qpos.shape[0] == actions.shape[0] == len(images["cam_high"])
+            qpos.shape[0] == actions.shape[0] == len(images[camera_names[0]])
         ), "The length of qpos, actions and images should be the same."
         for cam_name in camera_names:
             assert (
                 images[camera_names[0]][0].shape == images[cam_name][0].shape
             ), f"The shape of images[{camera_names[0]}] and images[{cam_name}] should be the same."
-        image_shape = images["cam_high"][0].shape
-        image_shape = f"{image_shape[1]}x{image_shape[0]}x{image_shape[2]}"
-        print("image shape:", image_shape)
-        print("episode_len:", qpos.shape[0])
-        print("start_joint:", actions[0])
+        image_shape = images[camera_names[0]][0].shape
+        image_size = f"{image_shape[1]}x{image_shape[0]}x{image_shape[2]}"
+        print("  states_num:", qpos.shape[1])
+        print("  image_size:", image_size)
+        print("  episode_len:", qpos.shape[0])
+        print("  start_joint:", actions[0])
+        print("END")

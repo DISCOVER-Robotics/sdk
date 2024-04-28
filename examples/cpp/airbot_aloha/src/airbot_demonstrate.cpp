@@ -207,15 +207,18 @@ int main(int argc, char **argv) {
 
   assert(start_joint_pos.size() == 7 && "The size of start_joint_pos should be 7.");
   std::vector<double> joint_arm(start_joint_pos.begin(), start_joint_pos.end() - 1);
+  std::vector<time_t> time_records_;
+  std::vector<double> endt_q_records_, endt_v_records_, endf_q_records_, endf_v_records_;
+  std::vector<std::vector<double>> qt_records_, vt_records_, tt_records_, qf_records_, vf_records_, tf_records_;
+  std::vector<std::vector<std::vector<double>>> eef_posef_records_, eef_poset_records_;
+  std::vector<std::vector<cv::Mat>> images_records_(camera_num);
 
   auto leader = std::make_unique<arm::Robot>(urdf_path, master_can, direction, master_speed, master_end_mode);
   auto follower = std::make_unique<arm::Robot>(urdf_path, node_can, direction, follower_speed, follower_end_mode);
 
   threads.emplace_back(std::thread([&]() {
     while (true) {
-      std::shared_lock<std::shared_mutex> lock(mutex_);
       if (!running) break;
-      lock.unlock();
       follower->set_target_joint_q(leader->get_current_joint_q(), false);
       follower->set_target_end(leader->get_current_end());
     }
@@ -227,22 +230,15 @@ int main(int argc, char **argv) {
     camera_threads.emplace_back(std::thread(
         [&](std::shared_ptr<WebCam> cam, int i) {
           while (true) {
-            {
-              std::lock_guard<std::shared_mutex> lock(mutex_);
-              if (!running) break;
-            }
+            if (!running) break;
             images[i] = cam->get_frame();
           }
         },
         cameras[i], i));
 
-  std::vector<std::vector<double>> q_records_, v_records_, t_records_, qf_records_, vf_records_, tf_records_;
   camera_threads.emplace_back(std::thread([&]() {
     while (true) {
-      {
-        std::lock_guard<std::shared_mutex> lock(mutex_);
-        if (!running) break;
-      }
+      if (!running) break;
       bool flag = false;
       for (int i = 0; i < camera_num; i++)
         if (images[i].empty()) {
@@ -251,25 +247,23 @@ int main(int argc, char **argv) {
         }
       if (flag) continue;
       cv::Mat merged = mergeRGBHorizontally(images);
-      std::string text = std::to_string(q_records_.size());
-      cv::Point org(50, 50);                    // Position where the text will be drawn
-      int fontFace = cv::FONT_HERSHEY_SIMPLEX;  // Font type
-      double fontScale = 1.5;                   // Font scale factor
-      cv::Scalar color(50, 20, 255);            // Text color
-      int thickness = 2;                        // Text thickness
-      int lineType = cv::LINE_AA;               // Line type
-
-      // Draw the text on the image
-      cv::putText(merged, text, org, fontFace, fontScale, color, thickness, lineType);
-      cv::imshow("Concat", merged);
-      cv::waitKey(1);
+      if (!merged.empty()) {
+        std::string text = std::to_string(qf_records_.size());
+        cv::Point org(50, 50);                    // Position where the text will be drawn
+        int fontFace = cv::FONT_HERSHEY_SIMPLEX;  // Font type
+        double fontScale = 1.5;                   // Font scale factor
+        cv::Scalar color(50, 20, 255);            // Text color
+        int thickness = 2;                        // Text thickness
+        int lineType = cv::LINE_AA;               // Line type
+        // Draw the text on the image
+        cv::putText(merged, text, org, fontFace, fontScale, color, thickness, lineType);
+        cv::imshow("Concat", merged);
+        cv::waitKey(1);
+      }
     }
   }));
 
   // record data
-  std::vector<time_t> time_records_;
-  std::vector<double> endt_q_records_, endt_v_records_, endf_q_records_, endf_v_records_;
-  std::vector<std::vector<cv::Mat>> images_records_(camera_num);
   bool recording = false;
   threads.emplace_back(std::thread([&]() {
     auto sleep_time = std::chrono::microseconds(1000000 / frequency);
@@ -278,26 +272,24 @@ int main(int argc, char **argv) {
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
     while (true) {
       start_time = std::chrono::system_clock::now();
-      {
-        std::lock_guard<std::shared_mutex> lock(mutex_);
-        if (!running) break;
-      }
-
+      if (!running) break;
       if (!recording) {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
         print("", 0, 0);
         continue;
       } else {
-        if (q_records_.size() < max_time_steps) {
-          print("Recorded: " + std::to_string(q_records_.size()), 0, 0);
-          q_records_.emplace_back(leader->get_current_joint_q());
-          v_records_.emplace_back(leader->get_current_joint_v());
-          t_records_.emplace_back(leader->get_current_joint_t());
+        if (qt_records_.size() < max_time_steps) {
+          print("Recorded: " + std::to_string(qt_records_.size()), 0, 0);
+          qt_records_.emplace_back(leader->get_current_joint_q());
+          vt_records_.emplace_back(leader->get_current_joint_v());
+          tt_records_.emplace_back(leader->get_current_joint_t());
           endt_q_records_.emplace_back(leader->get_current_end());
+          eef_poset_records_.emplace_back(leader->get_current_pose());
           qf_records_.emplace_back(follower->get_current_joint_q());
           vf_records_.emplace_back(follower->get_current_joint_v());
           tf_records_.emplace_back(follower->get_current_joint_t());
           endf_q_records_.emplace_back(follower->get_current_end());
+          eef_posef_records_.emplace_back(follower->get_current_pose());
           time_records_.emplace_back(get_timestamp());
           for (std::size_t i = 0; i < camera_num; i++) images_records_[i].emplace_back(images[i].clone());
         } else {
@@ -315,16 +307,18 @@ int main(int argc, char **argv) {
 
   // clear data
   auto clear_data = [&]() {
-    q_records_.clear();
-    v_records_.clear();
-    t_records_.clear();
+    qt_records_.clear();
+    vt_records_.clear();
+    tt_records_.clear();
     endt_q_records_.clear();
     endt_v_records_.clear();
+    eef_poset_records_.clear();
     qf_records_.clear();
     vf_records_.clear();
     tf_records_.clear();
     endf_q_records_.clear();
     endf_v_records_.clear();
+    eef_posef_records_.clear();
     time_records_.clear();
     for (std::size_t i = 0; i < camera_num; i++) images_records_[i].clear();
   };
@@ -351,24 +345,26 @@ int main(int argc, char **argv) {
           print("", 1, 0);
           print("", 2, 0);
         } else {
-          if (q_records_.size() < max_time_steps) break;
+          if (qt_records_.size() < max_time_steps) break;
           recording = false;
           leader->stop_gravity_compensation();
           gravity_compensation_flag = false;
-          std::string target_dir = "demonstrations/" + task_name + "/" + std::to_string(series_count);
+          std::string target_dir = "demonstrations/raw/" + task_name + "/" + std::to_string(series_count);
           createDirIfNotExists(target_dir);
           print("Start saving data to json...", 1, 0);
 
           json data;
-          data["count"] = q_records_.size();
-          data["/observations/pos_t"] = q_records_;
-          data["/observations/vel_t"] = v_records_;
-          data["/observations/eff_t"] = t_records_;
+          data["count"] = qt_records_.size();
+          data["/observations/pos_t"] = qt_records_;
+          data["/observations/vel_t"] = vt_records_;
+          data["/observations/eff_t"] = tt_records_;
           data["/observations/endpos_t"] = endt_q_records_;
+          data["/observations/eef_pose_t"] = eef_poset_records_;
           data["/observations/pos_f"] = qf_records_;
           data["/observations/vel_f"] = vf_records_;
           data["/observations/eff_f"] = tf_records_;
           data["/observations/endpos_f"] = endf_q_records_;
+          data["/observations/eef_pose_f"] = eef_posef_records_;
           data["/observations/time"] = time_records_;
           std::ofstream f(target_dir + "/records.json");
           f << data.dump(2);
@@ -430,6 +426,14 @@ int main(int argc, char **argv) {
                   std::to_string(leader->get_current_joint_q()[4]) + " " +
                   std::to_string(leader->get_current_joint_q()[5]) + " " + std::to_string(leader->get_current_end()),
               2, 0);
+        print("Current eef pose: " + std::to_string(leader->get_current_pose()[0][0]) + " " +
+                  std::to_string(leader->get_current_pose()[0][1]) + " " +
+                  std::to_string(leader->get_current_pose()[0][2]) + " " +
+                  std::to_string(leader->get_current_pose()[1][0]) + " " +
+                  std::to_string(leader->get_current_pose()[1][1]) + " " +
+                  std::to_string(leader->get_current_pose()[1][2]) + " " +
+                  std::to_string(leader->get_current_pose()[1][3]),
+              2, 0);
         break;
       default:
         break;
@@ -444,10 +448,11 @@ int main(int argc, char **argv) {
   }
   endwin();
 
-  std::unique_lock<std::shared_mutex> lock(mutex_);
-  running = false;
-  recording = false;
-  lock.unlock();
+  {
+    std::lock_guard<std::shared_mutex> lock(mutex_);
+    running = false;
+    recording = false;
+  }
 
   for (auto &&i : threads) i.join();
   auto reset_leader = std::thread([&]() { leader.reset(); });

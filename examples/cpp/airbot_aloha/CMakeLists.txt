@@ -23,32 +23,23 @@ find_package(Curses REQUIRED)
 add_subdirectory(thirdparty/argparse)
 
 find_package(Python COMPONENTS Interpreter Development)
-execute_process(
-  COMMAND
-    "${Python_EXECUTABLE}" -c
-    "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
-  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-message(STATUS "Python site-packages directory: ${PYTHON_SITE_PACKAGES}")
 install(
   DIRECTORY python/${PROJECT_NAME}/
-  DESTINATION ${PYTHON_SITE_PACKAGES}/${PROJECT_NAME}
+  DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/${PROJECT_NAME}
   FILES_MATCHING
   PATTERN "*.py")
-install(FILES python/requirements.txt
+install(FILES python/setup.py
         DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
-message(STATUS "Installing Python requirements file to \
-    ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/requirements.txt")
+message(STATUS "Installing Python setup.py file to \
+    ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/setup.py")
 
 add_custom_target(
-  install_python_requirements
-  COMMAND
-    ${Python_EXECUTABLE} -m pip install -r
-    ${CMAKE_SOURCE_DIR}/python/requirements.txt -i
-    https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
-  COMMENT "Installing Python requirements from requirements.txt")
+  install_python_packages
+  COMMAND ${Python_EXECUTABLE} -m pip install ${CMAKE_SOURCE_DIR}/python -i
+          https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+  COMMENT "Installing Python airbot_aloha package")
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} \
---build ${CMAKE_BINARY_DIR} --target install_python_requirements)")
+--build ${CMAKE_BINARY_DIR} --target install_python_packages)")
 
 add_library(webcam STATIC src/camera/webcam.cpp)
 target_include_directories(webcam PRIVATE ${OpenCV_INCLUDE_DIRS})
