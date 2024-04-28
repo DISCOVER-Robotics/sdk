@@ -1,4 +1,0 @@
-opencv-python
-h5py
-h5py-cache
-numpy>=1.20.0
