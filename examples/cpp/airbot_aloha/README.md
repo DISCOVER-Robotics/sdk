@@ -21,9 +21,9 @@ This project contains the codes about demonstration (single or double arm manipu
 
 ## Environment Setup
 
-### Data Collection & Convertion Environment
+### Data Collection and Convertion Environment
 
-Firstly, download the core control deb package from releases of [arm-control](https://git.qiuzhi.tech:20000/airbot-play/control/arm-control/-/releases).  The package file name should be in the format of `airbot_play_\<version>_\<arch>.deb`. Then install the package with the following command:
+Firstly, download the core control deb package from releases of [arm-control](https://git.qiuzhi.tech:20000/airbot-play/control/arm-control/-/releases).  The package file name should be in the format of `airbot_play_<version>_<arch>.deb`. Then install the package with the following command:
 
 ```bash
 sudo apt update
@@ -32,7 +32,7 @@ sudo service udev restart && udevadm control --reload
 sudo apt install ./airbot_play_*.deb -y
 ```
 
-Then, download the AIRBOT Play ALOHA deb package from releases of [airbot-aloha](https://git.qiuzhi.tech:20000/airbot-play/control/sdk/-/tree/feature-update-docs/examples/cpp/airbot_aloha?ref_type=heads). The package file name should be in the format of `airbot_aloha_\<version>_\<arch>.deb.` Then install the package with the following command:
+Then, download the AIRBOT Play ALOHA deb package from releases of [airbot-aloha](https://git.qiuzhi.tech:20000/airbot-play/control/sdk/-/tree/feature-update-docs/examples/cpp/airbot_aloha?ref_type=heads). The package file name should be in the format of `airbot_aloha_<version>_<arch>.deb.` Then install the package with the following command:
 
 ```bash
 sudo apt install ./airbot_aloha_*.deb
@@ -40,7 +40,7 @@ sudo apt install ./airbot_aloha_*.deb
 
 ### Data Replay Environment
 
->- [Data Conversion Environment](#Data-Conversion-Environment) needs to be configured first.
+>- [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be configured first.
 >
 >- This configuration will install the AIRBOT Play Python API.
 
@@ -55,6 +55,8 @@ mkdir build && cd build
 cmake .. && make -j32 && cd ..
 ```
 
+> Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `sdk-develop-python/python`.
+
 Finally, install the airbot python package via pip:
 
 ```bash
@@ -63,7 +65,7 @@ pip install . -i https://pypi.mirrors.ustc.edu.cn/simple/
 
 ## Data Collection
 
-> * [Data Collection & Convertion Environment](#Data-Collection-&-Convertion-Environment) needs to be configured first.
+> * [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be configured first.
 >
 > * The task name should be reasonable, and it is recommended to include time in the name to distinguish the same task data collected at different times.
 
@@ -73,6 +75,8 @@ pip install . -i https://pypi.mirrors.ustc.edu.cn/simple/
 3. **First**, connect the teaching arm via Type-C data cable (corresponding to CAN0), **then** connect the execution arm, too (corresponding to CAN1). For dual-arm operations, follow the above sequence for the left-side robotic arm first, then the right-side arm.
 4. Long-press the power button on each robotic arm to turn them on.
 5. Ensure that the robotic arms are at the zero pose; otherwise, perform a [zero calibration](https://discover-robotics.github.io/docs/manual/#_11).
+
+> Note: Other devices connected to your computer may occupy the CAN interfaces, you may need to change the dufault can interfaces manually. Please refer to [Explanation of Parameters](#explanation-of-parameters).
 
 ### Connecting Cameras
 Data collection typically requires multiple cameras, and the connection order can be as follows:
@@ -93,7 +97,7 @@ airbot_demonstrate \
     -f 15 \
     -sjp <joint_pos_1> <joint_pos_2> <joint_pos_3> <joint_pos_4> <joint_pos_5> <joint_pos_6> <gripper_pos>
 ```
-For dual-arm tasks, simply replace the command `airbot_demonstrate` with `airbot_demonstrate_dual`.
+For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demonstrate_dual` and change -sjp to -sjpl and -sjpr to specify the initial joint positions of left arm and right arm respectively (both defualt to 0 if not used).
 
 #### Explanation of Parameters
 
@@ -113,11 +117,21 @@ When reaching the maximum time steps, the program will prompt.
 - `-sjp`: Initial positions of each joint and gripper before starting collection for each episode; defaults to 0 if not used. Specify values based on the actual situation of the specific task.
 - `-f`: Data collection frequency, default is 15Hz.
 
+And there are some other parameters for flexible usage:
+
+- `-m`: the can interface of of the teacher arm, default to can0.
+- `-n`: the can interface of of the follower arm, default to can1.
+
 #### Excution Example
 
-```bash
-airbot_demonstrate -c 0 -mts 100 -tn test_task -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0
-```
+- One teacher with one follower:
+    ```bash
+    airbot_demonstrate -c 0 -mts 100 -tn test_task -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+    ```
+- Two teachers with two followers:
+    ```bash
+    airbot_demonstrate_dual -c 0 -mts 100 -tn test_task -sjpl 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -sjpr 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+    ```
 
 #### Key Descriptions
 
@@ -125,11 +139,11 @@ airbot_demonstrate -c 0 -mts 100 -tn test_task -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0
 
 After excuting the command above, the terminal will be cleaned and you can use keyboard to control. The key descriptions are as follows:
 
-* `g`: Toggle gravity compensation on/off.
-* `Spacebar`: Start/stop episode data recording.
-* `q`: Discard the current record.
-* `0`: Return the robotic arm to the initial position.
-* `p`: Print current robotic arm states information.
+- `g`: Toggle gravity compensation on/off.
+- `Spacebar`: Start/stop episode data recording.
+- `q`: Discard the current record.
+- `0`: Return the robotic arm to the initial position.
+- `p`: Print current robotic arm states information. If the information is not displayed properly, increase your terminal width.
 
 #### Operational Steps
 
@@ -139,7 +153,7 @@ After excuting the command above, the terminal will be cleaned and you can use k
     - If the teaching opration is not acceptable, press `q` to discard the current teaching record, then press `0` to control the robotic arm to return to the initial position.
     - If it is acceptable, press `Spacebar` to save the current teaching record. After saving, the robotic arm will automatically return to the initial position.
 4. (Optional) In the `demonstrations/raw/<task_name>` folder in the current directory, check the recorded episodes.
-    - Each collected episode data includes: videos recorded by 3 cameras (.avi), and a robotic arm status record file (.json).
+    - Each collected episode data includes: videos recorded by cameras (.avi), and a robotic arm status record file (.json).
 
 **Additional Notes:**
 
@@ -149,13 +163,13 @@ After excuting the command above, the terminal will be cleaned and you can use k
 
 3. It is recommended to store the collected task data folder <task_name> in the same directory structure on a **portable hard drive** as a backup.
 
-## Data Conversion
-> [Data Collection & Convertion Environment](#Data-Collection-&-Convertion-Environment) needs to be configured first.
+## Data Convertion
+> [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be configured first.
 
 In the same path where the data collection command was executed, run the following command to save the data in hdf5 format:
 
 ```bash
-python3 -m airbot_aloha.convert_episodes.py -rn 1 -cn 0 -tn test_task -se 0 -ee 0
+python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0
 ```
 
 **Parameter explanation:**
@@ -172,19 +186,19 @@ Similarly, it is recommended to store the converted task data folder `<task_name
 
 ## Data Replay (Optional)
 
-> Data replay can be used to verify if there are issues with collected data, init states of the environment, etc. (requires prior setup of the data [replay environment](#data-replay-environment)).
+> Data replay can be used to verify if there are issues with collected data, init states of the environment, etc. (requires prior setup of the [Data Replay Environment](#data-replay-environment)).
 
 The data replay command and its parameters are as follows:
 
 ```bash
-python3 -m airbot_aloha.replay_episodes.py -rn 1 -tn test_task -ei 0 -cb 1 -ii
+python3 -m airbot_aloha.replay_episodes -rn 1 -tn test_task -ei 0 -ii -can 1
 ```
 
 **Parameter explanation:**
 
 - `-tn`: Specify the task name.
 - `-ei`: Specify the ID corresponding to the HDF file.
-- `-cb`: Initial CAN ID; increment autoly for multiple robotic arms.
+- `-cb`: CAN ID of the follower arms. For dual-arm tasks, you can set `-can 1 3` if you followed the connection order in [Starting-Robotic-Arms](#starting-robotic-arms). Also, you can unplug all the Type-C wires first and only connect the follower arms, then set `-can 0 1`.
 - `-ii`: Do not replay camera data.
 - `-ia`: Do not replay action data.
 - `-rn`: For dual-arm tasks, specify `-rn` 2.
