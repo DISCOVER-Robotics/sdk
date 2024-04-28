@@ -9,3 +9,4 @@ ri_ws/
 **.so
 **.egg-info/
 **/__pycache__/
+**dist**
