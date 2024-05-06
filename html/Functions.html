@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Functions &mdash; Airbot  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Classes" href="Classes.html" />
+    <link rel="prev" title="Airbot Play Python API" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Airbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Classes.html">Classes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Airbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Functions</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="functions">
+<h1>Functions<a class="headerlink" href="#functions" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">airbot.</span></span><span class="sig-name descname"><span class="pre">create_agent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urdf_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'down'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">can_interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'can0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3.141592653589793</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'newteacher'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Classes.html#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></span></dt>
+<dd><p>Construct a new Robot object</p>
+<p>Once created, the instance will perform the following actions:</p>
+<p>1. initialize forward and inverse kinematics solvers 2. initialize
+text-based loggers; logs will be saved in the <cite>logs</cite> directory 3.
+initialize and check the status of the base interface board 4.
+initialize and check the status of the motors, from the base to the
+end 5. initialize and check the status of the end interface board 6.
+update motor status 7. start the following threads: *
+<a href="#id1"><span class="problematic" id="id2">thread_sync_pose_</span></a>: map joints to end pose * <a href="#id3"><span class="problematic" id="id4">thread_update_motor_</span></a>: send
+CAN messages to motors * <a href="#id5"><span class="problematic" id="id6">thread_plan_</span></a>: perform planning * <a href="#id7"><span class="problematic" id="id8">thread_log_</span></a>:
+start pushing robot status to Kibana * <a href="#id9"><span class="problematic" id="id10">thread_snap_</span></a>: start listening
+to the snap signals. will be removed in the future 8. unlock the
+motors</p>
+<p>Typically, the instance should be created once and used throughout the
+program. Also, it is the user’s responsibility to ensure that <strong>ONLY
+ONE</strong> instance is controlling the robot at a time.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">urdf_path</span></code>:</dt><dd><p>the path to valid AIRBOT Play URDF File. By default, when
+installed via apt package, two valid urdf files are installed: -
+AIRBOT Play with no end effector: <cite>/usr/local/share/airbot_play/ai
+rbot_play_v2_1/urdf/airbot_play_v2_1.urdf</cite> - AIRBOT Play with
+AIRBOT Play demonstrator: <cite>/usr/local/share/airbot_play/airbot_pla
+y_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf</cite></p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">can_interface</span></code>:</dt><dd><p>the interface recognized by the system. Usually in the form like
+<cite>can0</cite>, <cite>can1</cite>, etc. The currently available interfaces can be
+found by <cite>ip link</cite> command, given that <cite>iproute2</cite> package is
+installed on Debian-based systems</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">direction</span></code>:</dt><dd><p>the direction of the gravity. If AIRBOT Play is installed on a
+vertical surface, this option should be altered. Available
+options: “down”, “left”, “right”</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">vel</span></code>:</dt><dd><p>the maximum velocity of joints in Online / Replay mode.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">end_mode</span></code>:</dt><dd><p>the end effector installed at the end. Available options: -
+<cite>none</cite>: no end effector is installed - <cite>gripper</cite>: AIRBOT Gripper
+is installed - <cite>newteacher</cite>: AIRBOT Demonstrator is installed</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">constraint</span></code>:</dt><dd><p>whether or not AIRBOT Play stop moving once outside the joint
+limits</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">ignore_status_check</span></code>:</dt><dd><p>whether or not AIRBOT Play ignore the status check. This option is
+DEPRECATED, as it will be removed in the future</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">forearm_tpe</span></code>:</dt><dd><p>the type of the forearm. Available options: - <cite>DM</cite>: Damiao motors
+are installed - <cite>OD</cite>: Self-designed motors are installed</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">stay_init</span></code>:</dt><dd><p>whether or not AIRBOT Play stay in the initial position. If
+<cite>false</cite>, AIRBOT Play will move to the zero position once
+initialized. This option is DEPRECATED, as it will be removed in
+the future</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">ignore_limit</span></code>:</dt><dd><p>whether or not AIRBOT Play ignore the joint limits. This option is
+DEPRECATED, as it will be removed in the future</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">airbot.</span></span><span class="sig-name descname"><span class="pre">create_motor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">motor_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="Classes.html#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></span></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Airbot Play Python API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Classes.html" class="btn btn-neutral float-right" title="Classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Discover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

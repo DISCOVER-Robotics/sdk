@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classes &mdash; Airbot  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=b3ba4146"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Functions" href="Functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Airbot
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Functions.html">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Classes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#airbot.Robot"><code class="docutils literal notranslate"><span class="pre">Robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.add_target_joint_q"><code class="docutils literal notranslate"><span class="pre">Robot.add_target_joint_q()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.add_target_joint_v"><code class="docutils literal notranslate"><span class="pre">Robot.add_target_joint_v()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.add_target_relative_rotation"><code class="docutils literal notranslate"><span class="pre">Robot.add_target_relative_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.add_target_relative_translation"><code class="docutils literal notranslate"><span class="pre">Robot.add_target_relative_translation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.add_target_translation"><code class="docutils literal notranslate"><span class="pre">Robot.add_target_translation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.alter_logging"><code class="docutils literal notranslate"><span class="pre">Robot.alter_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_end"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_joint_error_code"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_joint_error_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_joint_q"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_joint_q()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_joint_t"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_joint_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_joint_temperature"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_joint_temperature()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_joint_v"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_joint_v()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_pose"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_pose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_rotation"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_current_translation"><code class="docutils literal notranslate"><span class="pre">Robot.get_current_translation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_motor_response_cnt"><code class="docutils literal notranslate"><span class="pre">Robot.get_motor_response_cnt()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_sn"><code class="docutils literal notranslate"><span class="pre">Robot.get_sn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_joint_q"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_joint_q()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_joint_t"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_joint_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_joint_v"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_joint_v()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_pose"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_pose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_rotation"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.get_target_translation"><code class="docutils literal notranslate"><span class="pre">Robot.get_target_translation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.gravity_compensation"><code class="docutils literal notranslate"><span class="pre">Robot.gravity_compensation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.record_load"><code class="docutils literal notranslate"><span class="pre">Robot.record_load()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.record_replay"><code class="docutils literal notranslate"><span class="pre">Robot.record_replay()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.record_save"><code class="docutils literal notranslate"><span class="pre">Robot.record_save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.record_start"><code class="docutils literal notranslate"><span class="pre">Robot.record_start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.record_stop"><code class="docutils literal notranslate"><span class="pre">Robot.record_stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_max_current"><code class="docutils literal notranslate"><span class="pre">Robot.set_max_current()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_end"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_end()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_joint_q"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_joint_q()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_joint_t"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_joint_t()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_joint_v"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_joint_v()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_pose"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_pose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_rotation"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_rotation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_translation"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_translation()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.set_target_vel"><code class="docutils literal notranslate"><span class="pre">Robot.set_target_vel()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.Robot.stop_gravity_compensation"><code class="docutils literal notranslate"><span class="pre">Robot.stop_gravity_compensation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#airbot.MotorDriver"><code class="docutils literal notranslate"><span class="pre">MotorDriver</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorBoundary"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorBoundary()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorCommunicationDetect"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorCommunicationDetect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorCurrentDetect"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorCurrentDetect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorDeInit"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorDeInit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorErrorDetect"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorErrorDetect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorErrorModeCmd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorErrorModeCmd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorGetParam"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorGetParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorInit"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorInit()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorLock"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorLock()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorMitModeCmd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorMitModeCmd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorPosModeCmd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorPosModeCmd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorResetID"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorResetID()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorSetFilterParam"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorSetFilterParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorSetPosParam"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorSetPosParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorSetSpdParam"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorSetSpdParam()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorSetZero"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorSetZero()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorSpdModeCmd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorSpdModeCmd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorTemperatureDetect"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorTemperatureDetect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorUnlock"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorUnlock()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.MotorWriteFlash"><code class="docutils literal notranslate"><span class="pre">MotorDriver.MotorWriteFlash()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_error_id"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_error_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_gear_ratio"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_gear_ratio()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_max_current"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_max_current()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_acceleration"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_acceleration()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_control_mode"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_control_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_current"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_current()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_error_id"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_error_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_id"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_id()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_kd_pos"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_kd_pos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_kd_spd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_kd_spd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_ki_pos"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_ki_pos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_ki_spd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_ki_spd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_kp_pos"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_kp_pos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_kp_spd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_kp_spd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_pos"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_pos()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_spd"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_spd()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_motor_temperature"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_motor_temperature()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_response_count"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_response_count()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_timeout"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_timeout()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_write_para_res"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_write_para_res()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.get_write_para_res_and_clear"><code class="docutils literal notranslate"><span class="pre">MotorDriver.get_write_para_res_and_clear()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.set_max_current"><code class="docutils literal notranslate"><span class="pre">MotorDriver.set_max_current()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.set_motor_control_mode"><code class="docutils literal notranslate"><span class="pre">MotorDriver.set_motor_control_mode()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#airbot.MotorDriver.set_motor_id"><code class="docutils literal notranslate"><span class="pre">MotorDriver.set_motor_id()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Airbot</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Classes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Classes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="classes">
+<h1>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="airbot.Robot">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">airbot.</span></span><span class="sig-name descname"><span class="pre">Robot</span></span><a class="headerlink" href="#airbot.Robot" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.add_target_joint_q">
+<span class="sig-name descname"><span class="pre">add_target_joint_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_d_joint_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.add_target_joint_q" title="Permalink to this definition"></a></dt>
+<dd><p>Position control method. Set the target joint positions of the robot
+arm in joint space. The robot will move to the target pose by adding
+the relative joint positions to the current planning target joint
+position targets.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_d_joint_q</span></code>:</dt><dd><p>the target relative joint positions in radians.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.add_target_joint_v">
+<span class="sig-name descname"><span class="pre">add_target_joint_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_d_joint_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.add_target_joint_v" title="Permalink to this definition"></a></dt>
+<dd><p>Velocity control method. Set the target joint velocities of the robot
+arm in joint space. The robot will accelerate / decelerate to target
+joint velocities by adding the relative joint velocities to the
+current joint velocity targets.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_joint_v</span></code>:</dt><dd><p>the target joint velocities in radians per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.add_target_relative_rotation">
+<span class="sig-name descname"><span class="pre">add_target_relative_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_d_rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.add_target_relative_rotation" title="Permalink to this definition"></a></dt>
+<dd><p>Position control method. Set the target rotation of the robot arm in
+Cartesian space. The robot will move to the target pose by adding the
+relative rotation to the current planning target. The addition is
+performed in <strong>the base frame</strong>.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up. The rotation is represented by a
+quaternion relative to the <cite>(1, 0, 0)</cite> unit vector.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_d_rotation</span></code>:</dt><dd><p>the target relative rotation in quaternion format <cite>( rx, ry, rz,
+rw )</cite>.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.add_target_relative_translation">
+<span class="sig-name descname"><span class="pre">add_target_relative_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_d_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.add_target_relative_translation" title="Permalink to this definition"></a></dt>
+<dd><p>Set the target relative translation of the robot arm in Cartesian
+space. The robot will move to the target pose by adding the relative
+translation to the current planning target. The addition is performed
+in <strong>the base frame</strong>.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_d_translation</span></code>:</dt><dd><p>the target relative translation in quaternion format <cite>( rx, ry,
+rz, rw )</cite>.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.add_target_translation">
+<span class="sig-name descname"><span class="pre">add_target_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_d_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.add_target_translation" title="Permalink to this definition"></a></dt>
+<dd><p>Position control method. Set the target relative translation of the
+robot arm in Cartesian space. The robot will move to the target pose
+by adding the relative translation to the current planning target.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_d_translation</span></code>:</dt><dd><p>the target relative translation in meters.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.alter_logging">
+<span class="sig-name descname"><span class="pre">alter_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.alter_logging" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_end">
+<span class="sig-name descname"><span class="pre">get_current_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.Robot.get_current_end" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current end effector position.</p>
+<p>The end effector position is a normalized value between 0 and 1, where
+0 denotes that the end effector is closed and 1 denotes that the end
+effector is open.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>double: current end position in meters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_joint_error_code">
+<span class="sig-name descname"><span class="pre">get_current_joint_error_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_joint_error_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_joint_q">
+<span class="sig-name descname"><span class="pre">get_current_joint_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_joint_q" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current joint positions in joint space.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: current joint positions in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_joint_t">
+<span class="sig-name descname"><span class="pre">get_current_joint_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_joint_t" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current joint torques in joint space.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: current joint torques in Newton meters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_joint_temperature">
+<span class="sig-name descname"><span class="pre">get_current_joint_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_joint_temperature" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_joint_v">
+<span class="sig-name descname"><span class="pre">get_current_joint_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_joint_v" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current joint velocities in joint space.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: current joint velocities in radians per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_pose">
+<span class="sig-name descname"><span class="pre">get_current_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_pose" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current end pose in Cartesian space.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up. The rotation is represented by a
+quaternion relative to the <cite>(1, 0, 0)</cite> unit vector.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;vector&lt;double&gt;&gt;: current end pose consisting of translation
+and quaternion rotation in <cite>(( x, y, z ), ( rx, ry, rz, rw ))</cite>
+format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_rotation">
+<span class="sig-name descname"><span class="pre">get_current_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_rotation" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current rotation part of the end pose.</p>
+<p>The rotation is represented by a quaternion relative to the <cite>(1, 0,
+0)</cite> unit vector. The reference frame is the base frame, where the
+origin is located at the base, x axis is pointing to the front, y axis
+is pointing to the left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: current rotation in quaternion format <cite>( rx, ry,
+rz, rw )</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_current_translation">
+<span class="sig-name descname"><span class="pre">get_current_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_current_translation" title="Permalink to this definition"></a></dt>
+<dd><p>Get the current translation part of the end pose.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: current translation in meters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_motor_response_cnt">
+<span class="sig-name descname"><span class="pre">get_motor_response_cnt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_motor_response_cnt" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_sn">
+<span class="sig-name descname"><span class="pre">get_sn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="headerlink" href="#airbot.Robot.get_sn" title="Permalink to this definition"></a></dt>
+<dd><p>Get the SN code of the robot arm.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>std::string: the serial number of the robot arm.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_joint_q">
+<span class="sig-name descname"><span class="pre">get_target_joint_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_joint_q" title="Permalink to this definition"></a></dt>
+<dd><p>Get the target joint positions in joint space.</p>
+<p>This “target joint position” is the short-term joint position goal of
+the robot arm. It can be either set by the user by calling position
+controlling functions with <cite>use_planning</cite> set to <cite>false</cite>, or by the
+robot itself when planning is enabled.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: target joint positions in radians.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_joint_t">
+<span class="sig-name descname"><span class="pre">get_target_joint_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_joint_t" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_joint_v">
+<span class="sig-name descname"><span class="pre">get_target_joint_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_joint_v" title="Permalink to this definition"></a></dt>
+<dd><p>Get the target joint velocities in joint space.</p>
+<p>This “target joint velocity” is the velocity goal of the robot arm. It
+is set by the user by calling velocity controlling functions.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: target joint velocities in radians per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_pose">
+<span class="sig-name descname"><span class="pre">get_target_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_pose" title="Permalink to this definition"></a></dt>
+<dd><p>Get the target end pose in Cartesian space.</p>
+<p>This “target pose” is the short-term end pose goal of the robot arm.
+It can be either set by the user by calling position controlling
+functions with <cite>use_planning</cite> set to <cite>false</cite>, or by the robot itself
+when planning is enabled.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up. The rotation is represented by a
+quaternion relative to the <cite>(1, 0, 0)</cite> unit vector.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;vector&lt;double&gt;&gt;: target end pose consisting of translation
+and quaternion rotation in <cite>(( x, y, z ), ( rx, ry, rz, rw ))</cite>
+format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_rotation">
+<span class="sig-name descname"><span class="pre">get_target_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_rotation" title="Permalink to this definition"></a></dt>
+<dd><p>Get the rotation part of the target end pose.</p>
+<p>The rotation is represented by a quaternion relative to the <cite>(1, 0,
+0)</cite> unit vector. The reference frame is the base frame, where the
+origin is located at the base, x axis is pointing to the front, y axis
+is pointing to the left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: target rotation in quaternion format <cite>( rx, ry,
+rz, rw )</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.get_target_translation">
+<span class="sig-name descname"><span class="pre">get_target_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.Robot.get_target_translation" title="Permalink to this definition"></a></dt>
+<dd><p>Get the translation part of the target end pose.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>vector&lt;double&gt;: target translation in meters.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.gravity_compensation">
+<span class="sig-name descname"><span class="pre">gravity_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.gravity_compensation" title="Permalink to this definition"></a></dt>
+<dd><p>Enter the gravity compensation mode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.record_load">
+<span class="sig-name descname"><span class="pre">record_load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.record_load" title="Permalink to this definition"></a></dt>
+<dd><p>Load the recorded trajectory from a file.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">filepath</span></code>:</dt><dd><p>the path to the file where the recorded trajectory is saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.record_replay">
+<span class="sig-name descname"><span class="pre">record_replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.record_replay" title="Permalink to this definition"></a></dt>
+<dd><p>Replay the recorded / loaded trajectory of the robot arm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.record_save">
+<span class="sig-name descname"><span class="pre">record_save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.record_save" title="Permalink to this definition"></a></dt>
+<dd><p>Save the recorded trajectory to a file.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">filepath</span></code>:</dt><dd><p>the path to the file where the recorded trajectory will be saved.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.record_start">
+<span class="sig-name descname"><span class="pre">record_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.record_start" title="Permalink to this definition"></a></dt>
+<dd><p>Start recording the trajectory of the robot arm.</p>
+<p>The robot will record the joint positions, velocities, and torques, as
+well as the end position, at each time step. The recorded data can be
+saved to a file and replayed later.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">record_type</span></code>:</dt><dd><p>DEPRECATED. This parameter is for backward compatibility and will
+be removed in the future.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.record_stop">
+<span class="sig-name descname"><span class="pre">record_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.record_stop" title="Permalink to this definition"></a></dt>
+<dd><p>Stop recording the trajectory of the robot arm.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_max_current">
+<span class="sig-name descname"><span class="pre">set_max_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_max_current" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_end">
+<span class="sig-name descname"><span class="pre">set_target_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_end</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_end" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_joint_q">
+<span class="sig-name descname"><span class="pre">set_target_joint_q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_joint_q</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_joint_q" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_joint_t">
+<span class="sig-name descname"><span class="pre">set_target_joint_t</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_joint_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_joint_t" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_joint_v">
+<span class="sig-name descname"><span class="pre">set_target_joint_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_joint_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_joint_v" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_pose">
+<span class="sig-name descname"><span class="pre">set_target_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_pose" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_rotation">
+<span class="sig-name descname"><span class="pre">set_target_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_rotation" title="Permalink to this definition"></a></dt>
+<dd><p>Position control method. Set the target rotation of the robot arm in
+Cartesian space.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up. The rotation is represented by a
+quaternion relative to the <cite>(1, 0, 0)</cite> unit vector.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_rotation</span></code>:</dt><dd><p>the target rotation in quaternion format <cite>( rx, ry, rz, rw )</cite>.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_translation">
+<span class="sig-name descname"><span class="pre">set_target_translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_translation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_planning</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_translation" title="Permalink to this definition"></a></dt>
+<dd><p>Position control method. Set the target translation of the robot arm
+in Cartesian space.</p>
+<p>The reference frame is the base frame, where the origin is located at
+the base, x axis is pointing to the front, y axis is pointing to the
+left, and z axis is pointing up.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_translation</span></code>:</dt><dd><p>the target translation in meters.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">use_planning</span></code>:</dt><dd><p>whether or not to use planning. If <cite>true</cite>, the robot will plan the
+trajectory to the target pose with cubic interpolation. If
+<cite>false</cite>, the robot will move directly to the target pose.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">time</span></code>:</dt><dd><p>the time scale to reach the target pose. If planning is disabled,
+this parameter will be ignored.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.set_target_vel">
+<span class="sig-name descname"><span class="pre">set_target_vel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_vel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.set_target_vel" title="Permalink to this definition"></a></dt>
+<dd><p>Velocity control method. Set the target end velocities of the robot
+arm in Cartesian space.</p>
+<p>&#64;bug This function is not implemented yet.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">target_vel</span></code>:</dt><dd><p>the target end velocities in meters per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.Robot.stop_gravity_compensation">
+<span class="sig-name descname"><span class="pre">stop_gravity_compensation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.Robot" title="airbot.Robot"><span class="pre">airbot.Robot</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.Robot.stop_gravity_compensation" title="Permalink to this definition"></a></dt>
+<dd><p>Exit the gravity compensation mode.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="airbot.MotorDriver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">airbot.</span></span><span class="sig-name descname"><span class="pre">MotorDriver</span></span><a class="headerlink" href="#airbot.MotorDriver" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pybind11_object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorBoundary">
+<span class="sig-name descname"><span class="pre">MotorBoundary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorBoundary" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorCommunicationDetect">
+<span class="sig-name descname"><span class="pre">MotorCommunicationDetect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorCommunicationDetect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorCurrentDetect">
+<span class="sig-name descname"><span class="pre">MotorCurrentDetect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorCurrentDetect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorDeInit">
+<span class="sig-name descname"><span class="pre">MotorDeInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorDeInit" title="Permalink to this definition"></a></dt>
+<dd><p>Deinitializes the motor.</p>
+<p>This function deinitializes the motor. It performs cleanup and
+releases resources associated with motor control.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorErrorDetect">
+<span class="sig-name descname"><span class="pre">MotorErrorDetect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorErrorDetect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorErrorModeCmd">
+<span class="sig-name descname"><span class="pre">MotorErrorModeCmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#airbot.MotorDriver.MotorErrorModeCmd" title="Permalink to this definition"></a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>MotorErrorModeCmd(self: airbot.MotorDriver) -&gt; None</p></li>
+<li><p>MotorErrorModeCmd(self: airbot.MotorDriver) -&gt; None</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorGetParam">
+<span class="sig-name descname"><span class="pre">MotorGetParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_joint_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorGetParam" title="Permalink to this definition"></a></dt>
+<dd><p>Requests motor parameters based on a specific command.</p>
+<p>This function sends a request to retrieve specific parameters from the
+motor. The parameter to be retrieved is identified by the <cite>param_cmd</cite>
+argument.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">param_cmd</span></code>:</dt><dd><p>The command code specifying which parameter to retrieve.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorInit">
+<span class="sig-name descname"><span class="pre">MotorInit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorInit" title="Permalink to this definition"></a></dt>
+<dd><p>Initializes the motor.</p>
+<p>This function initializes the motor for operation. It performs
+necessary setup and configuration for motor control.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True if motor initialization is successful; otherwise, false.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorLock">
+<span class="sig-name descname"><span class="pre">MotorLock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorLock" title="Permalink to this definition"></a></dt>
+<dd><p>Locks the motor to prevent movement.</p>
+<p>This function locks the motor to prevent any movement. Once locked,
+the motor will not respond to commands for movement.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorMitModeCmd">
+<span class="sig-name descname"><span class="pre">MotorMitModeCmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_kd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_t</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorMitModeCmd" title="Permalink to this definition"></a></dt>
+<dd><p>Commands the motor to operate in impedance mode with specific
+parameters.</p>
+<p>This function sets the motor to operate in an impedance control mode,
+where it applies force based on the provided parameters.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">f_p</span></code>:</dt><dd><p>Proportional force value.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">f_v</span></code>:</dt><dd><p>Velocity-based force value.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">f_kp</span></code>:</dt><dd><p>Proportional stiffness coefficient.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">f_kd</span></code>:</dt><dd><p>Damping coefficient.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">f_t</span></code>:</dt><dd><p>Desired torque value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorPosModeCmd">
+<span class="sig-name descname"><span class="pre">MotorPosModeCmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ignore_limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorPosModeCmd" title="Permalink to this definition"></a></dt>
+<dd><p>Commands the motor to move to a specified position at a specified
+speed.</p>
+<p>This function is responsible for commanding the motor to move to a
+desired position with a specified speed.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">pos</span></code>:</dt><dd><p>The target position to move the motor to.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">spd</span></code>:</dt><dd><p>The speed at which the motor should move to the target position.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">ignore_limit</span></code>:</dt><dd><p>If true, ignores any position limits that may be set.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorResetID">
+<span class="sig-name descname"><span class="pre">MotorResetID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorResetID" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorSetFilterParam">
+<span class="sig-name descname"><span class="pre">MotorSetFilterParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position_kd_filter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kd_spd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorSetFilterParam" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the filter parameters for position and speed control.</p>
+<p>This function configures the filter parameters used in position and
+speed control.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">position_kd_filter</span></code>:</dt><dd><p>Filter coefficient for position control derivative term.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">kd_spd</span></code>:</dt><dd><p>Filter coefficient for speed control derivative term.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorSetPosParam">
+<span class="sig-name descname"><span class="pre">MotorSetPosParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorSetPosParam" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the position control parameters (proportional gain and derivative
+gain) for the motor.</p>
+<p>This function configures the position control parameters (PID gains)
+for the motor.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">kp</span></code>:</dt><dd><p>Proportional gain for position control.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">kd</span></code>:</dt><dd><p>Derivative gain for position control.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorSetSpdParam">
+<span class="sig-name descname"><span class="pre">MotorSetSpdParam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">kp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">ki</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorSetSpdParam" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the speed control parameters (proportional gain and integral
+gain) for the motor.</p>
+<p>This function configures the speed control parameters (PI gains) for
+the motor.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">kp</span></code>:</dt><dd><p>Proportional gain for speed control.</p>
+</dd>
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">ki</span></code>:</dt><dd><p>Integral gain for speed control.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorSetZero">
+<span class="sig-name descname"><span class="pre">MotorSetZero</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorSetZero" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the motor position to zero.</p>
+<p>This function sets the current motor position to zero. It establishes
+a new reference point for position measurement.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True if setting motor position to zero is successful; otherwise,
+false.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorSpdModeCmd">
+<span class="sig-name descname"><span class="pre">MotorSpdModeCmd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorSpdModeCmd" title="Permalink to this definition"></a></dt>
+<dd><p>Commands the motor to rotate at a specified speed.</p>
+<p>This function commands the motor to rotate at the specified speed.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">spd</span></code>:</dt><dd><p>The speed at which the motor should rotate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorTemperatureDetect">
+<span class="sig-name descname"><span class="pre">MotorTemperatureDetect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorTemperatureDetect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorUnlock">
+<span class="sig-name descname"><span class="pre">MotorUnlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorUnlock" title="Permalink to this definition"></a></dt>
+<dd><p>Unlocks the motor to allow movement.</p>
+<p>This function unlocks the motor to enable movement. After unlocking,
+the motor can respond to movement commands.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.MotorWriteFlash">
+<span class="sig-name descname"><span class="pre">MotorWriteFlash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.MotorWriteFlash" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_error_id">
+<span class="sig-name descname"><span class="pre">get_error_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_error_id" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the error ID associated with the motor.</p>
+<p>This function returns the error ID that indicates any error condition
+of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The error ID of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_gear_ratio">
+<span class="sig-name descname"><span class="pre">get_gear_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_gear_ratio" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the gear ratio of the motor.</p>
+<p>This function returns the gear ratio of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The gear ratio of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_max_current">
+<span class="sig-name descname"><span class="pre">get_max_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_max_current" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_acceleration">
+<span class="sig-name descname"><span class="pre">get_motor_acceleration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_acceleration" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the acceleration of the motor.</p>
+<p>This function returns the current acceleration of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The acceleration of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_control_mode">
+<span class="sig-name descname"><span class="pre">get_motor_control_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_control_mode" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the control mode of the motor.</p>
+<p>This function returns the current control mode of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The control mode of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_current">
+<span class="sig-name descname"><span class="pre">get_motor_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_current" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the current current (electric current) of the motor.</p>
+<p>This function returns the electric current flowing through the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The current (electric current) of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_error_id">
+<span class="sig-name descname"><span class="pre">get_motor_error_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_error_id" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the error ID associated with the motor.</p>
+<p>This function returns the error ID that indicates any error condition
+of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The error ID of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_id">
+<span class="sig-name descname"><span class="pre">get_motor_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_id" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the ID of the motor.</p>
+<p>This function returns the unique identifier (ID) of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The ID of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_kd_pos">
+<span class="sig-name descname"><span class="pre">get_motor_kd_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_kd_pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_kd_spd">
+<span class="sig-name descname"><span class="pre">get_motor_kd_spd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_kd_spd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_ki_pos">
+<span class="sig-name descname"><span class="pre">get_motor_ki_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_ki_pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_ki_spd">
+<span class="sig-name descname"><span class="pre">get_motor_ki_spd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_ki_spd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_kp_pos">
+<span class="sig-name descname"><span class="pre">get_motor_kp_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_kp_pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_kp_spd">
+<span class="sig-name descname"><span class="pre">get_motor_kp_spd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_kp_spd" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_pos">
+<span class="sig-name descname"><span class="pre">get_motor_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_pos" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the current position of the motor.</p>
+<p>This function returns the current position of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The current position of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_spd">
+<span class="sig-name descname"><span class="pre">get_motor_spd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_spd" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the current speed of the motor.</p>
+<p>This function returns the current speed of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The current speed of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_motor_temperature">
+<span class="sig-name descname"><span class="pre">get_motor_temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_motor_temperature" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the temperature of the motor.</p>
+<p>This function returns the current temperature of the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The temperature of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_response_count">
+<span class="sig-name descname"><span class="pre">get_response_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_response_count" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the count of responses received from the motor.</p>
+<p>This function returns the number of responses received from the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The count of responses received from the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_timeout">
+<span class="sig-name descname"><span class="pre">get_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the timeout value configured for the motor.</p>
+<p>This function returns the timeout value set for the motor operations.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The timeout value in milliseconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_write_para_res">
+<span class="sig-name descname"><span class="pre">get_write_para_res</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_write_para_res" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieves the result of writing parameters to the motor.</p>
+<p>This function returns the result of writing parameters to the motor.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>True if writing parameters was successful; otherwise, false.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.get_write_para_res_and_clear">
+<span class="sig-name descname"><span class="pre">get_write_para_res_and_clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.get_write_para_res_and_clear" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.set_max_current">
+<span class="sig-name descname"><span class="pre">set_max_current</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg0</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.set_max_current" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.set_motor_control_mode">
+<span class="sig-name descname"><span class="pre">set_motor_control_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">motor_control_mode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.set_motor_control_mode" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the control mode for the motor.</p>
+<p>This function specifies the control mode for the motor.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">motor_control_mode</span></code>:</dt><dd><p>The control mode to be set for the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="airbot.MotorDriver.set_motor_id">
+<span class="sig-name descname"><span class="pre">set_motor_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#airbot.MotorDriver" title="airbot.MotorDriver"><span class="pre">airbot.MotorDriver</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">motor_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#airbot.MotorDriver.set_motor_id" title="Permalink to this definition"></a></dt>
+<dd><p>Sets the ID of the motor.</p>
+<p>This function assigns a unique identifier (ID) to the motor.</p>
+<dl class="simple">
+<dt>Parameter <code class="docutils literal notranslate"><span class="pre">motor_id</span></code>:</dt><dd><p>The ID of the motor.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Functions.html" class="btn btn-neutral float-left" title="Functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Discover.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
