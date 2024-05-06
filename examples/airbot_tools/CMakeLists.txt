@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(
   airbot_tools
-  VERSION 2.8.0
+  VERSION 2.8.1
   LANGUAGES CXX)
 
 option(GIT_CLEAN_CHECK "Check if git workspace is clean" ON)

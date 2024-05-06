@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(
   ros_interface
-  VERSION 2.8.0
+  VERSION 2.8.1
   LANGUAGES CXX)
 
 find_package(

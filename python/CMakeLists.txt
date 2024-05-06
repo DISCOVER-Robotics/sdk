@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.4...3.18)
 project(
   airbot_pybridge
   LANGUAGES CXX
-  VERSION 2.8.0)
+  VERSION 2.8.1)
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)

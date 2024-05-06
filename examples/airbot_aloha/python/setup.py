@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 setup(
     name="airbot_aloha",
-    version="2.8.0",
+    version="2.8.1",
     packages=find_packages(),
     package_dir={"": "."},
     install_requires=["numpy>=1.20.0", "h5py-cache", "opencv-python", "h5py"],
