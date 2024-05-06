@@ -36,7 +36,7 @@ message(STATUS "Installing Python setup.py file to \
 add_custom_target(
   install_python_packages
   COMMAND ${Python_EXECUTABLE} -m pip install ${CMAKE_SOURCE_DIR}/python -i
-          https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+          https://mirrors.ustc.edu.cn/pypi/web/simple
   COMMENT "Installing Python airbot_aloha package")
 install(CODE "execute_process(COMMAND ${CMAKE_COMMAND} \
 --build ${CMAKE_BINARY_DIR} --target install_python_packages)")

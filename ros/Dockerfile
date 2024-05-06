@@ -8,9 +8,9 @@ RUN apt-key add ros.asc
 
 WORKDIR /opt
 
-RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.tuna.tsinghua.edu.cn/ubuntu/|' /etc/apt/sources.list
-RUN sed -i 's|http://ports.ubuntu.com/|http://mirrors.tuna.tsinghua.edu.cn/|' /etc/apt/sources.list
-RUN echo "deb http://mirrors.tuna.tsinghua.edu.cn/ros/ubuntu/ focal main" > /etc/apt/sources.list.d/ros1-latest.list
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|http://mirrors.ustc.edu.cn/ubuntu/|' /etc/apt/sources.list
+RUN sed -i 's|http://ports.ubuntu.com/|http://mirrors.ustc.edu.cn/|' /etc/apt/sources.list
+RUN echo "deb http://mirrors.ustc.edu.cn/ros/ubuntu/ focal main" > /etc/apt/sources.list.d/ros1-latest.list
 
 RUN apt update \
         && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y \
