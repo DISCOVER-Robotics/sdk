@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
   node.param("/airbot_arm_ros/interface", can_if, std::string("can0"));
   node.param("/airbot_arm_ros/end_mode", end_mode, std::string("teacher"));
   ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(), can_if.c_str(), end_mode.c_str());
-  arm::Robot robot(urdf_path, can_if, "down", M_PI / 2, end_mode, false);
+  arm::Robot<6> robot(urdf_path, can_if, "down", M_PI / 2, end_mode);
 
   /**
    * Initialize ROS publisher and subscriber
@@ -106,9 +106,9 @@ int main(int argc, char** argv) {
       "/joy_trigger", 10, [&robot, &scale, &angle_scale, &recording, &compensating](const JoyPtr& joy) {
         if (joy->buttons[3] == 1) {
           if (!compensating)
-            robot.gravity_compensation();
+            robot.manual_mode();
           else
-            robot.stop_gravity_compensation();
+            robot.online_mode();
           compensating = !compensating;
         }  // Y
         if (joy->buttons[0] == 1) {
@@ -119,7 +119,7 @@ int main(int argc, char** argv) {
         }
         if (joy->buttons[1] == 1) {  // A
           if (!recording) {
-            robot.record_start("q");
+            robot.record_start();
             ROS_INFO("record started");
             recording = true;
           } else {
@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
             recording = false;
           }
         }
-        if (joy->buttons[2] == 1) robot.record_replay();  // B
+        if (joy->buttons[2] == 1) robot.replay_start();  // B
       });
 
   ROS_WARN("arm control begin");
@@ -138,13 +138,13 @@ int main(int argc, char** argv) {
    */
   while (ros::ok()) {
     auto end_pose = robot.get_current_pose();
-    airbot_pose_msg.position.x = end_pose[0][0];
-    airbot_pose_msg.position.y = end_pose[0][1];
-    airbot_pose_msg.position.z = end_pose[0][2];
-    airbot_pose_msg.orientation.x = end_pose[1][0];
-    airbot_pose_msg.orientation.y = end_pose[1][1];
-    airbot_pose_msg.orientation.z = end_pose[1][2];
-    airbot_pose_msg.orientation.w = end_pose[1][3];
+    airbot_pose_msg.position.x = end_pose.first[0];
+    airbot_pose_msg.position.y = end_pose.first[1];
+    airbot_pose_msg.position.z = end_pose.first[2];
+    airbot_pose_msg.orientation.x = end_pose.second[0];
+    airbot_pose_msg.orientation.y = end_pose.second[1];
+    airbot_pose_msg.orientation.z = end_pose.second[2];
+    airbot_pose_msg.orientation.w = end_pose.second[3];
     arm_pose_publisher.publish(airbot_pose_msg);
 
     auto joint_pos = robot.get_current_joint_q();
@@ -152,9 +152,9 @@ int main(int argc, char** argv) {
     auto joint_eff = robot.get_current_joint_t();
     joint_states_msg.header.stamp = ros::Time::now();
     joint_states_msg.header.frame_id = "airbot_arm";
-    joint_states_msg.position = joint_pos;
-    joint_states_msg.velocity = joint_spd;
-    joint_states_msg.effort = joint_eff;
+    joint_states_msg.position = {joint_pos[0], joint_pos[1], joint_pos[2], joint_pos[3], joint_pos[4], joint_pos[5]};
+    joint_states_msg.velocity = {joint_spd[0], joint_spd[1], joint_spd[2], joint_spd[3], joint_spd[4], joint_spd[5]};
+    joint_states_msg.effort = {joint_eff[0], joint_eff[1], joint_eff[2], joint_eff[3], joint_eff[4], joint_eff[5]};
 
     for (int motor_id = 1; motor_id <= 6; motor_id++)
       joint_states_msg.name.push_back("joint" + std::to_string(motor_id));
