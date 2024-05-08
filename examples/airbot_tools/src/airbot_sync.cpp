@@ -24,16 +24,28 @@ int main(int argc, char **argv) {
       .help("The gravity direction. Useful for arms installed vertically");
   program.add_argument("--leader-end-mode")
       .default_value("newteacher")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "none")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2")
       .help(
-          "The mode of the master arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
-          "\"newteacher\"");
+          "The mode of the master arm end effector. Available choices: \n"
+          "\"teacher\": The demonstrator equipped with Damiao motor \n"
+          "\"gripper\": The gripper equipped with Damiao motor \n"
+          "\"yinshi\": The Yinshi two-finger gripper \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
+          "\"teacherv2\": The V2 version of demonstrator equipped with self-developed motor \n"
+          "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--follower-end-mode")
       .default_value("gripper")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "none")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2")
       .help(
-          "The mode of the follower arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
-          "\"newteacher\"");
+          "The mode of the master arm end effector. Available choices: \n"
+          "\"teacher\": The demonstrator equipped with Damiao motor \n"
+          "\"gripper\": The gripper equipped with Damiao motor \n"
+          "\"yinshi\": The Yinshi two-finger gripper \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
+          "\"teacherv2\": The V2 version of demonstrator equipped with self-developed motor \n"
+          "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--leader-speed")
       .scan<'g', double>()
       .default_value(1 * M_PI)
