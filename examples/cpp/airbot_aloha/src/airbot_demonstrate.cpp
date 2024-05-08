@@ -109,16 +109,28 @@ int main(int argc, char **argv) {
       .help("The gravity direction. Useful for arms installed vertically");
   program.add_argument("--master-end-mode")
       .default_value("newteacher")
-      .choices("newteacher", "teacher", "gripper", "yinshi")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2")
       .help(
-          "The mode of the master arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
-          "\"newteacher\"");
+          "The mode of the master arm end effector. Available choices: \n"
+          "\"teacher\": The demonstrator equipped with Damiao motor \n"
+          "\"gripper\": The gripper equipped with Damiao motor \n"
+          "\"yinshi\": The Yinshi two-finger gripper \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
+          "\"teacherv2\": The V2 version of demonstrator equipped with self-developed motor \n"
+          "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--follower-end-mode")
       .default_value("gripper")
-      .choices("newteacher", "teacher", "gripper", "yinshi")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2")
       .help(
-          "The mode of the follower arm end effector. Available choices: \"teacher\", \"gripper\", \"yinshi\", "
-          "\"newteacher\"");
+          "The mode of the master arm end effector. Available choices: \n"
+          "\"teacher\": The demonstrator equipped with Damiao motor \n"
+          "\"gripper\": The gripper equipped with Damiao motor \n"
+          "\"yinshi\": The Yinshi two-finger gripper \n"
+          "\"newteacher\": The demonstrator equipped with self-developed "
+          "motor \n"
+          "\"teacherv2\": The V2 version of demonstrator equipped with self-developed motor \n"
+          "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--master-speed")
       .scan<'g', double>()
       .default_value(1.)
