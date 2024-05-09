@@ -51,7 +51,7 @@ sudo apt install ./airbot_aloha_*.deb
 >
 >- This configuration will install the AIRBOT Play Python API.
 
-The source code folder name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to build the project:
+The source code file name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to extract and build the project:
 
 ```bash
 sudo apt install librosconsole-dev liburdf-dev libspdlog-dev libfmt-dev git -y
