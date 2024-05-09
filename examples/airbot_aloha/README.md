@@ -51,18 +51,19 @@ sudo apt install ./airbot_aloha_*.deb
 >
 >- This configuration will install the AIRBOT Play Python API.
 
-The source code folder name should be in the format of `airbot_play_python_<version>`. Run the following command to build the project:
+The source code folder name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to build the project:
 
 ```bash
 sudo apt install librosconsole-dev liburdf-dev libspdlog-dev libfmt-dev git -y
-unzip sdk-develop-python.zip && sudo rm sdk-develop-python.zip
-cd sdk-develop-python/python
+cp airbot_play_python_2.7.zip airbot_play_python.zip
+unzip airbot_play_python.zip -q && sudo rm -rf airbot_play_python.zip
+cd airbot_play_python/python
 git clone --depth 1 https://github.com/pybind/pybind11.git
 mkdir build && cd build
 cmake .. && make -j32 && cd ..
 ```
 
-> Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `sdk-develop-python/python`.
+> Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `airbot_play_python/python`.
 
 Finally, install the airbot python package via pip:
 
