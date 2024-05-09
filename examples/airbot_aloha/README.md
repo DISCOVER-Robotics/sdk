@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This tutorial is about demonstration (single or double arm manipulation) for raw data collecting, data converting (convert raw data to hdf5 file used by the learning algorithms) and data replaying. 
+This tutorial is about demonstration (single or double arm manipulation) for raw data collecting, data converting (convert raw data to hdf5 file used by the learning algorithms) and data replaying.
 
 Please ask the customer service for all available dependency packages and source codes files. We will gradually provide relevant download links in the future.
 
