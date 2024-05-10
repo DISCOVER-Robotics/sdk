@@ -1,4 +1,4 @@
-FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/airbot-play/arm-control:main as dep
+FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/airbot-play/arm-control:v2.7.2 as dep
 
 FROM --platform=$TARGETPLATFORM registry.qiuzhi.tech/library/ros:noetic AS build-dep
 COPY --from=dep /usr/local /usr/local
