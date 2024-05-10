@@ -72,7 +72,7 @@ int main(int argc, char **argv) {
   std::string master_end_mode = program.get<std::string>("--master-end-mode");
   std::string follower_end_mode = program.get<std::string>("--follower-end-mode");
   std::string direction = program.get<std::string>("--direction");
-  double master_speed = program.get<double>("--master-speed");
+  double master_speed = program.get<double>("--leader-speed");
   double follower_speed = program.get<double>("--follower-speed");
   bool force_feedback = program.get<bool>("--force-feedback");
   if (urdf_path == "") {
