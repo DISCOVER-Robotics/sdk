@@ -39,7 +39,7 @@ sudo service udev restart && udevadm control --reload
 sudo apt install ./airbot_play_*.deb -y
 ```
 
-The functional package for data collection should be in the format of `airbot_aloha_<version>_<arch>.deb.`. Install this package with the following command:
+The functional package for data collection should be in the format of `airbot_aloha_<version>_<arch>.deb`. Install this package with the following command:
 
 ```bash
 sudo apt install ./airbot_aloha_*.deb
@@ -116,12 +116,12 @@ For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demons
 - `-mts`: Specifies the maximum number of frames to be captured; specified by the specific task.
 When reaching the maximum time steps, the program will prompt.
 - `-tn`: Task name, specified by the specific task.
-    - The collected data will be saved in the `demonstrations/raw/<task_name>` folder in the current directory.
+    - The collected data will be saved in the `demonstrations/(raw/)<task_name>` folder in the current directory.
 - `-se`: Starting episode number for collection, default is 0.
     - After interruption, you can modify this value to continue collection without overwriting previous data.
     - When data is mistakenly saved, specifying this episode number allows for re-collection to overwrite existing data.
     - When collecting data multiple times after executing the command, the episode numbers of subsequent collections will increment from this base.
-    - Each set of data is saved in the `demonstrations/raw/<task_name>/<episode_id>` folder.
+    - Each set of data is saved in the `demonstrations/(raw/)<task_name>/<episode_id>` folder.
 - `-sjp`: Initial positions of each joint and gripper before starting collection for each episode; defaults to 0 if not used. Specify values based on the actual situation of the specific task.
 - `-f`: Data collection frequency, default is 15Hz.
 
@@ -160,7 +160,7 @@ After excuting the command above, the terminal will be cleaned and you can use k
 3. After completing the task, wait to collect the specified number of frames (the number of frames used to complete the task should be as close as possible to the maximum collection frames):
     - If the teaching opration is not acceptable, press `q` to discard the current teaching record, then press `0` to control the robotic arm to return to the initial position.
     - If it is acceptable, press `Spacebar` to save the current teaching record. After saving, the robotic arm will automatically return to the initial position.
-4. (Optional) In the `demonstrations/raw/<task_name>` folder in the current directory, check the recorded episodes.
+4. (Optional) In the `demonstrations/(raw/)<task_name>` folder in the current directory, check the recorded episodes.
     - Each collected episode data includes: videos recorded by cameras (.avi), and a robotic arm status record file (.json).
 
 **Additional Notes:**
@@ -177,7 +177,7 @@ After excuting the command above, the terminal will be cleaned and you can use k
 In the same path where the data collection command was executed, run the following command to save the data in hdf5 format:
 
 ```bash
-/usr/bin/python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0
+/usr/bin/python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0 -rd ./demonstrations
 ```
 
 **Parameter explanation:**
@@ -187,8 +187,9 @@ In the same path where the data collection command was executed, run the followi
 - `-se`: Specify the starting episode number of the data.
 - `-ee`: Specify the ending episode number of the data.
 - `-rn`: For dual-arm tasks, specify `-rn` 2.
+- `-rd`: Path to your data directory.
 
-This command will search for the specified task data in the `demonstrations/raw` folder in the current directory and convert them to hdf5 files into the `demonstrations/hdf5` folder.
+This command will search for the specified task data in the `demonstrations(/raw)` folder in the current directory and convert them to hdf5 files into the `demonstrations/hdf5` folder.
 
 Similarly, it is recommended to store the converted task data folder `<task_name>` in the same directory structure on a portable hard drive as a backup.
 
