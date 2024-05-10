@@ -2,7 +2,9 @@
 
 ## Introduction
 
-This project contains the codes about demonstration (single or double arm manipulation) for raw data collecting, data convertor to convert raw data to hdf5 file and data replaying.
+This tutorial is about demonstration (single or double arm manipulation) for raw data collecting, data converting (convert raw data to hdf5 file used by the learning algorithms) and data replaying.
+
+Please ask the customer service for all available dependency packages and source codes files. We will gradually provide relevant download links in the future.
 
 > **Docker Notation**
 >
@@ -21,9 +23,14 @@ This project contains the codes about demonstration (single or double arm manipu
 
 ## Environment Setup
 
+!!! tip "Supported Operation Systems"
+
+    * Ubuntu 20.04 LTS AMD64(x86_64)
+    * Ubuntu 20.04 LTS ARM64
+
 ### Data Collection and Convertion Environment
 
-Firstly, download the core control deb package from releases of [arm-control](https://git.qiuzhi.tech:20000/airbot-play/control/arm-control/-/releases).  The package file name should be in the format of `airbot_play_<version>_<arch>.deb`. Then install the package with the following command:
+The core control package for data collection should be in the format of `airbot_play_<version>_<arch>.deb`. Install this package with the following command:
 
 ```bash
 sudo apt update
@@ -32,7 +39,7 @@ sudo service udev restart && udevadm control --reload
 sudo apt install ./airbot_play_*.deb -y
 ```
 
-Then, download the AIRBOT Play ALOHA deb package from releases of [airbot-aloha](https://git.qiuzhi.tech:20000/airbot-play/control/sdk/-/tree/feature-update-docs/examples/cpp/airbot_aloha?ref_type=heads). The package file name should be in the format of `airbot_aloha_<version>_<arch>.deb.` Then install the package with the following command:
+The functional package for data collection should be in the format of `airbot_aloha_<version>_<arch>.deb.`. Install this package with the following command:
 
 ```bash
 sudo apt install ./airbot_aloha_*.deb
@@ -44,18 +51,19 @@ sudo apt install ./airbot_aloha_*.deb
 >
 >- This configuration will install the AIRBOT Play Python API.
 
-Firstly, download the [arm-control python-interface source code zip file](https://git.qiuzhi.tech:20000/airbot-play/control/sdk/-/archive/develop/sdk-develop.zip?path=python). Then execute the following command to build the project:
+The source code file name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to extract and build the project:
 
 ```bash
 sudo apt install librosconsole-dev liburdf-dev libspdlog-dev libfmt-dev git -y
-unzip sdk-develop-python.zip && sudo rm sdk-develop-python.zip
-cd sdk-develop-python/python
+cp airbot_play_python_2.7.zip airbot_play_python.zip
+unzip airbot_play_python.zip -q && sudo rm -rf airbot_play_python.zip
+cd airbot_play_python/python
 git clone --depth 1 https://github.com/pybind/pybind11.git
 mkdir build && cd build
 cmake .. && make -j32 && cd ..
 ```
 
-> Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `sdk-develop-python/python`.
+> Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `airbot_play_python/python`.
 
 Finally, install the airbot python package via pip:
 
@@ -169,12 +177,12 @@ After excuting the command above, the terminal will be cleaned and you can use k
 In the same path where the data collection command was executed, run the following command to save the data in hdf5 format:
 
 ```bash
-python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0
+/usr/bin/python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0
 ```
 
 **Parameter explanation:**
 
-- `-cn`: Specify camera names.
+- `-cn`: Specify camera names. For example, if there are 2 cameras, then specify `-cn 0,1`.
 - `-tn`: Specify the task name, same as specified during data collection.
 - `-se`: Specify the starting episode number of the data.
 - `-ee`: Specify the ending episode number of the data.
@@ -191,14 +199,15 @@ Similarly, it is recommended to store the converted task data folder `<task_name
 The data replay command and its parameters are as follows:
 
 ```bash
-python3 -m airbot_aloha.replay_episodes -rn 1 -tn test_task -ei 0 -ii -can 1
+/usr/bin/python3 -m airbot_aloha.replay_episodes -rn 1 -tn test_task -ei 0 -ii -can 1 -cn 0
 ```
 
 **Parameter explanation:**
 
 - `-tn`: Specify the task name.
 - `-ei`: Specify the ID corresponding to the HDF file.
-- `-cb`: CAN ID of the follower arms. For dual-arm tasks, you can set `-can 1 3` if you followed the connection order in [Starting-Robotic-Arms](#starting-robotic-arms). Also, you can unplug all the Type-C wires first and only connect the follower arms, then set `-can 0 1`.
+- `-can`: CAN ID of the follower arms. For dual-arm tasks, you can set `-can 1 3` if you followed the connection order in [Starting-Robotic-Arms](#starting-robotic-arms). Also, you can unplug all the Type-C wires first and only connect the follower arms, then set `-can 0 1`.
 - `-ii`: Do not replay camera data.
 - `-ia`: Do not replay action data.
 - `-rn`: For dual-arm tasks, specify `-rn` 2.
+- `-cn`: The name of the cameras data to be replayed. For example, if there are 2 cameras, then specify `-cn 0,1`.
