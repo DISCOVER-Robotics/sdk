@@ -127,7 +127,7 @@ class CMakeBuild(build_ext):
 # logic and declaration, and simpler if you include description/version in a file.
 setup(
     name="airbot",
-    version="2.7.2",
+    version="2.7.3",
     author="Beiwen Tian",
     author_email="george@discover-robotics.com",
     description="",
