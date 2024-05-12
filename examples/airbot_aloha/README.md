@@ -19,7 +19,7 @@ Please ask the customer service for all available dependency packages and source
 > mv airbot_*.deb /tmp/ && cd /tmp
 > ```
 >
-> In some Docker Containers, there is no `sudo` command, you can just remove it from the commands below.
+> In some Docker Containers, there is no `sudo` command, you can just remove it from the commands below or you can install it by running: `apt install sudo`.
 
 ## Environment Setup
 
