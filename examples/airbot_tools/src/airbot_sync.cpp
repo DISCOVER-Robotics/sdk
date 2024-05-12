@@ -54,14 +54,30 @@ int main(int argc, char **argv) {
       .scan<'g', double>()
       .default_value(3 * M_PI)
       .help("The joint speed of the follower arm in percentage of PI.");
-  program.add_argument("--leader-armtype")
+  program.add_argument("--leader-forearm-type")
       .default_value("DM")
-      .choices("DM", "OD")
-      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
-  program.add_argument("--follower-armtype")
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of forearm of leader. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors, "
+          "\"encoder\": Self-developed encoders.");
+  program.add_argument("--follower-forearm-type")
       .default_value("DM")
-      .choices("DM", "OD")
-      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of forearm of follower. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors "
+          "\"encoder\": Self-developed encoders.");
+  program.add_argument("--leader-bigarm-type")
+      .default_value("OD")
+      .choices("OD", "encoder")
+      .help(
+          "The type of bigarm of leader. Available choices: \"OD\": Self-developed motors, \"encoder\": Self-developed "
+          "encoders.");
+  program.add_argument("--follower-bigarm-type")
+      .default_value("OD")
+      .choices("OD", "encoder")
+      .help(
+          "The type of bigarm of follower. Available choices: \"OD\": Self-developed motors \"encoder\": "
+          "Self-developed encoders.");
   program.add_argument("--mit").default_value(false).implicit_value(true).help("Enable force feedback control.");
   try {
     program.parse_args(argc, argv);
@@ -77,8 +93,10 @@ int main(int argc, char **argv) {
   std::string master_end_mode = program.get<std::string>("--leader-end-mode");
   std::string follower_end_mode = program.get<std::string>("--follower-end-mode");
   std::string direction = program.get<std::string>("--direction");
-  std::string leader_armtype = program.get<std::string>("--leader-armtype");
-  std::string follower_armtype = program.get<std::string>("--follower-armtype");
+  std::string leader_forearm_type = program.get<std::string>("--leader-forearm-type");
+  std::string follower_forearm_type = program.get<std::string>("--follower-forearm-type");
+  std::string leader_bigarm_type = program.get<std::string>("--leader-bigarm-type");
+  std::string follower_bigarm_type = program.get<std::string>("--follower-bigarm-type");
   double master_speed = program.get<double>("--leader-speed");
   double follower_speed = program.get<double>("--follower-speed");
   bool force_feedback = program.get<bool>("--mit");
@@ -93,10 +111,10 @@ int main(int argc, char **argv) {
   std::shared_mutex mutex_;
   std::vector<std::thread> threads;
 
-  auto leader =
-      std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode, leader_armtype);
+  auto leader = std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode,
+                                                leader_bigarm_type, leader_forearm_type);
   auto follower = std::make_unique<arm::Robot<6>>(urdf_path, node_can, direction, follower_speed, follower_end_mode,
-                                                  follower_armtype);
+                                                  follower_bigarm_type, follower_forearm_type);
 
   Joints<6> follower_joint_kps = {100.0f, 100.0f, 100.0f, 10.0f, 10.0f, 10.0f};
   Joints<6> follower_joint_kds = {1.0f, 1.0f, 1.0f, 0.02f, 0.02f, 0.02f};
