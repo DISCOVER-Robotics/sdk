@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
           "(multiple following arms). E.g., -n can1 can2");
   program.add_argument("-e", "--master-end-mode")
       .default_value("newteacher")
-      .choices("teacher", "gripper", "yinshi", "newteacher", "none", "teacherv2")
+      .choices("teacher", "gripper", "yinshi", "newteacher", "none", "teacherv2", "encoder")
       .help(
           "The mode of the master arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
@@ -69,8 +69,10 @@ int main(int argc, char **argv) {
           "Self-developed encoders");
   program.add_argument("--forearm-type")
       .default_value("DM")
-      .choices("DM", "OD")
-      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors, \"encoder\": "
+          "Self-developed encoders");
 
   try {
     program.parse_args(argc, argv);
