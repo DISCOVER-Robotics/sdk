@@ -34,7 +34,7 @@ The core control package for data collection should be in the format of `airbot_
 
 ```bash
 sudo apt update
-sudo apt install python3-pip python3 udev kmod iproute2 libcanberra-gtk-module libcanberra-gtk3-module -y
+sudo apt install python3-pip python3 udev kmod iproute2 libcanberra-gtk-module libcanberra-gtk3-module libspdlog-dev libfmt-dev liburdf-dev -y
 sudo service udev restart && udevadm control --reload
 sudo apt install ./airbot_play_*.deb -y
 ```
@@ -51,25 +51,23 @@ sudo apt install ./airbot_aloha_*.deb
 >
 >- This configuration will install the AIRBOT Play Python API.
 
-The source code file name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to extract and build the project:
+The source code file name should be in the format of `airbot_play_python_<version>.zip`. Run the following command to extract the zip package:
 
 ```bash
-sudo apt install librosconsole-dev liburdf-dev libspdlog-dev libfmt-dev git -y
-cp airbot_play_python_2.7.zip airbot_play_python.zip
+cp airbot_play_python_*.zip airbot_play_python.zip
 unzip airbot_play_python.zip -q && sudo rm -rf airbot_play_python.zip
+```
+
+Then install the package (using `/usr/bin/python3` command since the `airbot_aloha` package is installed by it):
+
+```bash
+sudo apt install librosconsole-dev git -y
 cd airbot_play_python/python
 git clone --depth 1 https://github.com/pybind/pybind11.git
-mkdir build && cd build
-cmake .. && make -j32 && cd ..
+/usr/bin/python3 setup.py install
 ```
 
 > Note: If you manually download the pybind11 project, then you should extract and rename the folder to `pybind11` and replace the empty pybind11 folder in `airbot_play_python/python`.
-
-Finally, install the airbot python package via pip:
-
-```bash
-pip install . -i https://pypi.mirrors.ustc.edu.cn/simple/
-```
 
 ## Data Collection
 
@@ -84,7 +82,7 @@ pip install . -i https://pypi.mirrors.ustc.edu.cn/simple/
 4. Long-press the power button on each robotic arm to turn them on.
 5. Ensure that the robotic arms are at the zero pose; otherwise, perform a [zero calibration](https://discover-robotics.github.io/docs/manual/#_11).
 
-> Note: Other devices connected to your computer may occupy the CAN interfaces, you may need to change the dufault can interfaces manually. Please refer to [Explanation of Parameters](#explanation-of-parameters).
+> Note: Other devices connected to your computer may occupy the CAN interfaces, you may need to change the default can interfaces manually. Please refer to [Explanation of Parameters](#explanation-of-parameters).
 
 ### Connecting Cameras
 Data collection typically requires multiple cameras, and the connection order can be as follows:
@@ -105,7 +103,7 @@ airbot_demonstrate \
     -f 15 \
     -sjp <joint_pos_1> <joint_pos_2> <joint_pos_3> <joint_pos_4> <joint_pos_5> <joint_pos_6> <gripper_pos>
 ```
-For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demonstrate_dual` and change -sjp to -sjpl and -sjpr to specify the initial joint positions of left arm and right arm respectively (both defualt to 0 if not used).
+For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demonstrate_dual` and change -sjp to -sjpl and -sjpr to specify the initial joint positions of left arm and right arm respectively (both defualt to `0,0,0,0,0,0,0` if not used).
 
 #### Explanation of Parameters
 
