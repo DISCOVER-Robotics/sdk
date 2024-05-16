@@ -34,7 +34,7 @@ The core control package for data collection should be in the format of `airbot_
 
 ```bash
 sudo apt update
-sudo apt install python3-pip python3 udev kmod iproute2 libcanberra-gtk-module libcanberra-gtk3-module libspdlog-dev libfmt-dev liburdf-dev -y
+sudo apt install python3-pip python3 udev kmod iproute2 libcanberra-gtk-module libcanberra-gtk3-module liburdf-dev libspdlog-dev libfmt-dev liborocos-kdl1.4 -y
 sudo service udev restart && udevadm control --reload
 sudo apt install ./airbot_play_*.deb -y
 ```
