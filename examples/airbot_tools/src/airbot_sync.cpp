@@ -98,7 +98,7 @@ int main(int argc, char **argv) {
   auto follower = std::make_unique<arm::Robot<6>>(urdf_path, node_can, direction, follower_speed, follower_end_mode,
                                                   follower_armtype);
 
-  Joints<6> follower_joint_kps = {75.0f, 75.0f, 75.0f, 3.0f, 3.0f, 3.0f};
+  Joints<6> follower_joint_kps = {100.0f, 100.0f, 100.0f, 10.0f, 10.0f, 10.0f};
   Joints<6> follower_joint_kds = {1.0f, 1.0f, 1.0f, 0.02f, 0.02f, 0.02f};
   Joints<6> follower_joint_p_gains = {7.f, 7.f, 7.f, .5f, 1.f, 1.f};
   double follower_gain = 2.5;
@@ -142,17 +142,37 @@ int main(int argc, char **argv) {
 
   // main: keyborad control
   // init terminal
-  filter();
   initscr();             // Initialize ncurses
   raw();                 // Disable line buffering
   keypad(stdscr, TRUE);  // Enable special keys
   noecho();              // Disable echoing of characters
   timeout(2);
   bool recording = false;
+  move(0, 0);
+  printw("AIRBOT Sync Control Ver. %s Keyboard Reference:", AIRBOT_VERSION);
+  refresh();
+  move(1, 0);
+  printw("[ / ]: (If gripper connected) gripper close / open                  `:     Return to zero point");
+  refresh();
+  move(2, 0);
+  printw(
+      "/: Reset error state    x: Enter manual mode (gravity compensation)   c: Enter online mode (command control)");
+  refresh();
+  move(3, 0);
+  printw(
+      "v: Enter offline mode (replay)      b: Start / stop recording (in manual mode)       n: Start replaying (in "
+      "offline mode)");
+  refresh();
+  move(4, 0);
+  printw("Ctrl + C / z: exit");
+
   while (1) {
     int ch = getch();
     std::this_thread::sleep_for(std::chrono::milliseconds(2));
     switch (ch) {
+      case '`':
+        leader->set_target_joint_q({0., 0., 0., 0., 0., 0.}, true);
+        break;
       case '[':
         leader->set_target_end(0);
         break;
@@ -161,6 +181,7 @@ int main(int argc, char **argv) {
         break;
       case '/':
         leader->reset_error();
+        follower->reset_error();
         break;
       case 'x':
         leader->manual_mode();
@@ -181,7 +202,10 @@ int main(int argc, char **argv) {
         }
         break;
       case 'n':
-        leader->replay_start();
+        for (int i = 0; i < 100; i++) {
+          leader->replay_start();
+          std::this_thread::sleep_for(std::chrono::seconds(5));
+        }
         break;
       default:
         break;

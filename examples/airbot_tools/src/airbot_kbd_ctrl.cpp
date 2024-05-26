@@ -103,7 +103,6 @@ int main(int argc, char **argv) {
   robot->record_load(trajectory_path);
 
   // init terminal
-  filter();
   initscr();             // Initialize ncurses
   raw();                 // Disable line buffering
   keypad(stdscr, TRUE);  // Enable special keys
@@ -119,12 +118,45 @@ int main(int argc, char **argv) {
   bool recording = false;
   auto logging = false;
   double x, y, z, w;
+  move(0, 0);
+  printw("AIRBOT Kerboard Control Ver. %s Keyboard Reference:", AIRBOT_VERSION);
+  refresh();
+  move(1, 0);
+  printw("1 / 2: Motor 1 left / right    3 / 4: Motor 2 backward / forward    5 / 6: Motor 3 upward / downward");
+  refresh();
+  move(2, 0);
+  printw("7 / 8: Motor 4 right / left    9 / 0: Motor 5 left / right          - / =: Motor 6 right / left");
+  refresh();
+  move(3, 0);
+  printw("[ / ]: (If gripper connected) gripper close / open                  `:     Return to zero point");
+  refresh();
+  move(4, 0);
+  printw("w / s / a / d / q / e: move the end effector forward / backward / left / right / upward / downward in ");
+  refresh();
+  move(5, 0);
+  printw("                       base frame or end frame (base frame by default)");
+  refresh();
+  move(6, 0);
+  printw("r: alter the frame used by w/a/s/d/q/e, base or end frame    t: change the moving step of commands");
+  refresh();
+  move(7, 0);
+  printw("j / l / i / k / u / o: rotate the end effector in roll / pitch / yaw axis");
+  refresh();
+  move(8, 0);
+  printw(
+      "/: Reset error state    x: Enter manual mode (gravity compensation)   c: Enter online mode (command control)");
+  refresh();
+  move(9, 0);
+  printw(
+      "v: Enter offline mode (replay)      b: Start / stop recording (in manual mode)       n: Start replaying (in "
+      "offline mode)");
+  refresh();
+  move(10, 0);
+  printw("Ctrl + C / z: exit");
+  refresh();
   while (1) {
     int ch = getch();
     switch (ch) {
-      case 'y':
-        use_planning = !use_planning;
-        break;
       case '1':
         robot->add_target_joint_q({angle_step, 0, 0, 0, 0, 0}, use_planning, MOVING_VEL);
         break;
@@ -211,6 +243,11 @@ int main(int argc, char **argv) {
           step = 0.1;
         } else {
           step = 0.01;
+        }
+        if (angle_step == M_PI / 10) {
+          angle_step = M_PI / 100;
+        } else {
+          angle_step = M_PI / 10;
         }
         break;
       case 'j':

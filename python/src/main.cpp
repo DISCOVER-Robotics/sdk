@@ -17,7 +17,7 @@ namespace py = pybind11;
 std::unique_ptr<arm::Robot<6>> createAgent(std::string urdf_path = URDF_INSTALL_PATH +
                                                                    "airbot_play_v2_1_with_gripper.urdf",
                                            std::string direction = "down", std::string can_interface = "can0",
-                                           double vel = M_PI, std::string end_mode = "newteacher",
+                                           double vel = 0.2, std::string end_mode = "newteacher",
                                            std::string forearm_type = "DM") {
   return std::make_unique<arm::Robot<6>>(urdf_path, can_interface, direction, vel, end_mode, forearm_type);
 }
@@ -131,6 +131,6 @@ PYBIND11_MODULE(airbot, m) {
       .def("set_max_current", &arm::Robot<6>::set_max_current, py::arg("max"), DOC(arm::Robot<6>, set_max_current));
 
   m.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
-        py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = M_PI,
+        py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = 0.2,
         py::arg("end_mode") = "newteacher", py::arg("forearm_type") = "DM");
 };
