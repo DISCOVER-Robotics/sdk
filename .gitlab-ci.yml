@@ -26,18 +26,17 @@ style-test:
 
 include:
   - 'ros/.gitlab-ci.yml'
-  - 'python/.gitlab-ci.yml'
-  - 'examples/cpp/airbot_tools/.gitlab-ci.yml'
-  - 'examples/cpp/airbot_aloha/.gitlab-ci.yml'
+  - 'examples/airbot_tools/.gitlab-ci.yml'
+  - 'examples/airbot_aloha/.gitlab-ci.yml'
 
 release:
   stage: release
   needs:
     - job: ros
       artifacts: true
-    - job: python
-      artifacts: true
     - job: airbot-tools
+      artifacts: true
+    - job: airbot-aloha
       artifacts: true
   rules:
     - if: $CI_COMMIT_TAG
@@ -50,17 +49,17 @@ release:
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file  packages/${AIRBOT_DEB_TOOLS} ${AIRBOT_DEB_TOOLS_LINK}
     - |
+      export AIRBOT_ALOHA_DEB_TOOLS=$(ls packages/ | grep "airbot_aloha") &&
+      export AIRBOT_ALOHA_DEB_TOOLS_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/airbot-aloha/${CI_COMMIT_REF_NAME}/${AIRBOT_ALOHA_DEB_TOOLS}"
+    - |
+      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file  packages/${AIRBOT_DEB_TOOLS} ${AIRBOT_ALOHA_DEB_TOOLS_LINK}
+    - |
       export ROS_DEB=$(ls packages/ | grep "ros-interface") &&
       export ROS_DEB_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/ros1/${CI_COMMIT_REF_NAME}/${ROS_DEB}"
     - |
       curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${ROS_DEB} ${ROS_DEB_LINK}
     - |
-      export PY_WHL=$(ls packages/ | grep "whl") &&
-      export PY_WHL_LINK="${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/generic/python/${CI_COMMIT_REF_NAME}/${PY_WHL}"
-    - |
-      curl --header "JOB-TOKEN: ${CI_JOB_TOKEN}" --upload-file packages/${PY_WHL} ${PY_WHL_LINK}
-    - |
       release-cli create --name "Release $CI_COMMIT_TAG" --tag-name $CI_COMMIT_TAG \
         --assets-link "{\"name\":\"${AIRBOT_DEB_TOOLS}\",\"url\":\"${AIRBOT_DEB_TOOLS_LINK}\", \"link_type\":\"package\"}" \
         --assets-link "{\"name\":\"${ROS_DEB}\",\"url\":\"${ROS_DEB_LINK}\", \"link_type\":\"package\"}" \
-        --assets-link "{\"name\":\"${PY_WHL}\",\"url\":\"${PY_WHL_LINK}\", \"link_type\":\"package\"}"
+        --assets-link "{\"name\":\"${AIRBOT_ALOHA_DEB_TOOLS}\",\"url\":\"${AIRBOT_ALOHA_DEB_TOOLS_LINK}\", \"link_type\":\"package\"}"

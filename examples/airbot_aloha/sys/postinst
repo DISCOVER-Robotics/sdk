@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Assuming Python3 is the target Python version
+python3 -m pip install /usr/share/airbot_aloha -i https://mirrors.ustc.edu.cn/pypi/web/simple --isolated
+
+rm -rf /usr/share/airbot_aloha
+
+exit 0

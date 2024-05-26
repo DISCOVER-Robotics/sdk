@@ -13,6 +13,9 @@
 [submodule "examples/cpp/airbot_aloha/thirdparty/argparse"]
 	path = examples/cpp/airbot_aloha/thirdparty/argparse
 	url = https://github.com/p-ranav/argparse
-[submodule "python/docs"]
-	path = python/docs
-	url = https://git.qiuzhi.tech/airbot-play/control/python-interface-doc.git
+[submodule "examples/airbot_tools/thirdparty/argparse"]
+	path = examples/airbot_tools/thirdparty/argparse
+	url = https://github.com/p-ranav/argparse
+[submodule "examples/airbot_aloha/thirdparty/argparse"]
+	path = examples/airbot_aloha/thirdparty/argparse
+	url = https://github.com/p-ranav/argparse
