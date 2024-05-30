@@ -27,7 +27,7 @@ python-doc:
 python-upload:
   stage: release
   needs:
-    - job: python
+    - job: python-doc
       artifacts: true
   image: curlimages/curl:latest
   # rules:
