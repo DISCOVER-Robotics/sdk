@@ -1,29 +1,26 @@
 variables:
-  ROS_CI_REGISTRY_IMAGE: registry.qiuzhi.tech/airbot-play/ros-interface
+  GIT_SUBMODULE_STRATEGY: recursive
 
-python:
+python-doc:
   stage: build
   image: ${CI_REGISTRY}/airbot-play/arm-control:develop
   script:
-    - sed -i 's|http://archive.ubuntu.com/|http://mirrors.ustc.edu.cn/|' /etc/apt/sources.list
-    - apt update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y python3 python3-wheel python3-pip udev clang
-    - cd /usr/local && rm -r include/airbot lib/libairbot* lib/cmake/airbot* share/airbot* && cd /opt/arm-control/build
-    - cmake .. -DGIT_CLEAN_CHECK=0 && make -j32 && cpack -G DEB && cd ..
-    - /lib/systemd/systemd-udevd --daemon # docker need run this for udev work
-    - apt install -y ./airbot_play*.deb
-    - cd $CI_PROJECT_DIR
-    - git submodule update --init --recursive && cd python && python3 setup.py bdist_wheel
-    - mkdir -p $CI_PROJECT_DIR/packages && mv dist/*.whl $CI_PROJECT_DIR/packages
-    - pip3 config set global.index-url https://pypi.ustc.edu.cn/simple && pip3 install -r docs/requirements.txt
-    - python3 -m pybind11_mkdoc -o src/doc.hpp -I/usr/include/eigen3 -std=c++17 /usr/include/airbot/command/command_base.hpp /usr/include/airbot/modules/motors/motor_driver.hpp && pip install .
-    - cd docs && make html && cd build/ && rm -r doctrees && git init
+    - cd python
+    - apt-get update && apt-get install -y doxygen zip python3-pip ca-certificates
+    - if [ -n "$CI_COMMIT_TAG" ]; then DEPLOY_REF=$CI_COMMIT_TAG; else DEPLOY_REF=latest; fi
+    - mkdir -p ../packages/ && zip -qr python.zip ./ && mv python.zip ../packages/
+    - pip3 install -r docs/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+    - pip install .
+    - python3 -m pybind11_mkdoc -o src/doc.hpp -I/usr/include/eigen3 -std=c++17 /usr/local/include/airbot/command/command_base.hpp /usr/local/include/airbot/modules/motors/motor_driver.hpp
+    - cd docs && make html
+    - mkdir -p build/html && cd build/html && git init
     - git config --global user.email "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647@noreply.example.com"
     - git config --global user.name "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647"
     - git add .
-    - git checkout -b html/python
-    - git commit -m "doc push" --no-verify
-    - git remote add python_doc "https://oauth2:$DOC_ACCESS_TOKEN@git.qiuzhi.tech/${CI_PROJECT_PATH}"
-    - git push --set-upstream python_doc html/python --force
+    - git checkout doc/${DEPLOY_REF}/python || git checkout --orphan doc/${DEPLOY_REF}/python
+    - git commit -m "doc push" --no-verify || true
+    - git remote add origin "https://oauth2:$DOC_ACCESS_TOKEN@git.qiuzhi.tech/${CI_PROJECT_PATH}"
+    - git push --force --set-upstream origin doc/${DEPLOY_REF}/python
 
   artifacts:
     paths:
@@ -33,7 +30,7 @@ python:
 python-upload:
   stage: release
   needs:
-    - job: python
+    - job: python-doc
       artifacts: true
   image: curlimages/curl:latest
   # rules:

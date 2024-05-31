@@ -26,6 +26,7 @@ style-test:
 
 include:
   - 'ros/.gitlab-ci.yml'
+  - 'python/.gitlab-ci.yml'
   - 'examples/airbot_tools/.gitlab-ci.yml'
   - 'examples/airbot_aloha/.gitlab-ci.yml'
 

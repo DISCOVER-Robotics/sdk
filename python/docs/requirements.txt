@@ -3,3 +3,4 @@ sphinx==7.1.2
 sphinx-rtd-theme==1.3.0rc1
 git+https://github.com/pybind/pybind11_mkdoc.git@master
 clang<=13.0.1
+sphinx-toolbox
