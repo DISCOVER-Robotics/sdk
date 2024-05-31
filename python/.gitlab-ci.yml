@@ -16,7 +16,7 @@ python-doc:
     - git config --global user.email "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647@noreply.example.com"
     - git config --global user.name "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647"
     - git add .
-    - git checkout -b doc/${DEPLOY_REF}/python
+    - git checkout doc/${DEPLOY_REF}/python || git checkout --orphan doc/${DEPLOY_REF}/python
     - git commit -m "doc push" --no-verify || true
     - git remote add origin "https://oauth2:$DOC_ACCESS_TOKEN@git.qiuzhi.tech/${CI_PROJECT_PATH}"
     - git push --force --set-upstream origin doc/${DEPLOY_REF}/python
