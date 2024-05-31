@@ -12,7 +12,8 @@ python-doc:
     - pip3 install -r docs/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
     - pip install .
     - python3 -m pybind11_mkdoc -o src/doc.hpp -I/usr/include/eigen3 -std=c++17 /usr/local/include/airbot/command/command_base.hpp /usr/local/include/airbot/modules/motors/motor_driver.hpp
-    - cd docs && make html && mkdir -p build/html && cd build/html && git init
+    - cd docs && make html
+    - mkdir -p build/html && cd build/html && git init
     - git config --global user.email "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647@noreply.example.com"
     - git config --global user.name "project_112_bot_916e14ffbe0fea32f0cb67cfb3521647"
     - git add .
