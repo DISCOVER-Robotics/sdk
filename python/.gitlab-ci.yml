@@ -6,7 +6,7 @@ python-doc:
   image: ${CI_REGISTRY}/airbot-play/arm-control:develop
   script:
     - cd python
-    - apt-get update && apt-get install -y doxygen zip python3-pip
+    - apt-get update && apt-get install -y doxygen zip python3-pip ca-certificates
     - if [ -n "$CI_COMMIT_TAG" ]; then DEPLOY_REF=$CI_COMMIT_TAG; else DEPLOY_REF=latest; fi
     - mkdir -p packages/ && zip -qr python.zip python/ && mv python.zip packages/
     - pip3 install -r docs/requirements.txt -i https://pypi.ustc.edu.cn/simple
