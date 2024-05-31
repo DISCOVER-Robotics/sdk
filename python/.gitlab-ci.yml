@@ -5,6 +5,7 @@ python-doc:
   stage: build
   image: ${CI_REGISTRY}/airbot-play/arm-control:develop
   script:
+    - cd python
     - apt-get update && apt-get install -y doxygen zip python3-pip
     - if [ -n "$CI_COMMIT_TAG" ]; then DEPLOY_REF=$CI_COMMIT_TAG; else DEPLOY_REF=latest; fi
     - mkdir -p packages/ && zip -qr python.zip python/ && mv python.zip packages/
