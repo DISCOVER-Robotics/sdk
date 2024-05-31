@@ -393,7 +393,7 @@ class Robot {
   }
   /**
    * @brief test
-   * 
+   *
    */
   inline bool manual_mode() {
     auto current_mode = arm_mode_.load(std::memory_order_relaxed);

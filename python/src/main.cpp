@@ -46,7 +46,7 @@ PYBIND11_MODULE(airbot, m) {
       MotorDriver::joint_upper_bounder_[4] - 1 * M_PI / 180, MotorDriver::joint_upper_bounder_[5] - 1 * M_PI / 180};
 
   py::class_<arm::Robot<6>, std::unique_ptr<arm::Robot<6>>>(m, "Robot", DOC(arm, Robot))
-     .def("logging", &arm::Robot<6>::logging, py::arg("logging"), DOC(arm, Robot, logging))
+      .def("logging", &arm::Robot<6>::logging, py::arg("logging"), DOC(arm, Robot, logging))
       .def("get_current_pose", &arm::Robot<6>::get_current_pose, DOC(arm, Robot, get_current_pose))
       .def("get_current_joint_q", &arm::Robot<6>::get_current_joint_q, DOC(arm, Robot, get_current_joint_q))
       .def("get_current_joint_v", &arm::Robot<6>::get_current_joint_v, DOC(arm, Robot, get_current_joint_v))

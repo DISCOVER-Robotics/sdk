@@ -7,7 +7,7 @@ python-doc:
   script:
     - if [ -n "$CI_COMMIT_TAG" ]; then DEPLOY_REF=$CI_COMMIT_TAG; else DEPLOY_REF=latest; fi
     - mkdir -p packages/ && zip -qr python.zip python/ && mv python.zip packages/
-    - pip3 install -r docs/requirements.txt -i https://pypi.ustc.edu.cn/simple 
+    - pip3 install -r docs/requirements.txt -i https://pypi.ustc.edu.cn/simple
     - python3 -m pybind11_mkdoc -o src/doc.hpp -I/usr/include/eigen3 -std=c++17 /usr/local/include/airbot/command/command_base.hpp /usr/local/include/airbot/modules/motors/motor_driver.hpp
     - pip install .
     - cd docs && make html && cd build/html && git init
