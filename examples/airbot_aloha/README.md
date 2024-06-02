@@ -96,14 +96,15 @@ The above sequence is just a reference: the actual connection order depends on t
 
 ```bash
 airbot_demonstrate \
-    -c <cam_device_0> -c <cam_device_1> -c <cam_device_2> \
+    -c <cam_device_0> <cam_device_1> <cam_device_2> \
     -mts <max_time_step> \
     -tn <task_name> \
     -se <start_episode_index> \
     -f 15 \
+    -gn 1\
     -sjp <joint_pos_1> <joint_pos_2> <joint_pos_3> <joint_pos_4> <joint_pos_5> <joint_pos_6> <gripper_pos>
 ```
-For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demonstrate_dual` and change -sjp to -sjpl and -sjpr to specify the initial joint positions of left arm and right arm respectively (both defualt to `0,0,0,0,0,0,0` if not used).
+You can specify the paramter '-gn' to choose to collect with single arm (default) or dual arm (-gn 2) .
 
 #### Explanation of Parameters
 
@@ -111,6 +112,7 @@ For dual-arm tasks, replace the command `airbot_demonstrate` with `airbot_demons
     - Typically, follow the connection order, where available camera device numbers are incremented by even numbers, such as 0, 2, 4...
     - If your computer has a built-in regular camera, it occupies one device number, and externally connected camera device numbers start from 2 and increment by even numbers: 2, 4, 6... (if cameras were connected before the computer started, the device number of the built-in camera may not be 0; in rare cases, after connecting cameras post-startup, the built-in camera's device number may not be 0).
     - If your computer has a built-in depth/structured light camera (like Windows Hello camera), the RGB camera and depth camera each occupy a device number, and externally connected camera device numbers start from 4 and increment by even numbers: 4, 6, 8...
+- `-can`: Can device interfaces of the teach-follow arms groups, default is '0 1 2 3', in this case, can0&can2 correspond to the teacher arms, and can1&can3 correspond to the follower arms.
 - `-mts`: Specifies the maximum number of frames to be captured; specified by the specific task.
 When reaching the maximum time steps, the program will prompt.
 - `-tn`: Task name, specified by the specific task.
@@ -120,13 +122,10 @@ When reaching the maximum time steps, the program will prompt.
     - When data is mistakenly saved, specifying this episode number allows for re-collection to overwrite existing data.
     - When collecting data multiple times after executing the command, the episode numbers of subsequent collections will increment from this base.
     - Each set of data is saved in the `demonstrations/(raw/)<task_name>/<episode_id>` folder.
-- `-sjp`: Initial positions of each joint and gripper before starting collection for each episode; defaults to 0 if not used. Specify values based on the actual situation of the specific task.
+- `-sjp`: Initial positions of each joint and gripper before starting collection for each episode; defaults to `0 0 0 0 0 0 0`. If you use dual arms and want them to have different initial joint angles, you can append values back, e.g. `0 0 0 0 0 0 0 0 0 0 0 0 0 0`.
 - `-f`: Data collection frequency, default is 15Hz.
+- `-gn`: The number of robot teach-follow group to execute in the system, default is 1.
 
-And there are some other parameters for flexible usage:
-
-- `-m`: the can interface of of the teacher arm, default to can0.
-- `-n`: the can interface of of the follower arm, default to can1.
 
 #### Excution Example
 
@@ -145,7 +144,7 @@ And there are some other parameters for flexible usage:
 
 After excuting the command above, the terminal will be cleaned and you can use keyboard to control. The key descriptions are as follows:
 
-- `g`: Toggle gravity compensation on/off.
+- `g`: Toggle teach mode on/off.
 - `Spacebar`: Start/stop episode data recording.
 - `q`: Discard the current record.
 - `0`: Return the robotic arm to the initial position.
@@ -209,4 +208,4 @@ The data replay command and its parameters are as follows:
 - `-ii`: Do not replay camera data.
 - `-ia`: Do not replay action data.
 - `-rn`: For dual-arm tasks, specify `-rn` 2.
-- `-cn`: The name of the cameras data to be replayed. For example, if there are 2 cameras, then specify `-cn 0,1`.
+- `-cn`: The name of the cameras data to be replayed. For example, if there are two cameras, specify `-cn 0 1`.
