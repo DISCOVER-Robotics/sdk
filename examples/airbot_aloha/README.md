@@ -215,3 +215,8 @@ The data replay command and its parameters are as follows:
 - `-ia`: Do not replay action data.
 - `-rn`: For dual-arm tasks, specify `-rn` 2.
 - `-cn`: The name of the cameras data to be replayed. For example, if there are two cameras, specify `-cn 0 1`.
+
+For mobile usage, there are some other parameters:
+
+- `-mt`: specify `-mt slantec_athena` to replay the base data at the same time.
+- `-bs`: speed of the robot base, the value can be `high`, `medium`, `low` or float number between `(0, 1.5)`.
