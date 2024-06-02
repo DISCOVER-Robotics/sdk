@@ -45,6 +45,8 @@ The functional package for data collection should be in the format of `airbot_al
 sudo apt install ./airbot_aloha_*.deb
 ```
 
+> If you also want to collect mobile data, please refer to [airbase repo](https://github.com/RoboticsChen/airbase?tab=readme-ov-file#starting-data-collection) for environment setup and basic usage. Then you can use the package for data collection together with airbase in the format of `airbot_aloha_mobile_<version>_<arch>.deb`.
+
 ### Data Replay Environment
 
 >- [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be configured first.
@@ -91,6 +93,10 @@ Data collection typically requires multiple cameras, and the connection order ca
 - Dual-arm task: Left arm camera -> Right arm camera -> Environment camera top -> Environment camera bottom
 
 The above sequence is just a reference: the actual connection order depends on the number of cameras and their placement. Generally, prioritize connecting arm-mounted, left-side, and overhead cameras first.
+
+### Starting Robotic Base (for mobile task)
+
+Please refer to [airbase repo](https://github.com/RoboticsChen/airbase?tab=readme-ov-file#starting-the-robot-base).
 
 ### Starting Data Collection
 
