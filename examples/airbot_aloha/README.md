@@ -96,7 +96,7 @@ The above sequence is just a reference: the actual connection order depends on t
 
 ### Starting Robotic Base (for mobile task)
 
-Please refer to [airbase repo](https://github.com/RoboticsChen/airbase?tab=readme-ov-file#starting-the-robot-base).
+Press and hold the power button of the robot base until it lights up. Wait for the robot base WIFI starting and then connect to it. Make sure the emergency button and brake button are both not pressed. Please refer to [airbase repo](https://github.com/RoboticsChen/airbase?tab=readme-ov-file#starting-the-robot-base) for more details.
 
 ### Starting Data Collection
 
@@ -132,29 +132,38 @@ When reaching the maximum time steps, the program will prompt.
 - `-f`: Data collection frequency, default is 15Hz.
 - `-gn`: The number of robot teach-follow group to execute in the system, default is 1.
 
+For mobile usage, there are some other parameters you can set:
+
+- `-mn`: The name of the map to build/load that is used to move the base to a absolute pose.
+- `-sp`: The move speed of the RobotBase when moving to a target pose. The value can be low, medium, high or float value ∈ (0, 1.5].
 
 #### Excution Example
 
 - One teacher with one follower:
     ```bash
-    airbot_demonstrate -c 0 -mts 100 -tn test_task -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+    airbot_demonstrate -c 0 -mts 100 -tn example_task -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0
     ```
 - Two teachers with two followers:
     ```bash
-    airbot_demonstrate_dual -c 0 -mts 100 -tn test_task -sjpl 0.0 0.0 0.0 0.0 0.0 0.0 0.0 -sjpr 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+    airbot_demonstrate -c 0 2 -mts 200 -tn example_task -gn 2 -sjp 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
     ```
 
 #### Key Descriptions
 
-> Do not press or hold keys continuously; otherwise, the key's behavior will repeat sequentially.
+> * Do not press or hold keys continuously; otherwise, the key's behavior will repeat sequentially.
+>
+> * For mobile usage, you can see an additional step information in the terminal after executing the command above.
+>  > * If you haven't built any maps in the current environment or the previous map works wrong, you need to press `1` to create a new one. After pressing, the terminal will prompt you to move the robot base to a desired origin position, and then press `Enter` again at that position, and then you can push the robot base around the environment to build the map. Then press `s` to save the map and press `o` to move the robot base to origin.
+> > * If you have a good map, you can press 2 to load it and the robot base will take some time to localize and then it will auto move to the origin.
+> > * If you just want to use the robotic arms immediately, you can press `3` to skip this step but the pose control of the robot base may work wrong.
 
-After excuting the command above, the terminal will be cleaned and you can use keyboard to control. The key descriptions are as follows:
+After excuting the command above, you can use the keyboard of your computer to control. The key descriptions are as follows:
 
 - `g`: Toggle teach mode on/off.
 - `Spacebar`: Start/stop episode data recording.
 - `q`: Discard the current record.
 - `0`: Return the robotic arm to the initial position.
-- `p`: Print current robotic arm states information. If the information is not displayed properly, increase your terminal width.
+- `p`: Print current robot states information.
 
 #### Operational Steps
 
@@ -164,7 +173,7 @@ After excuting the command above, the terminal will be cleaned and you can use k
     - If the teaching opration is not acceptable, press `q` to discard the current teaching record, then press `0` to control the robotic arm to return to the initial position.
     - If it is acceptable, press `Spacebar` to save the current teaching record. After saving, the robotic arm will automatically return to the initial position.
 4. (Optional) In the `demonstrations/(raw/)<task_name>` folder in the current directory, check the recorded episodes.
-    - Each collected episode data includes: videos recorded by cameras (.avi), and a robotic arm status record file (.json).
+    - Each collected episode data includes: videos recorded by cameras (.avi), and a robotic arm status record file (records.json) and a robot base status record file (base_poses.json) if used.
 
 **Additional Notes:**
 
@@ -175,12 +184,12 @@ After excuting the command above, the terminal will be cleaned and you can use k
 3. It is recommended to store the collected task data folder <task_name> in the same directory structure on a **portable hard drive** as a backup.
 
 ## Data Convertion
-> [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be configured first.
+> [Data Collection and Convertion Environment](#data-collection-and-convertion-environment) needs to be set up first.
 
 In the same path where the data collection command was executed, run the following command to save the data in hdf5 format:
 
 ```bash
-/usr/bin/python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn test_task -se 0 -ee 0 -rd ./demonstrations
+/usr/bin/python3 -m airbot_aloha.convert_episodes -rn 1 -cn 0 -tn example_task -se 0 -ee 0 -rd ./demonstrations
 ```
 
 **Parameter explanation:**
@@ -203,7 +212,7 @@ Similarly, it is recommended to store the converted task data folder `<task_name
 The data replay command and its parameters are as follows:
 
 ```bash
-/usr/bin/python3 -m airbot_aloha.replay_episodes -rn 1 -tn test_task -ei 0 -ii -can 1 -cn 0
+/usr/bin/python3 -m airbot_aloha.replay_episodes -rn 1 -tn example_task -ei 0 -ii -can 1 -cn 0
 ```
 
 **Parameter explanation:**
@@ -220,3 +229,5 @@ For mobile usage, there are some other parameters:
 
 - `-mt`: specify `-mt slantec_athena` to replay the base data at the same time.
 - `-bs`: speed of the robot base, the value can be `high`, `medium`, `low` or float number between `(0, 1.5)`.
+
+After executing the command above, you can see the instruction in the terminal (also an additional map options step for mobile usage).
