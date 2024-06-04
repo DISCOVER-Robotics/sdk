@@ -30,6 +30,8 @@ Please ask the customer service for all available dependency packages and source
 
 ### Data Collection and Convertion Environment
 
+#### Basic Setup
+
 The core control package for data collection should be in the format of `airbot_play_<version>_<arch>.deb`. Install this package with the following command:
 
 ```bash
@@ -45,7 +47,15 @@ The functional package for data collection should be in the format of `airbot_al
 sudo apt install ./airbot_aloha_*.deb
 ```
 
-> If you also want to collect mobile data, please refer to [airbase repo](https://github.com/RoboticsChen/airbase?tab=readme-ov-file#starting-data-collection) for environment setup and basic usage. Then you can use the package for data collection together with airbase in the format of `airbot_aloha_mobile_<version>_<arch>.deb`.
+#### Mobile Setup (optional)
+
+If you also want to collect mobile data, please refer to [airbase repo](https://github.com/RoboticsChen/airbase) for environment setup and basic usage (make sure the python packages are installed in the same env as others).
+
+Then you can use the package for data collection together with airbase in the format of `airbot_aloha_mobile_<version>_<arch>.deb`. If you have installed `airbot_aloha_<version>_<arch>.deb`, it will be replaced.
+
+```bash
+sudo apt install ./airbot_aloha_mobile_*.deb
+```
 
 ### Data Replay Environment
 
