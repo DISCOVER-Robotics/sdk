@@ -13,9 +13,9 @@ ros:
     - apt --fix-broken install -y
     - apt update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y ros-noetic-ros-base ros-noetic-kdl-parser ros-noetic-tf ros-noetic-joy iproute2
     - apt update && DEBIAN_FRONTEND=noninteractive TZ=Asia/Shanghai apt install -y python3 python3-bloom python3-pip fakeroot dpkg-dev debhelper libkdl-parser-dev
-    - pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple rosdepc
-    - rosdepc init
-    - rosdepc update
+    - pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple rosdep
+    - rosdep init
+    - rosdep update
     - echo "185.199.111.133 raw.githubusercontent.com" >> /etc/hosts
     - mkdir -p ~/ros_ws/src && cp -r ros/ ~/ros_ws/src/ && cd ~/ros_ws/src
     - bloom-generate rosdebian --ros-distro noetic  --os-name ubuntu --os-version focal
