@@ -14,15 +14,15 @@
 
 namespace py = pybind11;
 
-std::unique_ptr<arm::Robot<6>> createAgent(std::string urdf_path = URDF_INSTALL_PATH +
+std::shared_ptr<arm::Robot<6>> createAgent(std::string urdf_path = URDF_INSTALL_PATH +
                                                                    "airbot_play_v2_1_with_gripper.urdf",
                                            std::string direction = "down", std::string can_interface = "can0",
                                            double vel = 0.2, std::string end_mode = "newteacher",
-                                           std::string forearm_type = "DM") {
-  return std::make_unique<arm::Robot<6>>(urdf_path, can_interface, direction, vel, end_mode, forearm_type);
+                                           std::string bigarm_type = "OD", std::string forearm_type = "DM") {
+  return std::make_shared<arm::Robot<6>>(urdf_path, can_interface, direction, vel, end_mode, bigarm_type, forearm_type);
 }
 
-std::unique_ptr<MotorDriver> createMotor(uint16_t id, const char *interface, std::string type) {
+std::shared_ptr<MotorDriver> createMotor(uint16_t id, const char *interface, std::string type) {
   std::vector<spdlog::sink_ptr> sinks;
   sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>(
       (std::string("logs/airbot_play-") + get_timestring() + ".log").c_str(), 1024 * 1024, 10, false));
@@ -130,5 +130,5 @@ PYBIND11_MODULE(airbot, m) {
 
   m.def("create_agent", &createAgent, py::arg("urdf_path") = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf",
         py::arg("direction") = "down", py::arg("can_interface") = "can0", py::arg("vel") = 0.2,
-        py::arg("end_mode") = "newteacher", py::arg("forearm_type") = "DM");
+        py::arg("end_mode") = "newteacher", py::arg("bigarm_type") = "OD", py::arg("forearm_type") = "DM");
 };

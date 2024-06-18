@@ -95,11 +95,11 @@ int main(int argc, char **argv) {
   program.add_argument("-u", "--urdf")
       .default_value(std::string())
       .help("Manually provided URDF path to override default paths.");
-  program.add_argument("-m", "--master")
+  program.add_argument("-m", "--leader")
       .required()
       .default_value("can0")
       .help("Can device interface of the master arm.");
-  program.add_argument("-n", "--node")
+  program.add_argument("-n", "--follower")
       .required()
       .default_value("can1")
       .help("Can device interface of the following arm.");
@@ -107,11 +107,11 @@ int main(int argc, char **argv) {
       .default_value("down")
       .choices("down", "left", "right")
       .help("The gravity direction. Useful for arms installed vertically");
-  program.add_argument("--master-end-mode")
+  program.add_argument("--leader-end-mode")
       .default_value("newteacher")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2", "none")
       .help(
-          "The mode of the master arm end effector. Available choices: \n"
+          "The mode of the leader arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
           "\"gripper\": The gripper equipped with Damiao motor \n"
           "\"yinshi\": The Yinshi two-finger gripper \n"
@@ -121,9 +121,9 @@ int main(int argc, char **argv) {
           "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--follower-end-mode")
       .default_value("gripper")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "teacherv2", "none")
       .help(
-          "The mode of the master arm end effector. Available choices: \n"
+          "The mode of the leader arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
           "\"gripper\": The gripper equipped with Damiao motor \n"
           "\"yinshi\": The Yinshi two-finger gripper \n"
@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
           "motor \n"
           "\"teacherv2\": The V2 version of demonstrator equipped with self-developed motor \n"
           "\"none\": The arm is not equipped with end effector.");
-  program.add_argument("--master-speed")
+  program.add_argument("--leader-speed")
       .scan<'g', double>()
       .default_value(1.)
       .help("The joint speed of the master arm in percentage of PI.");
@@ -173,12 +173,12 @@ int main(int argc, char **argv) {
   }
 
   std::string urdf_path = program.get<std::string>("--urdf");
-  std::string master_can = program.get<std::string>("--master");
-  std::string node_can = program.get<std::string>("--node");
-  std::string master_end_mode = program.get<std::string>("--master-end-mode");
+  std::string master_can = program.get<std::string>("--leader");
+  std::string node_can = program.get<std::string>("--follower");
+  std::string master_end_mode = program.get<std::string>("--leader-end-mode");
   std::string follower_end_mode = program.get<std::string>("--follower-end-mode");
   std::string direction = program.get<std::string>("--direction");
-  double master_speed = program.get<double>("--master-speed");
+  double master_speed = program.get<double>("--leader-speed");
   double follower_speed = program.get<double>("--follower-speed");
   std::vector<std::string> camera_strs = program.get<std::vector<std::string>>("--camera");
   int start_episode = program.get<int>("--start-episode");

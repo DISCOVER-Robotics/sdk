@@ -35,6 +35,6 @@ set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE) # ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL YES)
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "airbot_play (>= 2.8.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "airbot_play (>= 2.9.0)")
 
 include(CPack)

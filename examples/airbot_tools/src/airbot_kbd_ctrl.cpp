@@ -61,6 +61,12 @@ int main(int argc, char **argv) {
       .default_value(false)
       .implicit_value(true)
       .help("Stop arm when going out of bounds in gravity compensation mode. False by default");
+  program.add_argument("--bigarm-type")
+      .default_value("OD")
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of big arm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors, \"encoder\": "
+          "Self-developed encoders");
   program.add_argument("--forearm-type")
       .default_value("DM")
       .choices("DM", "OD")
@@ -81,6 +87,7 @@ int main(int argc, char **argv) {
   std::string direction = program.get<std::string>("--direction");
   double master_speed = program.get<double>("--master-speed") * M_PI;
   bool constrained = program.get<bool>("--constrained");
+  std::string bigarm_type = program.get<std::string>("--bigarm-type");
   std::string forearm_type = program.get<std::string>("--forearm-type");
   if (urdf_path == "") {
     if (master_end_mode == "none")
@@ -90,10 +97,10 @@ int main(int argc, char **argv) {
   }
 
   // Synchronization
-  std::unique_ptr<arm::Robot<6>> robot;
+  std::shared_ptr<arm::Robot<6>> robot;
   try {
-    robot =
-        std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode, forearm_type);
+    robot = std::make_shared<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode,
+                                            bigarm_type, forearm_type);
   } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     endwin();

@@ -3,7 +3,7 @@ import time
 import math
 
 urdf_path = airbot.AIRBOT_PLAY_WITH_GRIPPER_URDF
-bot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "gripper")
+bot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "none")
 
 joint_pos = bot.get_current_joint_q()
 step = 0
