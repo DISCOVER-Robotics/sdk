@@ -14,6 +14,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
+    "sphinx_toolbox.more_autodoc.variables",
 ]
 
 intersphinx_mapping = {

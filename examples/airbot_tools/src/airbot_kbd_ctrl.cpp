@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
           "(multiple following arms). E.g., -n can1 can2");
   program.add_argument("-e", "--master-end-mode")
       .default_value("newteacher")
-      .choices("teacher", "gripper", "yinshi", "newteacher", "none", "teacherv2")
+      .choices("teacher", "gripper", "yinshi", "newteacher", "none", "teacherv2", "encoder")
       .help(
           "The mode of the master arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
@@ -56,15 +56,23 @@ int main(int argc, char **argv) {
   program.add_argument("--master-speed")
       .scan<'g', double>()
       .default_value(1.)
-      .help("The joint speed of the master arm in ratio of PI.");
+      .help("The maximum joint speed of the master arm in ratio of PI.");
   program.add_argument("--constrained")
       .default_value(false)
       .implicit_value(true)
       .help("Stop arm when going out of bounds in gravity compensation mode. False by default");
+  program.add_argument("--bigarm-type")
+      .default_value("OD")
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of big arm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors, \"encoder\": "
+          "Self-developed encoders");
   program.add_argument("--forearm-type")
       .default_value("DM")
-      .choices("DM", "OD")
-      .help("The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors");
+      .choices("DM", "OD", "encoder")
+      .help(
+          "The type of forearm. Available choices: \"DM\": Damiao motor, \"OD\": Self-developed motors, \"encoder\": "
+          "Self-developed encoders");
 
   try {
     program.parse_args(argc, argv);
@@ -81,19 +89,20 @@ int main(int argc, char **argv) {
   std::string direction = program.get<std::string>("--direction");
   double master_speed = program.get<double>("--master-speed") * M_PI;
   bool constrained = program.get<bool>("--constrained");
+  std::string bigarm_type = program.get<std::string>("--bigarm-type");
   std::string forearm_type = program.get<std::string>("--forearm-type");
   if (urdf_path == "") {
     if (master_end_mode == "none")
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play.urdf";
     else
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play_with_gripper.urdf";
   }
 
   // Synchronization
-  std::unique_ptr<arm::Robot<6>> robot;
+  std::shared_ptr<arm::Robot<6>> robot;
   try {
-    robot =
-        std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode, forearm_type);
+    robot = std::make_shared<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode,
+                                            bigarm_type, forearm_type);
   } catch (const std::runtime_error &e) {
     std::cerr << e.what() << '\n';
     endwin();

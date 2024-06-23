@@ -2,6 +2,7 @@ import json
 import airbot
 import time
 import os
+import math
 
 
 def replay(json_file):
@@ -12,20 +13,20 @@ def replay(json_file):
     urdf_path = airbot.AIRBOT_PLAY_WITH_GRIPPER_URDF
 
     try:
-        robot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "gripper")
+        robot = airbot.create_agent("down", "can0", math.pi * 3, "none")
     except RuntimeError as e:
         print(e)
         exit(1)
 
     # 控制机器人
     for traj in traj_list:
-        # robot.set_target_joint_q(traj, use_planning=False)
-        robot.set_target_joint_mit(
-            traj,
-            [0, 0, 0, 0, 0, 0],
-            [75, 75, 75, 10, 10, 10],
-            [1, 1, 1, 0.06, 0.06, 0.06],
-        )
+        robot.set_target_joint_q(traj, use_planning=False)
+        # robot.set_target_joint_mit(
+        #     traj,
+        #     [0, 0, 0, 0, 0, 0],
+        #     [120, 120, 120, 30, 30, 30],
+        #     [1.2, 1.2, 1.2, 0.15, 0.15, 0.15],
+        # )
         time.sleep(0.001)
 
 
