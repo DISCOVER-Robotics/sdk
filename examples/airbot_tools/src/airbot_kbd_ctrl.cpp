@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
   program.add_argument("--master-speed")
       .scan<'g', double>()
       .default_value(1.)
-      .help("The joint speed of the master arm in ratio of PI.");
+      .help("The maximum joint speed of the master arm in ratio of PI.");
   program.add_argument("--constrained")
       .default_value(false)
       .implicit_value(true)
@@ -93,9 +93,9 @@ int main(int argc, char **argv) {
   std::string forearm_type = program.get<std::string>("--forearm-type");
   if (urdf_path == "") {
     if (master_end_mode == "none")
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play.urdf";
     else
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play_with_gripper.urdf";
   }
 
   // Synchronization

@@ -15,6 +15,7 @@ find_package(
              tf
              geometry_msgs)
 find_package(airbot_play REQUIRED)
+find_package(orocos_kdl REQUIRED)
 
 set(CATKIN_BUILD_BINARY_PACKAGE true)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -42,7 +43,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 add_executable(airbot_arm_ros src/main.cpp)
 add_dependencies(airbot_arm_ros ${${PROJECT_NAME}_EXPORTED_TARGETS}
                  ${catkin_EXPORTED_TARGETS})
-target_link_libraries(airbot_arm_ros ${catkin_LIBRARIES} airbot_play)
+target_link_libraries(airbot_arm_ros ${catkin_LIBRARIES} airbot_play orocos-kdl)
 
 add_executable(joy_proxy src/joy_proxy.cpp)
 add_dependencies(airbot_arm_ros ${${PROJECT_NAME}_EXPORTED_TARGETS}

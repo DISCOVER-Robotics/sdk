@@ -2,8 +2,7 @@ import airbot
 import time
 import math
 
-urdf_path = airbot.AIRBOT_PLAY_WITH_GRIPPER_URDF
-bot = airbot.create_agent(urdf_path, "down", "can0", 1.0, "none")
+bot = airbot.create_agent("down", "can0", 1.0, "none")
 
 bot.manual_mode()
 time.sleep(5)

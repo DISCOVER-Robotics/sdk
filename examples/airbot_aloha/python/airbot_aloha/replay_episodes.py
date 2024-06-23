@@ -2,6 +2,7 @@ import os
 import argparse
 import time
 import h5py
+import numpy as np
 
 
 def main(args):
@@ -23,8 +24,6 @@ def main(args):
     assert camera_names is not None, "Camera names must be provided"
     assert robots_num == len(can_bus_id), "Can bus id num must be equal to robot num"
     # assert robots_num==2 and len(camera_names) == 4, "Two robots should have 4 cameras"
-    if urdf_path == "":
-        urdf_path = "/usr/local/share/airbot_play/airbot_play_v2_1/urdf/airbot_play_v2_1_with_gripper.urdf"
 
     # load dataset
     if task_name != "":
@@ -62,12 +61,10 @@ def main(args):
 
             # instance the airbot player
             urdf_path = airbot.AIRBOT_PLAY_URDF
-            vel = 1.0
+            vel = 6.28
             for id in can_bus_id:
                 robots_list.append(
-                    airbot.create_agent(
-                        urdf_path, "down", f"{vcan}can{id}", vel, "gripper"
-                    )
+                    airbot.create_agent("down", f"{vcan}can{id}", vel, "none")
                 )
         elif "ros" in robot_name:
             from ros_robot import RosRobot
@@ -108,13 +105,22 @@ def main(args):
             del robots_list
             exit()
 
-        for action in actions:
+        UPSAMPLE = 300
+        for action_idx in range(len(actions) - 1):
             for index, robot in enumerate(robots_list):
                 first = index * 6
                 last = first + 6
-                robot.set_target_joint_q(action[first:last])
-                robot.set_target_end(action[last])
-            time.sleep(DT)
+                for i in range(UPSAMPLE):
+                    robot.set_target_joint_q(
+                        actions[action_idx][first:last] * (1 - i / UPSAMPLE)
+                        + actions[action_idx + 1][first:last] * (i / UPSAMPLE),
+                        False,
+                    )
+                    robot.set_target_end(
+                        actions[action_idx][last] * (1 - i / UPSAMPLE)
+                        + actions[action_idx + 1][last] * (i / UPSAMPLE)
+                    )
+                    time.sleep(DT / UPSAMPLE)
         # wait key
         while True:
             key = input("Press Enter to exit...")
