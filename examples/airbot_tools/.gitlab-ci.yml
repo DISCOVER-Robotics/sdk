@@ -3,7 +3,7 @@ variables:
 
 airbot-tools:
   stage: build
-  image: registry.qiuzhi.tech/airbot-play/arm-control:develop
+  image: registry.qiuzhi.tech/airbot-play/arm-control:main
   script:
     - cd examples/airbot_tools && mkdir build && cd build && cmake .. && make -j $NPROC && cpack -G DEB
     - mkdir $CI_PROJECT_DIR/packages && mv ../*.deb $CI_PROJECT_DIR/packages

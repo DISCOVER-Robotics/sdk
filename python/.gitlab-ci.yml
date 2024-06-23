@@ -3,7 +3,7 @@ variables:
 
 python-doc:
   stage: build
-  image: ${CI_REGISTRY}/airbot-play/arm-control:develop
+  image: ${CI_REGISTRY}/airbot-play/arm-control:main
   script:
     - cd python
     - apt-get update && apt-get install -y doxygen zip python3-pip ca-certificates clang
