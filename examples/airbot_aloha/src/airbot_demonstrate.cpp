@@ -188,11 +188,16 @@ int main(int argc, char **argv) {
   std::vector<double> start_joint_pos = program.get<std::vector<double>>("--start-joint-pos");
   std::size_t camera_num = camera_strs.size();
   std::vector<std::shared_ptr<WebCam>> cameras(camera_num);
+
+  if (master_can == node_can) {
+    std::cerr << "CAN device for leader and follower arm must be different." << std::endl;
+    return 1;
+  }
   if (urdf_path == "") {
     if (master_end_mode == "none")
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play.urdf";
     else
-      urdf_path = URDF_INSTALL_PATH + "airbot_play_v2_1_with_gripper.urdf";
+      urdf_path = URDF_INSTALL_PATH + "airbot_play_with_gripper.urdf";
   }
   if (camera_num == 0) {
     std::cerr << "No camera device specified." << std::endl;
@@ -227,13 +232,19 @@ int main(int argc, char **argv) {
   std::vector<Frame> eef_posef_records_, eef_poset_records_;
   std::vector<std::vector<cv::Mat>> images_records_(camera_num);
 
-  auto leader = std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode);
-  auto follower = std::make_unique<arm::Robot<6>>(urdf_path, node_can, direction, follower_speed, follower_end_mode);
+  std::unique_ptr<arm::Robot<6>> leader, follower;
+  try {
+    leader = std::make_unique<arm::Robot<6>>(urdf_path, master_can, direction, master_speed, master_end_mode);
+    follower = std::make_unique<arm::Robot<6>>(urdf_path, node_can, direction, follower_speed, follower_end_mode);
+  } catch (const std::exception &err) {
+    std::cerr << err.what() << std::endl;
+    return 1;
+  }
 
   threads.emplace_back(std::thread([&]() {
     while (true) {
       if (!running) break;
-      follower->set_target_joint_q(leader->get_current_joint_q(), false);
+      follower->set_target_joint_q(leader->get_current_joint_q(), false, 4);
       follower->set_target_end(leader->get_current_end());
     }
   }));

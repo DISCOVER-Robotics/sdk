@@ -29,7 +29,7 @@ class Raw2Hdf5(object):
         if root_dir[-1] != "/":
             root_dir += "/"
         if task_name != "":
-            self.task_path = root_dir + task_name + "/"
+            self.task_path = root_dir + "/raw/" + task_name + "/"
         else:
             self.task_path = root_dir
         # optional record

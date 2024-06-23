@@ -8,6 +8,7 @@
 #include <std_msgs/Float64.h>
 
 #include <airbot/airbot.hpp>
+#include <kdl/frames.hpp>
 
 using Pose = geometry_msgs::Pose;
 using PosePtr = geometry_msgs::Pose::ConstPtr;
@@ -53,7 +54,7 @@ int main(int argc, char** argv) {
   node.param("/airbot_arm_ros/interface", can_if, std::string("can0"));
   node.param("/airbot_arm_ros/end_mode", end_mode, std::string("teacher"));
   ROS_WARN("urdf: %s, interface: %s, end_mode: %s", urdf_path.c_str(), can_if.c_str(), end_mode.c_str());
-  arm::Robot<6> robot(urdf_path, can_if, "down", M_PI / 2, end_mode);
+  arm::Robot<6> robot(urdf_path, can_if, "down", M_PI, end_mode);
 
   /**
    * Initialize ROS publisher and subscriber
@@ -78,9 +79,8 @@ int main(int argc, char** argv) {
                                   joints->velocity[4], joints->velocity[5]});
       }});
   auto subscriber_target_set_position = node.subscribe<std_msgs::Float64>(
-      "/airbot_play/gripper/set_position", 10, {[&robot](const std_msgs::Float64::ConstPtr& end) {
-        robot.set_target_end(std::clamp(end->data ? 0.99 : 0.01, 0.0, 1.0));
-      }});
+      "/airbot_play/gripper/set_position", 10,
+      {[&robot](const std_msgs::Float64::ConstPtr& end) { robot.set_target_end(std::clamp(end->data, 0.0, 1.0)); }});
 
   auto scale = 0.001d;
   auto angle_scale = 0.2d;
@@ -91,14 +91,23 @@ int main(int argc, char** argv) {
       "/joy_latched", 10, {[&robot, &scale, &angle_scale](const JoyPtr& joy) {
         bool flag = false;
 
-        if (joy->buttons[7] == 0) {
+        if (joy->buttons[7] == 0) {  // RT
           if (std::abs(joy->axes[1]) > 1e-3 || std::abs(joy->axes[0]) > 1e-3 || std::abs(joy->axes[3]) > 1e-3) {
             if (joy->buttons[6] == 1) {  // LT
               robot.add_target_relative_translation({-scale * joy->axes[3], scale * joy->axes[0], scale * joy->axes[1]},
-                                                    false);
+                                                    false, 3);
             } else {
-              robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]}, false);
+              robot.add_target_translation({scale * joy->axes[1], scale * joy->axes[0], scale * joy->axes[3]}, false,
+                                           3);
             }
+          }
+        } else {
+          if (std::abs(joy->axes[1]) > 1e-3 || std::abs(joy->axes[0]) > 1e-3 || std::abs(joy->axes[3]) > 1e-3) {
+            auto rot =
+                KDL::Rotation::RPY(angle_scale * joy->axes[3], angle_scale * joy->axes[0], angle_scale * joy->axes[1]);
+            double x, y, z, w;
+            rot.GetQuaternion(x, y, z, w);
+            robot.add_target_relative_rotation({x, y, z, w}, false, 3);
           }
         }
       }});
