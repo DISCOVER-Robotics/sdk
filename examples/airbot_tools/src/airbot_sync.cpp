@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
       .help("The joint speed of the master arm in percentage of PI.");
   program.add_argument("--follower-speed")
       .scan<'g', double>()
-      .default_value(3)
+      .default_value(3.)
       .help("The joint speed of the follower arm in percentage of PI.");
   program.add_argument("--leader-forearm-type")
       .default_value("DM")

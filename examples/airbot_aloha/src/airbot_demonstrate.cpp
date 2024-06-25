@@ -471,7 +471,6 @@ int main(int argc, char **argv) {
       break;
     }
   }
-  endwin();
 
   {
     std::lock_guard<std::shared_mutex> lock(mutex_);
@@ -485,5 +484,6 @@ int main(int argc, char **argv) {
   reset_leader.join();
   reset_follower.join();
   for (auto &&i : camera_threads) i.join();
+  endwin();
   return 0;
 }

@@ -1,7 +1,7 @@
 import airbot
 import math
 
-bot = airbot.create_agent(end_mode="gripper")
+bot = airbot.create_agent(end_mode="none")
 
 joint_pos = bot.get_current_joint_q()
 step = 0
