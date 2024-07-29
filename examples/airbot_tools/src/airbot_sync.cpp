@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
       .help("The gravity direction. Useful for arms installed vertically");
   program.add_argument("--leader-end-mode")
       .default_value("newteacher")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2", "encoder")
       .help(
           "The mode of the master arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
           "\"none\": The arm is not equipped with end effector.");
   program.add_argument("--follower-end-mode")
       .default_value("gripper")
-      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2")
+      .choices("newteacher", "teacher", "gripper", "yinshi", "none", "teacherv2", "encoder")
       .help(
           "The mode of the master arm end effector. Available choices: \n"
           "\"teacher\": The demonstrator equipped with Damiao motor \n"
